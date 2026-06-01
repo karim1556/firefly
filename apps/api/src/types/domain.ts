@@ -1,0 +1,22 @@
+export const ROLE_VALUES = [
+  "ADMIN",
+  "COUNSELLOR",
+  "TEACHER",
+  "STUDENT",
+  "PARENT",
+  "FIREFLY_REPRESENTATIVE",
+  "FIREFLY_SPECIALIST",
+  "SYSTEM_ADMIN"
+] as const;
+
+export type AppRole = (typeof ROLE_VALUES)[number];
+
+export const TIER_VALUES = ["TIER_1", "TIER_2", "TIER_3"] as const;
+export type TierValue = (typeof TIER_VALUES)[number];
+
+export const STUDENT_STATUS_VALUES = ["STABLE", "NEEDS_SUPPORT", "NEEDS_INTERVENTION"] as const;
+export const CASE_STATUS_VALUES = ["OPEN", "IN_PROGRESS", "ON_HOLD", "CLOSED"] as const;
+export const CASE_TYPE_VALUES = ["SEL", "COUNSELLING", "CRISIS", "CAREER", "NEURO_DEVELOPMENTAL"] as const;
+export const RISK_LEVEL_VALUES = ["LOW", "MEDIUM", "HIGH", "CRITICAL"] as const;
+export const SESSION_STATUS_VALUES = ["SCHEDULED", "COMPLETED", "CANCELLED", "NO_SHOW"] as const;
+export const INCIDENT_SEVERITY_VALUES = ["LOW", "MODERATE", "HIGH", "CRITICAL"] as const;

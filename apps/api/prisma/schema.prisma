@@ -1,0 +1,208 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  COUNSELLOR
+  TEACHER
+  STUDENT
+  PARENT
+  FIREFLY_REPRESENTATIVE
+  FIREFLY_SPECIALIST
+  SYSTEM_ADMIN
+}
+
+enum Tier {
+  TIER_1
+  TIER_2
+  TIER_3
+}
+
+enum StudentStatus {
+  STABLE
+  NEEDS_SUPPORT
+  NEEDS_INTERVENTION
+}
+
+enum CaseStatus {
+  OPEN
+  IN_PROGRESS
+  ON_HOLD
+  CLOSED
+}
+
+enum CaseType {
+  SEL
+  COUNSELLING
+  CRISIS
+  CAREER
+  NEURO_DEVELOPMENTAL
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum SessionStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum IncidentSeverity {
+  LOW
+  MODERATE
+  HIGH
+  CRITICAL
+}
+
+model User {
+  id                String              @id @default(uuid()) @db.Uuid
+  email             String              @unique
+  passwordHash      String
+  fullName          String
+  role              Role
+  schoolId          String?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  refreshTokens     RefreshToken[]
+  openedCases       Case[]              @relation("OpenedBy")
+  assignedCases     Case[]              @relation("AssignedCounsellor")
+  sessions          Session[]           @relation("CounsellorSessions")
+  incidentReports   Incident[]          @relation("ReportedIncidents")
+  timelineEvents    CaseTimelineEvent[] @relation("TimelineCreatedBy")
+  counsellorStudents Student[]          @relation("CounsellorStudents")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid()) @db.Uuid
+  tokenHash String
+  userId    String   @db.Uuid
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Student {
+  id              String         @id @default(uuid()) @db.Uuid
+  admissionNumber String?        @unique
+  firstName       String
+  lastName        String
+  grade           String
+  classroom       String
+  tier            Tier           @default(TIER_1)
+  status          StudentStatus  @default(STABLE)
+  riskScore       Int            @default(0)
+  counsellorId    String?        @db.Uuid
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  counsellor      User?          @relation("CounsellorStudents", fields: [counsellorId], references: [id])
+  assessments     Assessment[]
+  cases           Case[]
+  sessions        Session[]
+  incidents       Incident[]
+
+  @@index([grade, classroom])
+  @@index([tier])
+}
+
+model Assessment {
+  id         String    @id @default(uuid()) @db.Uuid
+  studentId  String    @db.Uuid
+  score      Int
+  riskLevel  RiskLevel
+  notes      String?
+  createdAt  DateTime  @default(now())
+  student    Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId, createdAt])
+}
+
+model Case {
+  id                   String              @id @default(uuid()) @db.Uuid
+  studentId            String              @db.Uuid
+  openedById           String              @db.Uuid
+  assignedCounsellorId String?             @db.Uuid
+  title                String
+  summary              String?
+  tier                 Tier
+  type                 CaseType
+  riskLevel            RiskLevel
+  status               CaseStatus          @default(OPEN)
+  openedAt             DateTime            @default(now())
+  closedAt             DateTime?
+  student              Student             @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  openedBy             User                @relation("OpenedBy", fields: [openedById], references: [id])
+  assignedCounsellor   User?               @relation("AssignedCounsellor", fields: [assignedCounsellorId], references: [id])
+  timelineEvents       CaseTimelineEvent[]
+  sessions             Session[]
+  incidents            Incident[]
+
+  @@index([studentId, status])
+  @@index([tier, riskLevel])
+}
+
+model CaseTimelineEvent {
+  id          String   @id @default(uuid()) @db.Uuid
+  caseId      String   @db.Uuid
+  createdById String   @db.Uuid
+  eventType   String
+  title       String
+  description String
+  metadata    Json?
+  createdAt   DateTime @default(now())
+  case        Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  createdBy   User     @relation("TimelineCreatedBy", fields: [createdById], references: [id])
+
+  @@index([caseId, createdAt])
+}
+
+model Session {
+  id             String        @id @default(uuid()) @db.Uuid
+  caseId         String?       @db.Uuid
+  studentId      String        @db.Uuid
+  counsellorId   String        @db.Uuid
+  title          String
+  notes          String?
+  scheduledAt    DateTime
+  durationMins   Int           @default(45)
+  status         SessionStatus @default(SCHEDULED)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  case           Case?         @relation(fields: [caseId], references: [id], onDelete: SetNull)
+  student        Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  counsellor     User          @relation("CounsellorSessions", fields: [counsellorId], references: [id])
+
+  @@index([scheduledAt, status])
+}
+
+model Incident {
+  id           String           @id @default(uuid()) @db.Uuid
+  studentId    String?          @db.Uuid
+  caseId       String?          @db.Uuid
+  reportedById String           @db.Uuid
+  severity     IncidentSeverity
+  incidentType String
+  description  String
+  actionTaken  String
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  student      Student?         @relation(fields: [studentId], references: [id], onDelete: SetNull)
+  case         Case?            @relation(fields: [caseId], references: [id], onDelete: SetNull)
+  reportedBy   User             @relation("ReportedIncidents", fields: [reportedById], references: [id])
+
+  @@index([severity, createdAt])
+}
