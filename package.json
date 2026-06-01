@@ -1,0 +1,23 @@
+{
+  "name": "firefly-health",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=22 <24"
+  },
+  "scripts": {
+    "dev": "concurrently -n API,WEB -c blue,magenta \"pnpm --filter @firefly/api dev\" \"pnpm --filter @firefly/web dev\"",
+    "dev:api": "pnpm --filter @firefly/api dev",
+    "dev:web": "pnpm --filter @firefly/web dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "db:generate": "pnpm --filter @firefly/api prisma generate",
+    "db:push": "pnpm --filter @firefly/api prisma db push",
+    "db:seed": "pnpm --filter @firefly/api prisma db seed"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}

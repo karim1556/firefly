@@ -1,0 +1,18 @@
+FROM node:22-alpine AS base
+
+RUN corepack enable
+WORKDIR /app
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/web/package.json apps/web/package.json
+COPY apps/api/package.json apps/api/package.json
+
+RUN pnpm install --frozen-lockfile
+
+COPY . .
+
+RUN pnpm --filter @firefly/web build
+
+EXPOSE 3000
+
+CMD ["pnpm", "--filter", "@firefly/web", "start"]
