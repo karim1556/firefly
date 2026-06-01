@@ -57,12 +57,12 @@ export default function ClassroomDetail({ params }: { params: { classroomId: str
           flags: [ (created as any) ].concat((old?.flags || []).filter((f: any) => !String(f.id).startsWith("temp-")))
         }));
       } else {
-        qc.invalidateQueries(["classroom", params.classroomId]);
+        qc.invalidateQueries({ queryKey: ["classroom", params.classroomId] });
       }
 
       alert("Flag created");
     } catch {
-      qc.invalidateQueries(["classroom", params.classroomId]);
+      qc.invalidateQueries({ queryKey: ["classroom", params.classroomId] });
       alert("Unable to create flag");
     }
   }
@@ -93,12 +93,12 @@ export default function ClassroomDetail({ params }: { params: { classroomId: str
           observations: [ (created as any) ].concat((old?.observations || []).filter((o: any) => !String(o.id).startsWith("temp-")))
         }));
       } else {
-        qc.invalidateQueries(["classroom", params.classroomId]);
+        qc.invalidateQueries({ queryKey: ["classroom", params.classroomId] });
       }
 
       alert("Observation saved");
     } catch {
-      qc.invalidateQueries(["classroom", params.classroomId]);
+      qc.invalidateQueries({ queryKey: ["classroom", params.classroomId] });
       alert("Unable to save observation");
     }
   }
