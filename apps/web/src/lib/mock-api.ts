@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { AuthUser, Role, DashboardOverview, AnalyticsData, SELSession, ReferralItem, CrisisIncident, ComplianceRecord, NotificationItem, AppointmentItem, StudentSummary, CaseSummary } from "@/lib/types";
 
 export function isMockToken(token: string | null): boolean {

@@ -6,14 +6,14 @@ import { PageHeader } from "@/components/modules/common/page-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/hooks/use-auth";
-import type { PaginatedResponse } from "@/lib/types";
+import type { PaginatedResponse, Classroom } from "@/lib/types";
 
 export default function ClassroomsPage() {
   const { authFetch } = useAuth();
 
   const query = useQuery({
     queryKey: ["classrooms"],
-    queryFn: () => authFetch<PaginatedResponse<any>>(`/classrooms`)
+    queryFn: () => authFetch<PaginatedResponse<Classroom>>(`/classrooms`)
   });
 
   if (query.isLoading) {
@@ -45,7 +45,7 @@ export default function ClassroomsPage() {
                 </tr>
               </thead>
               <tbody>
-                {classrooms.map((c: any) => (
+                {classrooms.map((c: Classroom) => (
                   <tr key={c.id} className="border-t border-zinc-200 text-zinc-800">
                     <td className="px-4 py-3 font-medium">{c.name}</td>
                     <td className="px-4 py-3">{c.grade}</td>

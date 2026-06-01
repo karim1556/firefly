@@ -1,19 +1,17 @@
 "use client";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { PageHeader } from "@/components/modules/common/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/hooks/use-auth";
-import type { SessionSummary } from "@/lib/types";
 
 export default function ClassroomDetail({ params }: { params: { classroomId: string } }) {
   const { authFetch, user } = useAuth();
   const qc = useQueryClient();
-  const router = useRouter();
 
   const query = useQuery({
     queryKey: ["classroom", params.classroomId],
@@ -63,7 +61,7 @@ export default function ClassroomDetail({ params }: { params: { classroomId: str
       }
 
       alert("Flag created");
-    } catch (err) {
+    } catch {
       qc.invalidateQueries(["classroom", params.classroomId]);
       alert("Unable to create flag");
     }
@@ -99,7 +97,7 @@ export default function ClassroomDetail({ params }: { params: { classroomId: str
       }
 
       alert("Observation saved");
-    } catch (err) {
+    } catch {
       qc.invalidateQueries(["classroom", params.classroomId]);
       alert("Unable to save observation");
     }
