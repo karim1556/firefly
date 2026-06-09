@@ -94,6 +94,134 @@ const OBSERVATIONS: Array<any> = [
 ];
 
 
+// ======================== ACADEMIC & WELLBEING DATA ========================
+const ACADEMIC_DATA: Record<string, { attendancePercent: number; assignmentCompletionPercent: number; recentPerformance: string }> = {
+  s1:  { attendancePercent: 78, assignmentCompletionPercent: 65, recentPerformance: "Declining — Maths and Science dropped15%" },
+  s2:  { attendancePercent: 92, assignmentCompletionPercent: 88, recentPerformance: "Consistent — Top10% of class" },
+  s3:  { attendancePercent: 85, assignmentCompletionPercent: 72, recentPerformance: "Stable — Average performance" },
+  s4:  { attendancePercent: 70, assignmentCompletionPercent: 58, recentPerformance: "Declining — Withdrawn from activities" },
+  s5:  { attendancePercent: 95, assignmentCompletionPercent: 90, recentPerformance: "Excellent — All subjects above85%" },
+  s6:  { attendancePercent: 98, assignmentCompletionPercent: 95, recentPerformance: "Outstanding — Consistent high achiever" },
+  s7:  { attendancePercent: 72, assignmentCompletionPercent: 62, recentPerformance: "Declining — Behaviour affecting performance" },
+  s8:  { attendancePercent: 96, assignmentCompletionPercent: 92, recentPerformance: "Excellent — Engaged and proactive" },
+  s9:  { attendancePercent: 80, assignmentCompletionPercent: 75, recentPerformance: "Stable — Minor anxiety affecting exams" },
+  s10: { attendancePercent: 99, assignmentCompletionPercent: 98, recentPerformance: "Outstanding — Top performer" },
+  s11: { attendancePercent: 75, assignmentCompletionPercent: 68, recentPerformance: "Declining — Outbursts affecting focus" },
+  s12: { attendancePercent: 94, assignmentCompletionPercent: 91, recentPerformance: "Good — Consistent and reliable" },
+  s13: { attendancePercent: 68, assignmentCompletionPercent: 55, recentPerformance: "Declining — Aggressive behaviour noted" },
+  s14: { attendancePercent: 97, assignmentCompletionPercent: 93, recentPerformance: "Excellent — Socially well-integrated" },
+  s15: { attendancePercent: 88, assignmentCompletionPercent: 80, recentPerformance: "Good — Improving steadily" },
+};
+
+const WELLBEING_DATA: Record<string, { selParticipation: number; emotionalWellnessScore: number }> = {
+  s1:  { selParticipation: 45, emotionalWellnessScore: 28 },
+  s2:  { selParticipation: 78, emotionalWellnessScore: 62 },
+  s3:  { selParticipation: 65, emotionalWellnessScore: 55 },
+  s4:  { selParticipation: 30, emotionalWellnessScore: 22 },
+  s5:  { selParticipation: 88, emotionalWellnessScore: 74 },
+  s6:  { selParticipation: 95, emotionalWellnessScore: 88 },
+  s7:  { selParticipation: 40, emotionalWellnessScore: 35 },
+  s8:  { selParticipation: 92, emotionalWellnessScore: 85 },
+  s9:  { selParticipation: 60, emotionalWellnessScore: 48 },
+  s10: { selParticipation: 98, emotionalWellnessScore: 90 },
+  s11: { selParticipation: 50, emotionalWellnessScore: 42 },
+  s12: { selParticipation: 85, emotionalWellnessScore: 78 },
+  s13: { selParticipation: 35, emotionalWellnessScore: 30 },
+  s14: { selParticipation: 90, emotionalWellnessScore: 82 },
+  s15: { selParticipation: 70, emotionalWellnessScore: 65 },
+};
+
+const SEL_PROGRESS: Record<string, { assigned: number; completed: number; pending: number }> = {
+  s1:  { assigned: 8, completed: 4, pending: 2 },
+  s2:  { assigned: 6, completed: 5, pending: 0 },
+  s3:  { assigned: 7, completed: 4, pending: 1 },
+  s4:  { assigned: 10, completed: 3, pending: 4 },
+  s5:  { assigned: 5, completed: 5, pending: 0 },
+  s6:  { assigned: 4, completed: 4, pending: 0 },
+  s7:  { assigned: 9, completed: 3, pending: 3 },
+  s8:  { assigned: 5, completed: 5, pending: 0 },
+  s9:  { assigned: 6, completed: 3, pending: 1 },
+  s10: { assigned: 3, completed: 3, pending: 0 },
+  s11: { assigned: 7, completed: 3, pending: 2 },
+  s12: { assigned: 4, completed: 3, pending: 0 },
+  s13: { assigned: 8, completed: 2, pending: 3 },
+  s14: { assigned: 4, completed: 4, pending: 0 },
+  s15: { assigned: 6, completed: 4, pending: 1 },
+};
+
+// ======================== RICH OBSERVATIONS (20+) ========================
+const OBSERVATIONS_RICH: Array<any> = [
+  { id:"obs-1", studentId:"s13", classroom:"8A", type:"BEHAVIOURAL", severity:"HIGH", notes:"Outburst during group activity — pushed a chair at another student", createdAt:new Date(NOW-3*H).toISOString(), createdBy:"Rajesh Kumar" },
+  { id:"obs-2", studentId:"s4", classroom:"9C", type:"EMOTIONAL", severity:"HIGH", notes:"Low mood reported in morning check-in. Withdrawn during break.", createdAt:new Date(NOW-5*H).toISOString(), createdBy:"Priya Sharma" },
+  { id:"obs-3", studentId:"s1", classroom:"8A", type:"BEHAVIOURAL", severity:"MEDIUM", notes:"Aggressive response to peer feedback in Science class", createdAt:new Date(NOW-8*H).toISOString(), createdBy:"Rajesh Kumar" },
+  { id:"obs-4", studentId:"s7", classroom:"8B", type:"BEHAVIOURAL", severity:"HIGH", notes:"Physical altercation during recess — punched a wall", createdAt:new Date(NOW-12*H).toISOString(), createdBy:"Lakshmi Iyer" },
+  { id:"obs-5", studentId:"s11", classroom:"6A", type:"ACADEMIC", severity:"MEDIUM", notes:"Assignment submission dropped from 90% to 55% in past month", createdAt:new Date(NOW-1*D).toISOString(), createdBy:"Sunita O'Brien" },
+  { id:"obs-6", studentId:"s9", classroom:"7C", type:"ATTENDANCE", severity:"MEDIUM", notes:"4 absences in the last2 weeks — family trip reported", createdAt:new Date(NOW-2*D).toISOString(), createdBy:"Ravi Patel" },
+  { id:"obs-7", studentId:"s2", classroom:"10B", type:"SOCIAL", severity:"LOW", notes:"Noticed eating alone during lunch — usually social", createdAt:new Date(NOW-18*H).toISOString(), createdBy:"Anita Verma" },
+  { id:"obs-8", studentId:"s6", classroom:"5A", type:"EMOTIONAL", severity:"LOW", notes:"Seemed anxious before the Math test — breathing exercises helped", createdAt:new Date(NOW-20*H).toISOString(), createdBy:"Meera Joshi" },
+  { id:"obs-9", studentId:"s3", classroom:"7A", type:"ACADEMIC", severity:"MEDIUM", notes:"Struggling with reading comprehension — possible dyslexia screening needed", createdAt:new Date(NOW-1*D).toISOString(), createdBy:"Deepa Menon" },
+  { id:"obs-10", studentId:"s15", classroom:"10C", type:"SOCIAL", severity:"LOW", notes:"Participated actively in group discussion — good improvement", createdAt:new Date(NOW-30*H).toISOString(), createdBy:"Sneha Reddy" },
+  { id:"obs-11", studentId:"s5", classroom:"6B", type:"BEHAVIOURAL", severity:"LOW", notes:"Helped a younger student who fell during assembly — positive leadership", createdAt:new Date(NOW-4*H).toISOString(), createdBy:"Anita Verma" },
+  { id:"obs-12", studentId:"s8", classroom:"10A", type:"EMOTIONAL", severity:"LOW", notes:"Reported feeling stressed about board exams — coping strategies discussed", createdAt:new Date(NOW-6*H).toISOString(), createdBy:"Dr. Anil Kumar" },
+  { id:"obs-13", studentId:"s12", classroom:"9B", type:"ATTENDANCE", severity:"LOW", notes:"Late arrival3 times this week — alarm issue reported", createdAt:new Date(NOW-10*H).toISOString(), createdBy:"Sunita O'Brien" },
+  { id:"obs-14", studentId:"s14", classroom:"7B", type:"SOCIAL", severity:"LOW", notes:"Facilitated peer study group — excellent social skills", createdAt:new Date(NOW-36*H).toISOString(), createdBy:"Deepa Menon" },
+  { id:"obs-15", studentId:"s10", classroom:"5B", type:"ACADEMIC", severity:"LOW", notes:"Creative project submission — exceeded expectations", createdAt:new Date(NOW-48*H).toISOString(), createdBy:"Meera Joshi" },
+  { id:"obs-16", studentId:"s13", classroom:"8A", type:"EMOTIONAL", severity:"HIGH", notes:"Expressed hopelessness about academic performance — immediate check-in needed", createdAt:new Date(NOW-6*H).toISOString(), createdBy:"Priya Sharma" },
+  { id:"obs-17", studentId:"s4", classroom:"9C", type:"BEHAVIOURAL", severity:"CRITICAL", notes:"Self-harm ideation disclosed to class teacher", createdAt:new Date(NOW-1*H).toISOString(), createdBy:"Rajesh Kumar" },
+  { id:"obs-18", studentId:"s7", classroom:"8B", type:"ACADEMIC", severity:"MEDIUM", notes:"Test anxiety causing incomplete papers — extra time granted", createdAt:new Date(NOW-2*D).toISOString(), createdBy:"Lakshmi Iyer" },
+  { id:"obs-19", studentId:"s1", classroom:"8A", type:"ATTENDANCE", severity:"MEDIUM", notes:"Arrived late 5 times — pattern suggests avoidance of specific class", createdAt:new Date(NOW-3*D).toISOString(), createdBy:"Ravi Patel" },
+  { id:"obs-20", studentId:"s11", classroom:"6A", type:"SOCIAL", severity:"MEDIUM", notes:"Excluded from peer group during lunch — possible social isolation", createdAt:new Date(NOW-5*D).toISOString(), createdBy:"Sunita O'Brien" },
+  { id:"obs-21", studentId:"s2", classroom:"10B", type:"EMOTIONAL", severity:"MEDIUM", notes:"Mood swings noted — tearful after PTM results discussion", createdAt:new Date(NOW-7*D).toISOString(), createdBy:"Dr. Anil Kumar" },
+  { id:"obs-22", studentId:"s9", classroom:"7C", type:"BEHAVIOURAL", severity:"LOW", notes:"Apologized unprompted after losing temper — good self-awareness", createdAt:new Date(NOW-9*D).toISOString(), createdBy:"Ravi Patel" },
+];
+
+// ======================== FLAG HISTORY ========================
+const FLAGS_HISTORY: Array<any> = [
+  { id:"fh-1", studentId:"s13", classroom:"8A", category:"EMOTIONAL_DISTRESS", priority:"HIGH", notes:"Aggressive behaviour observed in class", status:"OPEN", createdAt:new Date(NOW-2*H).toISOString(), createdBy:"Rajesh Kumar" },
+  { id:"fh-2", studentId:"s11", classroom:"6A", category:"ATTENDANCE_ISSUES", priority:"MEDIUM", notes:"Attendance concerns and withdrawn behaviour", status:"OPEN", createdAt:new Date(NOW-1*D).toISOString(), createdBy:"Lakshmi Iyer" },
+  { id:"fh-3", studentId:"s4", classroom:"9C", category:"EMOTIONAL_DISTRESS", priority:"CRITICAL", notes:"Self-harm ideation disclosed — crisis protocol activated", status:"OPEN", createdAt:new Date(NOW-H).toISOString(), createdBy:"Priya Sharma" },
+  { id:"fh-4", studentId:"s7", classroom:"8B", category:"BULLYING", priority:"HIGH", notes:"Physical altercation — peer conflict escalation", status:"RESOLVED", createdAt:new Date(NOW-4*D).toISOString(), createdBy:"Lakshmi Iyer", resolvedAt:new Date(NOW-2*D).toISOString() },
+  { id:"fh-5", studentId:"s1", classroom:"8A", category:"ACADEMIC_DECLINE", priority:"MEDIUM", notes:"Grades dropped 20% — maths and science affected", status:"RESOLVED", createdAt:new Date(NOW-10*D).toISOString(), createdBy:"Rajesh Kumar", resolvedAt:new Date(NOW-5*D).toISOString() },
+  { id:"fh-6", studentId:"s9", classroom:"7C", category:"SOCIAL_ISOLATION", priority:"LOW", notes:"Eating alone during lunch — possible exclusion", status:"RESOLVED", createdAt:new Date(NOW-7*D).toISOString(), createdBy:"Ravi Patel", resolvedAt:new Date(NOW-3*D).toISOString() },
+  { id:"fh-7", studentId:"s3", classroom:"7A", category:"ACADEMIC_DECLINE", priority:"MEDIUM", notes:"Reading comprehension difficulties — screening needed", status:"OPEN", createdAt:new Date(NOW-1*D).toISOString(), createdBy:"Deepa Menon" },
+  { id:"fh-8", studentId:"s2", classroom:"10B", category:"EMOTIONAL_DISTRESS", priority:"MEDIUM", notes:"Mood swings and tearfulness reported by PTM", status:"OPEN", createdAt:new Date(NOW-7*D).toISOString(), createdBy:"Dr. Anil Kumar" },
+];
+
+// ======================== CLASSROOM ACTIVITY FEED ========================
+const CLASSROOM_ACTIVITY: Record<string, Array<any>> = {
+  "8A": [
+    { id:"ca-1", type:"OBSERVATION_ADDED", studentId:"s13", studentName:"Karan Mehta", description:"Outburst during group activity", createdAt:new Date(NOW-3*H).toISOString(), createdBy:"Rajesh Kumar" },
+    { id:"ca-2", type:"FLAG_RAISED", studentId:"s13", studentName:"Karan Mehta", description:"Aggressive behaviour — Emotional Distress", createdAt:new Date(NOW-2*H).toISOString(), createdBy:"Rajesh Kumar" },
+    { id:"ca-3", type:"SEL_SESSION_COMPLETED", studentId:"s13", studentName:"Karan Mehta", description:"Completed 'Managing Emotions' session", createdAt:new Date(NOW-1*D).toISOString(), createdBy:"Priya Sharma" },
+    { id:"ca-4", type:"OBSERVATION_ADDED", studentId:"s1", studentName:"Arjun Patel", description:"Aggressive response to peer feedback", createdAt:new Date(NOW-8*H).toISOString(), createdBy:"Rajesh Kumar" },
+    { id:"ca-5", type:"WORKSHOP_ATTENDED", studentId:"s1", studentName:"Arjun Patel", description:"Attended 'Stress Management' workshop", createdAt:new Date(NOW-2*D).toISOString(), createdBy:"Sneha Reddy" },
+  ],
+  "9C": [
+    { id:"cb-1", type:"FLAG_RAISED", studentId:"s4", studentName:"Ananya Reddy", description:"Self-harm ideation — CRITICAL", createdAt:new Date(NOW-H).toISOString(), createdBy:"Priya Sharma" },
+    { id:"cb-2", type:"OBSERVATION_ADDED", studentId:"s4", studentName:"Ananya Reddy", description:"Low mood in morning check-in", createdAt:new Date(NOW-5*H).toISOString(), createdBy:"Priya Sharma" },
+    { id:"cb-3", type:"SEL_SESSION_COMPLETED", studentId:"s4", studentName:"Ananya Reddy", description:"Completed crisis intervention session", createdAt:new Date(NOW-2*H).toISOString(), createdBy:"Priya Sharma" },
+  ],
+  "6A": [
+    { id:"cc-1", type:"FLAG_RAISED", studentId:"s11", studentName:"Aditya Mishra", description:"Attendance concerns and withdrawn behaviour", createdAt:new Date(NOW-1*D).toISOString(), createdBy:"Lakshmi Iyer" },
+    { id:"cc-2", type:"OBSERVATION_ADDED", studentId:"s11", studentName:"Aditya Mishra", description:"Assignment submission dropped", createdAt:new Date(NOW-1*D).toISOString(), createdBy:"Sunita O'Brien" },
+    { id:"cc-3", type:"WORKSHOP_ATTENDED", studentId:"s11", studentName:"Aditya Mishra", description:"Attended 'Anger Management' SEL session", createdAt:new Date(NOW-3*D).toISOString(), createdBy:"Sneha Reddy" },
+  ],
+  "8B": [
+    { id:"cd-1", type:"FLAG_RESOLVED", studentId:"s7", studentName:"Aryan Joshi", description:"Bullying concern resolved after mediation", createdAt:new Date(NOW-2*D).toISOString(), createdBy:"Lakshmi Iyer" },
+    { id:"cd-2", type:"OBSERVATION_ADDED", studentId:"s7", studentName:"Aryan Joshi", description:"Physical altercation during recess", createdAt:new Date(NOW-12*H).toISOString(), createdBy:"Lakshmi Iyer" },
+  ],
+  "7A": [{ id:"ce-1", type:"OBSERVATION_ADDED", studentId:"s3", studentName:"Rohan Verma", description:"Reading comprehension difficulties noted", createdAt:new Date(NOW-1*D).toISOString(), createdBy:"Deepa Menon" }],
+  "7C": [{ id:"cf-1", type:"OBSERVATION_ADDED", studentId:"s9", studentName:"Rahul Desai", description:"4 absences in two weeks", createdAt:new Date(NOW-2*D).toISOString(), createdBy:"Ravi Patel" }],
+  "10B": [{ id:"cg-1", type:"OBSERVATION_ADDED", studentId:"s2", studentName:"Priya Sharma", description:"Mood swings and tearfulness", createdAt:new Date(NOW-7*D).toISOString(), createdBy:"Dr. Anil Kumar" }],
+  "5A": [{ id:"ch-1", type:"OBSERVATION_ADDED", studentId:"s6", studentName:"Kavya Nair", description:"Test anxiety — breathing exercises helped", createdAt:new Date(NOW-20*H).toISOString(), createdBy:"Meera Joshi" }],
+  "6B": [{ id:"ci-1", type:"OBSERVATION_ADDED", studentId:"s5", studentName:"Vikram Singh", description:"Helped younger student — positive leadership", createdAt:new Date(NOW-4*H).toISOString(), createdBy:"Anita Verma" }],
+  "10A": [{ id:"cj-1", type:"OBSERVATION_ADDED", studentId:"s8", studentName:"Isha Kapoor", description:"Exam stress reported", createdAt:new Date(NOW-6*H).toISOString(), createdBy:"Dr. Anil Kumar" }],
+  "9B": [{ id:"ck-1", type:"OBSERVATION_ADDED", studentId:"s12", studentName:"Sanya Khanna", description:"Late arrivals 3 times this week", createdAt:new Date(NOW-10*H).toISOString(), createdBy:"Sunita O'Brien" }],
+  "7B": [{ id:"cl-1", type:"OBSERVATION_ADDED", studentId:"s14", studentName:"Diya Rao", description:"Facilitated peer study group", createdAt:new Date(NOW-36*H).toISOString(), createdBy:"Deepa Menon" }],
+  "5B": [{ id:"cm-1", type:"OBSERVATION_ADDED", studentId:"s10", studentName:"Neha Gupta", description:"Creative project exceeded expectations", createdAt:new Date(NOW-48*H).toISOString(), createdBy:"Meera Joshi" }],
+  "10C": [{ id:"cn-1", type:"OBSERVATION_ADDED", studentId:"s15", studentName:"Ravi Yadav", description:"Active participation in group discussion", createdAt:new Date(NOW-30*H).toISOString(), createdBy:"Sneha Reddy" }],
+};
+
 // ======================== WELLBEING REPORT ========================
 const WELLBEING_REPORT = {
   studentStatus:[{status:"STABLE",_count:{status:532}},{status:"NEEDS_SUPPORT",_count:{status:215}},{status:"NEEDS_INTERVENTION",_count:{status:100}}],
@@ -192,12 +320,20 @@ export async function mockRequest<T>(url: string, _init?: RequestInit, user?: Au
     const s = STUDENTS.find(x => x.id === sid);
     if (s) return {
       ...s,
+      academic: ACADEMIC_DATA[s.id] ?? { attendancePercent: 85, assignmentCompletionPercent: 80, recentPerformance: "Average" },
+      wellbeing: WELLBEING_DATA[s.id] ?? { selParticipation: 70, emotionalWellnessScore: 65 },
+      selProgress: SEL_PROGRESS[s.id] ?? { assigned: 5, completed: 3, pending: 1 },
       counsellor: { id:"couns-1", fullName:"Priya Sharma", email:"counsellor@firefly.local" },
       assessments: [],
       assessmentTrend: [{ id:"as-1", score: s.riskScore, riskLevel: s.riskScore>=70?"HIGH":s.riskScore>=40?"MEDIUM":"LOW", createdAt: new Date(NOW-D).toISOString() }],
       cases: CASES.filter(c => c.student.id === sid),
       sessions: SESSIONS.filter(x => x.student.firstName === s.firstName),
-      incidents: INCIDENTS.filter(x => x.student?.firstName === s.firstName)
+      incidents: INCIDENTS.filter(x => x.student?.firstName === s.firstName),
+      recentActivity: {
+        observations: OBSERVATIONS_RICH.filter(o => o.studentId === sid).slice(0, 5),
+        flags: FLAGS_HISTORY.filter(f => f.studentId === sid),
+        workshops: ["Stress Management", "Building Empathy", "Mindfulness & Focus"].slice(0, 2),
+      },
     } as T;
     throw new Error("Student not found");
   }
@@ -349,6 +485,65 @@ export async function mockRequest<T>(url: string, _init?: RequestInit, user?: Au
       { day: "Tue", slots: [ { time: "09:00", subject: "English" }, { time: "10:00", subject: "Social Studies" } ] },
     ];
     return { id: `class-${classroomName}`, name: classroomName, grade: students[0].grade, teacher: { id:`t-${classroomName}`, fullName: ROLE_NAMES.CLASS_TEACHER ?? ROLE_NAMES.TEACHER }, students, timetable, flags: FLAGS.filter(f => f.classroom === classroomName), observations: OBSERVATIONS.filter(o=>o.classroom===classroomName) } as T;
+  }
+
+  // =========== STUDENT FULL PROFILE ===========
+  if (basePath.startsWith("/students/") && basePath.endsWith("/full")) {
+    const sid = basePath.replace("/students/", "").replace("/full", "");
+    const s = STUDENTS.find(x => x.id === sid);
+    if (!s) throw new Error("Student not found");
+    return {
+      ...s,
+      academic: ACADEMIC_DATA[s.id] ?? { attendancePercent: 85, assignmentCompletionPercent: 80, recentPerformance: "Average" },
+      wellbeing: WELLBEING_DATA[s.id] ?? { selParticipation: 70, emotionalWellnessScore: 65 },
+      selProgress: SEL_PROGRESS[s.id] ?? { assigned: 5, completed: 3, pending: 1 },
+      recentActivity: {
+        observations: OBSERVATIONS_RICH.filter(o => o.studentId === sid).slice(0, 5),
+        flags: FLAGS_HISTORY.filter(f => f.studentId === sid),
+        workshops: ["Stress Management", "Building Empathy", "Mindfulness & Focus"].slice(0, Math.floor(Math.random() * 3)),
+      },
+    } as T;
+  }
+
+  // =========== STUDENT SEL PROGRESS ===========
+  if (basePath.startsWith("/students/") && basePath.endsWith("/sel-progress")) {
+    const sid = basePath.replace("/students/", "").replace("/sel-progress", "");
+    return (SEL_PROGRESS[sid] ?? { assigned: 5, completed: 3, pending: 1 }) as T;
+  }
+
+  // =========== CLASSROOM SEL PROGRESS ===========
+  if (basePath.startsWith("/classrooms/") && basePath.endsWith("/sel-progress")) {
+    const tail = basePath.replace("/classrooms/", "").replace("/sel-progress", "");
+    const classroomName = tail.startsWith("class-") ? tail.replace("class-", "") : tail;
+    const classroomStudents = STUDENTS.filter(st => st.classroom === classroomName);
+    let assigned = 0, completed = 0, pending = 0;
+    classroomStudents.forEach(st => {
+      const p = SEL_PROGRESS[st.id] ?? { assigned: 5, completed: 3, pending: 1 };
+      assigned += p.assigned; completed += p.completed; pending += p.pending;
+    });
+    const total = classroomStudents.length;
+    return {
+      classroomId: `class-${classroomName}`,
+      totalStudents: total,
+      assigned, completed, pending,
+      completionRate: assigned > 0 ? Math.round((completed / assigned) * 100) : 0,
+    } as T;
+  }
+
+  // =========== CLASSROOM ACTIVITY FEED ===========
+  if (basePath.startsWith("/classrooms/") && basePath.endsWith("/activity")) {
+    const tail = basePath.replace("/classrooms/", "").replace("/activity", "");
+    const classroomName = tail.startsWith("class-") ? tail.replace("class-", "") : tail;
+    return { data: CLASSROOM_ACTIVITY[classroomName] ?? [] } as T;
+  }
+
+  // =========== FLAG/OBSERVATION HISTORY FOR STUDENT ===========
+  if (basePath.startsWith("/students/") && basePath.endsWith("/history")) {
+    const sid = basePath.replace("/students/", "").replace("/history", "");
+    return {
+      observations: OBSERVATIONS_RICH.filter(o => o.studentId === sid),
+      flags: FLAGS_HISTORY.filter(f => f.studentId === sid),
+    } as T;
   }
 
   if (basePath === "/referrals") return [

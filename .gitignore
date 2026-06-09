@@ -18,3 +18,7 @@ coverage/
 # OS/editor
 .DS_Store
 .vscode/
+
+# Requirements docs (not for version control)
+module3.md
+m3.docx

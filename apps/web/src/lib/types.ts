@@ -283,3 +283,78 @@ export interface SelSessionSummary {
   counsellorId: string;
   status: "SCHEDULED" | "COMPLETED" | "CANCELLED" | "NO_SHOW";
 }
+
+// Module 3 — Classroom Profiles& Rosters
+export type ObservationType = "BEHAVIOURAL" | "ACADEMIC" | "SOCIAL" | "EMOTIONAL" | "ATTENDANCE";
+export type FlagCategory = "EMOTIONAL_DISTRESS" | "BULLYING" | "ATTENDANCE_ISSUES" | "ACADEMIC_DECLINE" | "SOCIAL_ISOLATION";
+export type FlagPriority = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+
+export interface ObservationEntry {
+  id: string;
+  studentId: string;
+  classroom: string;
+  type: ObservationType;
+  severity: "LOW" | "MEDIUM" | "HIGH";
+  notes: string;
+  createdAt: string;
+  createdBy: string;
+}
+
+export interface FlagEntry {
+  id: string;
+  studentId: string;
+  classroom: string;
+  category: FlagCategory;
+  priority: FlagPriority;
+  notes: string;
+  status: "OPEN" | "RESOLVED";
+  createdAt: string;
+  createdBy: string;
+  resolvedAt?: string;
+}
+
+export interface AcademicSnapshot {
+  attendancePercent: number;
+  assignmentCompletionPercent: number;
+  recentPerformance: string;
+}
+
+export interface SELProgress {
+  assigned: number;
+  completed: number;
+  pending: number;
+}
+
+export interface StudentFullProfile extends StudentSummary {
+  academic: AcademicSnapshot;
+  wellbeing: {
+    selParticipation: number;
+    emotionalWellnessScore: number;
+    riskLevel: string;
+  };
+  recentActivity: {
+    observations: ObservationEntry[];
+    flags: FlagEntry[];
+    workshops: string[];
+  };
+  selProgress: SELProgress;
+}
+
+export interface ClassroomActivityItem {
+  id: string;
+  type: "OBSERVATION_ADDED" | "FLAG_RAISED" | "SEL_SESSION_COMPLETED" | "WORKSHOP_ATTENDED" | "FLAG_RESOLVED";
+  studentId: string;
+  studentName: string;
+  description: string;
+  createdAt: string;
+  createdBy: string;
+}
+
+export interface ClassroomSELProgress {
+  classroomId: string;
+  totalStudents: number;
+  assigned: number;
+  completed: number;
+  pending: number;
+  completionRate: number;
+}
