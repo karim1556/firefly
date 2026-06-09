@@ -111,7 +111,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           throw error;
         }
 
-        const payload = mockLogin(email, password);
+        const payload = mockLogin(email);
 
         persistSession({
           user: payload.user,

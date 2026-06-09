@@ -5,13 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import type { StudentSummary, FlagEntry } from "@/lib/types";
-import { Search, Filter } from "lucide-react";
+import { Search, Filter, Sparkles } from "lucide-react";
 
 type FilterType = "ALL" | "FLAGGED" | "AT_RISK" | "HIGH_PERFORMING" | "RECENT_OBSERVATIONS";
 
 interface StudentRosterProps {
   students: StudentSummary[];
   flags: FlagEntry[];
+  observations?: Array<{ studentId: string; type?: string; createdAt: string }>;
   onSelectStudent: (student: StudentSummary) => void;
   onObserve: (student: StudentSummary) => void;
   onFlag: (student: StudentSummary) => void;
@@ -32,9 +33,12 @@ const STATUS_LABELS: Record<string, string> = {
   NEEDS_INTERVENTION: "Under Review",
 };
 
+const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+
 export function StudentRoster({
   students,
   flags,
+  observations = [],
   onSelectStudent,
   onObserve,
   onFlag,
@@ -45,11 +49,22 @@ export function StudentRoster({
 
   const flaggedIds = new Set(flags.filter(f => f.status === "OPEN").map(f => f.studentId));
 
+  const recentObsByStudent = new Map<string, { type?: string; createdAt: string }>();
+  observations.forEach((o) => {
+    const ts = new Date(o.createdAt).getTime();
+    if (Date.now() - ts > SEVEN_DAYS_MS) return;
+    const existing = recentObsByStudent.get(o.studentId);
+    if (!existing || new Date(existing.createdAt).getTime() < ts) {
+      recentObsByStudent.set(o.studentId, { type: o.type, createdAt: o.createdAt });
+    }
+  });
+
   let filtered = students;
   if (search) {
     const q = search.toLowerCase();
     filtered = filtered.filter(
-      s => `${s.firstName} ${s.lastName}`.toLowerCase().includes(q)
+      s => `${s.firstName} ${s.lastName}`.toLowerCase().includes(q) ||
+           (s.admissionNumber || "").toLowerCase().includes(q)
     );
   }
   if (filter === "FLAGGED") {
@@ -58,6 +73,8 @@ export function StudentRoster({
     filtered = filtered.filter(s => s.tier === "TIER_3" || s.status === "NEEDS_INTERVENTION");
   } else if (filter === "HIGH_PERFORMING") {
     filtered = filtered.filter(s => s.tier === "TIER_1" && s.status === "STABLE");
+  } else if (filter === "RECENT_OBSERVATIONS") {
+    filtered = filtered.filter(s => recentObsByStudent.has(s.id));
   }
 
   return (
@@ -66,7 +83,7 @@ export function StudentRoster({
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
           <Input
-            placeholder="Search students..."
+            placeholder="Search by name or Student ID..."
             value={search}
             onChange={e => setSearch(e.target.value)}
             className="pl-9"
@@ -92,11 +109,12 @@ export function StudentRoster({
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {filtered.length === 0 ? (
-          <p className="col-span-full py-8 text-center text-sm text-zinc-500">No students found</p>
+          <p className="col-span-full py-8 text-center text-sm text-zinc-500">No students match this filter</p>
         ) : (
           filtered.map(s => {
             const isFlagged = flaggedIds.has(s.id);
             const isSelected = s.id === selectedStudentId;
+            const recent = recentObsByStudent.get(s.id);
             return (
               <Card
                 key={s.id}
@@ -107,18 +125,29 @@ export function StudentRoster({
               >
                 <CardContent className="p-4">
                   <div className="mb-2 flex items-start justify-between">
-                    <div>
-                      <p className="font-medium text-zinc-900">
+                    <div className="min-w-0">
+                      <p className="truncate font-medium text-zinc-900">
                         {s.firstName} {s.lastName}
-</p>
-                      <p className="text-xs text-zinc-500">Grade {s.grade} · {s.classroom}</p>
+                      </p>
+                      <p className="text-xs text-zinc-500">Grade {s.grade} · {s.classroom}{s.age ? ` · Age ${s.age}` : ""}</p>
+                      {s.admissionNumber && (
+                        <p className="text-[11px] text-zinc-400">ID: {s.admissionNumber}</p>
+                      )}
                     </div>
-                    {isFlagged && (
-                      <span className="flex items-center gap-1 rounded-full bg-red-100 px-2 py-0.5 text-xs text-red-700">
-                        <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
-                        Flagged
-                      </span>
-                    )}
+                    <div className="flex flex-col items-end gap-1">
+                      {isFlagged && (
+                        <span className="flex items-center gap-1 rounded-full bg-red-100 px-2 py-0.5 text-xs text-red-700">
+                          <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
+                          Flagged
+                        </span>
+                      )}
+                      {recent && (
+                        <span className="flex items-center gap-1 rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-medium text-blue-700" title={`New ${recent.type} observation`}>
+                          <Sparkles className="h-2.5 w-2.5" />
+                          Recent
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <div className="mb-2 flex items-center gap-2">
                     <Badge
@@ -152,7 +181,7 @@ export function StudentRoster({
                     <button
                       onClick={e => { e.stopPropagation(); onObserve(s); }}
                       className="flex-1 rounded-lg border border-zinc-200 bg-white px-2 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-50"
- >
+                    >
                       Observe
                     </button>
                     <button

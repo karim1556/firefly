@@ -1,6 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import type { AuthUser, Role, DashboardOverview, AnalyticsData, SELSession, ReferralItem, CrisisIncident, ComplianceRecord, NotificationItem, AppointmentItem, StudentSummary, CaseSummary } from "@/lib/types";
+import type {
+  AuthUser, Role, DashboardOverview, StudentSummary,
+  Teacher, TimetableSlot, SELSessionDetailed, SessionFeedback, StudentDemographics,
+  IEP, IEPFeedback, IEPFeedbackProgress, IEPGoalStatus, ObservationEntry, ObservationType, FlagEntry, FlagCategory, FlagPriority, ClassroomActivityItem,
+} from "@/lib/types";
 
 export function isMockToken(token: string | null): boolean {
   return token !== null && token.startsWith("mock_");
@@ -24,7 +26,7 @@ const ROLE_NAMES: Record<string, string> = {
   CAREER_SPECIALIST: "Meera Joshi", EXTERNAL_PARTNER: "Ravi Deshmukh"
 };
 
-export function mockLogin(email: string, password: string) {
+export function mockLogin(email: string) {
   const role = ROLE_BY_EMAIL[email] ?? "ADMIN" as Role;
   return { accessToken: `mock_access_token_${role}`, refreshToken: `mock_refresh_token_${role}`, user: { id: `mock-user-${role}`, email, fullName: ROLE_NAMES[role], role } };
 }
@@ -35,21 +37,21 @@ const H = 60*60*1000; const D = 24*H;
 
 // ======================== STUDENTS (15 with INDIAN names) ========================
 const STUDENTS = [
-  { id:"s1", firstName:"Arjun", lastName:"Patel", grade:"8", classroom:"8A", tier:"TIER_3", status:"NEEDS_INTERVENTION", riskScore:84, admissionNumber:"FF-2024-001", _count:{cases:2,assessments:3} },
-  { id:"s2", firstName:"Priya", lastName:"Sharma", grade:"10", classroom:"10B", tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:62, admissionNumber:"FF-2024-002", _count:{cases:1,assessments:2} },
-  { id:"s3", firstName:"Rohan", lastName:"Verma", grade:"7", classroom:"7A", tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:55, admissionNumber:"FF-2024-003", _count:{cases:1,assessments:1} },
-  { id:"s4", firstName:"Ananya", lastName:"Reddy", grade:"9", classroom:"9C", tier:"TIER_3", status:"NEEDS_INTERVENTION", riskScore:91, admissionNumber:"FF-2024-004", _count:{cases:2,assessments:2} },
-  { id:"s5", firstName:"Vikram", lastName:"Singh", grade:"6", classroom:"6B", tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:48, admissionNumber:"FF-2024-005", _count:{cases:1,assessments:1} },
-  { id:"s6", firstName:"Kavya", lastName:"Nair", grade:"5", classroom:"5A", tier:"TIER_1", status:"STABLE", riskScore:32, admissionNumber:"FF-2024-006", _count:{cases:0,assessments:1} },
-  { id:"s7", firstName:"Aryan", lastName:"Joshi", grade:"8", classroom:"8B", tier:"TIER_3", status:"NEEDS_INTERVENTION", riskScore:76, admissionNumber:"FF-2024-007", _count:{cases:1,assessments:1} },
-  { id:"s8", firstName:"Isha", lastName:"Kapoor", grade:"10", classroom:"10A", tier:"TIER_1", status:"STABLE", riskScore:18, admissionNumber:"FF-2024-008", _count:{cases:0,assessments:1} },
-  { id:"s9", firstName:"Rahul", lastName:"Desai", grade:"7", classroom:"7C", tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:58, admissionNumber:"FF-2024-009", _count:{cases:1,assessments:1} },
-  { id:"s10", firstName:"Neha", lastName:"Gupta", grade:"5", classroom:"5B", tier:"TIER_1", status:"STABLE", riskScore:25, admissionNumber:"FF-2024-010", _count:{cases:0,assessments:1} },
-  { id:"s11", firstName:"Aditya", lastName:"Mishra", grade:"6", classroom:"6A", tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:45, admissionNumber:"FF-2024-011", _count:{cases:1,assessments:0} },
-  { id:"s12", firstName:"Sanya", lastName:"Khanna", grade:"9", classroom:"9B", tier:"TIER_1", status:"STABLE", riskScore:22, admissionNumber:"FF-2024-012", _count:{cases:0,assessments:0} },
-  { id:"s13", firstName:"Karan", lastName:"Mehta", grade:"8", classroom:"8A", tier:"TIER_3", status:"NEEDS_INTERVENTION", riskScore:72, admissionNumber:"FF-2024-013", _count:{cases:1,assessments:1} },
-  { id:"s14", firstName:"Diya", lastName:"Rao", grade:"7", classroom:"7B", tier:"TIER_1", status:"STABLE", riskScore:15, admissionNumber:"FF-2024-014", _count:{cases:0,assessments:0} },
-  { id:"s15", firstName:"Ravi", lastName:"Yadav", grade:"10", classroom:"10C", tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:52, admissionNumber:"FF-2024-015", _count:{cases:1,assessments:1} },
+  { id:"s1", firstName:"Arjun", lastName:"Patel", grade:"8", classroom:"8A", age:13, tier:"TIER_3", status:"NEEDS_INTERVENTION", riskScore:84, admissionNumber:"FF-2024-001", _count:{cases:2,assessments:3} },
+  { id:"s2", firstName:"Priya", lastName:"Sharma", grade:"10", classroom:"10B", age:15, tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:62, admissionNumber:"FF-2024-002", _count:{cases:1,assessments:2} },
+  { id:"s3", firstName:"Rohan", lastName:"Verma", grade:"7", classroom:"7A", age:12, tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:55, admissionNumber:"FF-2024-003", _count:{cases:1,assessments:1} },
+  { id:"s4", firstName:"Ananya", lastName:"Reddy", grade:"9", classroom:"9C", age:14, tier:"TIER_3", status:"NEEDS_INTERVENTION", riskScore:91, admissionNumber:"FF-2024-004", _count:{cases:2,assessments:2} },
+  { id:"s5", firstName:"Vikram", lastName:"Singh", grade:"6", classroom:"6B", age:11, tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:48, admissionNumber:"FF-2024-005", _count:{cases:1,assessments:1} },
+  { id:"s6", firstName:"Kavya", lastName:"Nair", grade:"5", classroom:"5A", age:10, tier:"TIER_1", status:"STABLE", riskScore:32, admissionNumber:"FF-2024-006", _count:{cases:0,assessments:1} },
+  { id:"s7", firstName:"Aryan", lastName:"Joshi", grade:"8", classroom:"8B", age:13, tier:"TIER_3", status:"NEEDS_INTERVENTION", riskScore:76, admissionNumber:"FF-2024-007", _count:{cases:1,assessments:1} },
+  { id:"s8", firstName:"Isha", lastName:"Kapoor", grade:"10", classroom:"10A", age:15, tier:"TIER_1", status:"STABLE", riskScore:18, admissionNumber:"FF-2024-008", _count:{cases:0,assessments:1} },
+  { id:"s9", firstName:"Rahul", lastName:"Desai", grade:"7", classroom:"7C", age:12, tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:58, admissionNumber:"FF-2024-009", _count:{cases:1,assessments:1} },
+  { id:"s10", firstName:"Neha", lastName:"Gupta", grade:"5", classroom:"5B", age:10, tier:"TIER_1", status:"STABLE", riskScore:25, admissionNumber:"FF-2024-010", _count:{cases:0,assessments:1} },
+  { id:"s11", firstName:"Aditya", lastName:"Mishra", grade:"6", classroom:"6A", age:11, tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:45, admissionNumber:"FF-2024-011", _count:{cases:1,assessments:0} },
+  { id:"s12", firstName:"Sanya", lastName:"Khanna", grade:"9", classroom:"9B", age:14, tier:"TIER_1", status:"STABLE", riskScore:22, admissionNumber:"FF-2024-012", _count:{cases:0,assessments:0} },
+  { id:"s13", firstName:"Karan", lastName:"Mehta", grade:"8", classroom:"8A", age:13, tier:"TIER_3", status:"NEEDS_INTERVENTION", riskScore:72, admissionNumber:"FF-2024-013", _count:{cases:1,assessments:1} },
+  { id:"s14", firstName:"Diya", lastName:"Rao", grade:"7", classroom:"7B", age:12, tier:"TIER_1", status:"STABLE", riskScore:15, admissionNumber:"FF-2024-014", _count:{cases:0,assessments:0} },
+  { id:"s15", firstName:"Ravi", lastName:"Yadav", grade:"10", classroom:"10C", age:15, tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:52, admissionNumber:"FF-2024-015", _count:{cases:1,assessments:1} },
 ];
 
 // ======================== CASES (8 with INDIAN names) ========================
@@ -82,15 +84,10 @@ const INCIDENTS = [
   { id:"inc-4", severity:"CRITICAL", incidentType:"Substance concern - Vikram Singh", description:"Suspected substance possession reported by peer. Campus security involved.", actionTaken:"Student search conducted. Counsellor debrief completed. Disciplinary committee notified.", createdAt:new Date(NOW-7*D).toISOString(), student:{firstName:"Vikram",lastName:"Singh"} },
 ];
 
-// ======================== FLAGS & OBSERVATIONS (in-memory) ========================
-const FLAGS: Array<any> = [
-  { id: "f-1", classroom: "8A", studentId: "s13", raisedBy: "Rajesh Kumar", reason: "Aggressive behaviour observed in class", createdAt: new Date(NOW-2*H).toISOString() },
-  { id: "f-2", classroom: "6A", studentId: "s11", raisedBy: "Lakshmi Iyer", reason: "Attendance concerns and withdrawn behaviour", createdAt: new Date(NOW-1*D).toISOString() },
-];
-
-const OBSERVATIONS: Array<any> = [
-  { id: "o-1", classroom: "8A", studentId: "s13", observedBy: "Rajesh Kumar", notes: "Outburst during group activity", createdAt: new Date(NOW-3*H).toISOString() },
-  { id: "o-2", classroom: "9C", studentId: "s4", observedBy: "Priya Sharma", notes: "Low mood reported in check-in", createdAt: new Date(NOW-5*H).toISOString() },
+// ======================== OBSERVATIONS (in-memory) ========================
+const OBSERVATIONS: Array<ObservationEntry> = [
+  { id: "o-1", classroom: "8A", studentId: "s13", type: "BEHAVIOURAL", severity: "HIGH", notes: "Outburst during group activity", createdAt: new Date(NOW-3*H).toISOString(), createdBy: "Rajesh Kumar" },
+  { id: "o-2", classroom: "9C", studentId: "s4", type: "EMOTIONAL", severity: "HIGH", notes: "Low mood reported in check-in", createdAt: new Date(NOW-5*H).toISOString(), createdBy: "Priya Sharma" },
 ];
 
 
@@ -150,7 +147,7 @@ const SEL_PROGRESS: Record<string, { assigned: number; completed: number; pendin
 };
 
 // ======================== RICH OBSERVATIONS (20+) ========================
-const OBSERVATIONS_RICH: Array<any> = [
+const OBSERVATIONS_RICH: Array<ObservationEntry> = [
   { id:"obs-1", studentId:"s13", classroom:"8A", type:"BEHAVIOURAL", severity:"HIGH", notes:"Outburst during group activity — pushed a chair at another student", createdAt:new Date(NOW-3*H).toISOString(), createdBy:"Rajesh Kumar" },
   { id:"obs-2", studentId:"s4", classroom:"9C", type:"EMOTIONAL", severity:"HIGH", notes:"Low mood reported in morning check-in. Withdrawn during break.", createdAt:new Date(NOW-5*H).toISOString(), createdBy:"Priya Sharma" },
   { id:"obs-3", studentId:"s1", classroom:"8A", type:"BEHAVIOURAL", severity:"MEDIUM", notes:"Aggressive response to peer feedback in Science class", createdAt:new Date(NOW-8*H).toISOString(), createdBy:"Rajesh Kumar" },
@@ -176,19 +173,254 @@ const OBSERVATIONS_RICH: Array<any> = [
 ];
 
 // ======================== FLAG HISTORY ========================
-const FLAGS_HISTORY: Array<any> = [
-  { id:"fh-1", studentId:"s13", classroom:"8A", category:"EMOTIONAL_DISTRESS", priority:"HIGH", notes:"Aggressive behaviour observed in class", status:"OPEN", createdAt:new Date(NOW-2*H).toISOString(), createdBy:"Rajesh Kumar" },
+const FLAGS_HISTORY: Array<FlagEntry> = [
+  { id:"fh-1", studentId:"s13", classroom:"8A", category:"EMOTIONAL_DISTRESS", priority:"HIGH", notes:"Aggressive behaviour observed in class", status:"OPEN", createdAt:new Date(NOW-2*H).toISOString(), createdBy:"Rajesh Kumar", updatedAt:new Date(NOW-1*H).toISOString(), updatedBy:"Priya Sharma" },
   { id:"fh-2", studentId:"s11", classroom:"6A", category:"ATTENDANCE_ISSUES", priority:"MEDIUM", notes:"Attendance concerns and withdrawn behaviour", status:"OPEN", createdAt:new Date(NOW-1*D).toISOString(), createdBy:"Lakshmi Iyer" },
-  { id:"fh-3", studentId:"s4", classroom:"9C", category:"EMOTIONAL_DISTRESS", priority:"CRITICAL", notes:"Self-harm ideation disclosed — crisis protocol activated", status:"OPEN", createdAt:new Date(NOW-H).toISOString(), createdBy:"Priya Sharma" },
+  { id:"fh-3", studentId:"s4", classroom:"9C", category:"EMOTIONAL_DISTRESS", priority:"CRITICAL", notes:"Self-harm ideation disclosed — crisis protocol activated", status:"OPEN", createdAt:new Date(NOW-H).toISOString(), createdBy:"Priya Sharma", updatedAt:new Date(NOW-30*60*1000).toISOString(), updatedBy:"Dr. Anil Kumar" },
   { id:"fh-4", studentId:"s7", classroom:"8B", category:"BULLYING", priority:"HIGH", notes:"Physical altercation — peer conflict escalation", status:"RESOLVED", createdAt:new Date(NOW-4*D).toISOString(), createdBy:"Lakshmi Iyer", resolvedAt:new Date(NOW-2*D).toISOString() },
-  { id:"fh-5", studentId:"s1", classroom:"8A", category:"ACADEMIC_DECLINE", priority:"MEDIUM", notes:"Grades dropped 20% — maths and science affected", status:"RESOLVED", createdAt:new Date(NOW-10*D).toISOString(), createdBy:"Rajesh Kumar", resolvedAt:new Date(NOW-5*D).toISOString() },
+  { id:"fh-5", studentId:"s1", classroom:"8A", category:"ACADEMIC_DECLINE", priority:"MEDIUM", notes:"Grades dropped 20% — maths and science affected", status:"RESOLVED", createdAt:new Date(NOW-10*D).toISOString(), createdBy:"Rajesh Kumar", updatedAt:new Date(NOW-7*D).toISOString(), updatedBy:"Rajesh Kumar", resolvedAt:new Date(NOW-5*D).toISOString() },
   { id:"fh-6", studentId:"s9", classroom:"7C", category:"SOCIAL_ISOLATION", priority:"LOW", notes:"Eating alone during lunch — possible exclusion", status:"RESOLVED", createdAt:new Date(NOW-7*D).toISOString(), createdBy:"Ravi Patel", resolvedAt:new Date(NOW-3*D).toISOString() },
   { id:"fh-7", studentId:"s3", classroom:"7A", category:"ACADEMIC_DECLINE", priority:"MEDIUM", notes:"Reading comprehension difficulties — screening needed", status:"OPEN", createdAt:new Date(NOW-1*D).toISOString(), createdBy:"Deepa Menon" },
   { id:"fh-8", studentId:"s2", classroom:"10B", category:"EMOTIONAL_DISTRESS", priority:"MEDIUM", notes:"Mood swings and tearfulness reported by PTM", status:"OPEN", createdAt:new Date(NOW-7*D).toISOString(), createdBy:"Dr. Anil Kumar" },
 ];
 
+// ======================== NAME POOL FOR SYNTHETIC STUDENTS ========================
+const FIRST_NAMES_M = ["Aarav","Vivaan","Aditya","Vihaan","Arjun","Reyansh","Sai","Aryan","Krishna","Ishaan","Shaurya","Atharv","Ayush","Aarush","Advait","Pranav","Adhrit","Riaan","Veer","Samarth","Devansh","Yash","Arnav","Kabir","Rudra","Ansh","Kian","Darsh","Aarush","Veer","Aaditya","Rohit","Saurav","Kunal","Manan","Yuvraj","Hriday","Tejas","Nirvan","Akshar"];
+const FIRST_NAMES_F = ["Saanvi","Aanya","Aadhya","Aaradhya","Ananya","Pari","Anika","Isha","Anvi","Navya","Arya","Myra","Ira","Aahana","Anaya","Pihu","Riya","Aaradhya","Aarohi","Anvi","Prisha","Kavya","Khushi","Aarna","Ishita","Siya","Tara","Misha","Anvi","Kiara","Nitya","Sara","Mira","Aditi","Riya","Suhana","Trisha","Mahika","Pranavi","Ishani","Aahana"];
+const LAST_NAMES = ["Sharma","Verma","Patel","Reddy","Iyer","Nair","Khan","Kapoor","Joshi","Rao","Mehta","Bose","Chatterjee","Banerjee","Mukherjee","Das","Gupta","Singh","Kumar","Mishra","Yadav","Pandey","Saxena","Srinivasan","Bhat","Pillai","Menon","Kaur","Dhillon","Chopra","Bajaj","Malhotra","Khanna","Sethi","Ahuja","Bhatt","Soni","Trivedi","Desai"];
+const FATHER_NAMES = ["Rajesh","Suresh","Anil","Vijay","Prakash","Manoj","Arun","Dinesh","Ramesh","Sanjay","Mahesh","Ashok","Karthik","Ravi","Sunil","Naveen","Pradeep","Vinod","Ganesh","Rakesh","Subramaniam","Raghunathan","Harish","Pankaj","Mohan","Rajendra","Devendra","Yogesh","Naresh","Umesh"];
+const MOTHER_NAMES = ["Sunita","Anita","Priya","Meena","Lakshmi","Sushma","Kavita","Rekha","Geeta","Asha","Pooja","Sapna","Seema","Neeta","Anjali","Nirmala","Mala","Reema","Vandana","Sarita","Indira","Radha","Sneha","Nandini","Lalitha","Saroj","Kiran","Manju","Suman","Urmila"];
+
+const NAME_POOL: Array<{ firstName: string; lastName: string; gender: "Male" | "Female" }> = [];
+(function buildNamePool() {
+  FIRST_NAMES_M.forEach((fn) => LAST_NAMES.forEach((ln) => NAME_POOL.push({ firstName: fn, lastName: ln, gender: "Male" })));
+  FIRST_NAMES_F.forEach((fn) => LAST_NAMES.forEach((ln) => NAME_POOL.push({ firstName: fn, lastName: ln, gender: "Female" })));
+})();
+
+const SEED_CLASSROOMS = Array.from(new Set(STUDENTS.map((s) => s.classroom))).sort();
+const DETERMINISTIC_RNG = (() => {
+  let seed = 0xC0FFEE;
+  return () => {
+    seed = (seed * 1664525 + 1013904223) >>> 0;
+    return seed / 0xFFFFFFFF;
+  };
+})();
+
+const PARENT_CONTACT_PREFIX = ["98","97","96","95","90","89","88","87","80","79"];
+
+const SYNTHETIC_STUDENTS: Array<StudentSummary & { gender: string; isSynthetic: boolean }> = (() => {
+  const out: Array<StudentSummary & { gender: string; isSynthetic: boolean }> = [];
+  let poolIdx = 0;
+  let idCounter = 100;
+  SEED_CLASSROOMS.forEach((classroomName) => {
+    const grade = classroomName.replace(/[A-Z]/g, "");
+    const targetCount = 20 + Math.floor(DETERMINISTIC_RNG() * 5);
+    for (let i = 0; i < targetCount; i++) {
+      const n = NAME_POOL[poolIdx % NAME_POOL.length];
+      poolIdx++;
+      const riskScore = 15 + Math.floor(DETERMINISTIC_RNG() * 75);
+      const tier = riskScore >= 70 ? "TIER_3" : riskScore >= 40 ? "TIER_2" : "TIER_1";
+      const status = tier === "TIER_3" ? "NEEDS_INTERVENTION" : tier === "TIER_2" ? "NEEDS_SUPPORT" : "STABLE";
+      const year = 2024;
+      const seq = idCounter++;
+      out.push({
+        id: `gen-${seq}`,
+        firstName: n.firstName,
+        lastName: n.lastName,
+        grade,
+        classroom: classroomName,
+        age: parseInt(grade) + 5,
+        tier,
+        status,
+        riskScore,
+        admissionNumber: `FF-${year}-${String(seq).padStart(3, "0")}`,
+        _count: { cases: tier === "TIER_1" ? 0 : 1, assessments: tier === "TIER_1" ? 0 : 1 },
+        gender: n.gender,
+        isSynthetic: true,
+      });
+    }
+  });
+  return out;
+})();
+
+const ALL_STUDENTS = [...STUDENTS, ...SYNTHETIC_STUDENTS];
+
+// ======================== STUDENT DEMOGRAPHICS ========================
+const DEMOGRAPHICS: Record<string, StudentDemographics> = (() => {
+  const out: Record<string, StudentDemographics> = {};
+  ALL_STUDENTS.forEach((s, idx) => {
+    const year = 2026 - (parseInt(s.grade) + 5);
+    const month = 1 + (idx % 12);
+    const day = 1 + (idx % 28);
+    const dob = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    const age = 2026 - year;
+    const father = FATHER_NAMES[idx % FATHER_NAMES.length];
+    const mother = MOTHER_NAMES[(idx * 7) % MOTHER_NAMES.length];
+    const phone = `${PARENT_CONTACT_PREFIX[idx % PARENT_CONTACT_PREFIX.length]}${String(10000000 + (idx * 13579) % 90000000).padStart(8, "0")}`;
+    const gender = (s as Record<string, unknown>).gender as string | undefined;
+    out[s.id] = {
+      dateOfBirth: dob,
+      age,
+      gender: (gender as "Male" | "Female" | "Other") ?? (idx % 2 === 0 ? "Male" : "Female"),
+      fatherName: `${father} ${s.lastName}`,
+      motherName: `${mother} ${s.lastName}`,
+      parentContact: `+91 ${phone.slice(0, 5)} ${phone.slice(5)}`,
+      admissionNumber: s.admissionNumber ?? `FF-${year}-${String(idx + 1).padStart(3, "0")}`,
+      standard: `Grade ${s.grade}`,
+      section: s.classroom.replace(/[0-9]/g, ""),
+    };
+  });
+  return out;
+})();
+
+// ======================== TEACHERS ========================
+const TEACHER_TEMPLATES: Array<{ fullName: string; subject: string }> = [
+  { fullName: "Rajesh Kumar", subject: "Mathematics" },
+  { fullName: "Sunita O'Brien", subject: "English" },
+  { fullName: "Lakshmi Iyer", subject: "Science" },
+  { fullName: "Ravi Patel", subject: "Social Studies" },
+  { fullName: "Meera Joshi", subject: "Hindi" },
+  { fullName: "Deepa Menon", subject: "Computer Science" },
+  { fullName: "Anita Verma", subject: "Art" },
+  { fullName: "Sneha Reddy", subject: "Physical Education" },
+  { fullName: "Dr. Anil Kumar", subject: "Wellbeing" },
+  { fullName: "Vikram Singh", subject: "Music" },
+];
+
+const TEACHERS_BY_CLASSROOM: Record<string, Array<Teacher>> = (() => {
+  const out: Record<string, Array<Teacher>> = {};
+  SEED_CLASSROOMS.forEach((classroomName, idx) => {
+    const ct = TEACHER_TEMPLATES[idx % TEACHER_TEMPLATES.length];
+    const subjectTeachers = [0, 1, 2, 3].map((j) => TEACHER_TEMPLATES[(idx + j + 1) % TEACHER_TEMPLATES.length]);
+    const list: Array<Teacher> = [
+      { id: `t-ct-${classroomName}`, fullName: ct.fullName, subject: ct.subject, isClassTeacher: true, initials: initialsOf(ct.fullName) },
+      ...subjectTeachers.map((t, j) => ({ id: `t-sub-${classroomName}-${j}`, fullName: t.fullName, subject: t.subject, isClassTeacher: false, initials: initialsOf(t.fullName) })),
+    ];
+    out[classroomName] = list;
+  });
+  return out;
+})();
+
+function initialsOf(name: string) {
+  return name
+    .split(" ")
+    .map((p) => p[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+}
+
+// ======================== CLASSROOM TIMETABLES ========================
+const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"] as const;
+const PERIOD_TIMES = ["09:00", "10:00", "11:15", "13:00", "14:00"] as const;
+const SUBJECTS = ["Mathematics", "English", "Science", "Social Studies", "Hindi"];
+
+const CLASSROOM_TIMETABLES: Record<string, Array<TimetableSlot>> = (() => {
+  const out: Record<string, Array<TimetableSlot>> = {};
+  SEED_CLASSROOMS.forEach((classroomName, classIdx) => {
+    const slots: Array<TimetableSlot> = [];
+    const teachers = TEACHERS_BY_CLASSROOM[classroomName];
+    DAYS.forEach((day, dayIdx) => {
+      PERIOD_TIMES.forEach((time, period) => {
+        if (period === 2 && dayIdx === 2) {
+          slots.push({ day, period: period + 1, time, subject: "SEL: Building Empathy", teacherName: "Dr. Anil Kumar", type: "SEL" });
+          return;
+        }
+        if (period === 4 && dayIdx === 0) {
+          slots.push({ day, period: period + 1, time, subject: "SEL: Self-awareness", teacherName: "Dr. Anil Kumar", type: "SEL" });
+          return;
+        }
+        if (period === 1 && dayIdx === 4) {
+          slots.push({ day, period: period + 1, time, subject: "Free Period — Request SEL", teacherName: null, type: "FREE" });
+          return;
+        }
+        const subjectIdx = (classIdx + dayIdx + period) % SUBJECTS.length;
+        const subject = SUBJECTS[subjectIdx];
+        const teacher = teachers.find((t) => t.subject === subject) ?? teachers[0];
+        slots.push({ day, period: period + 1, time, subject, teacherName: teacher.fullName, type: "ACADEMIC" });
+      });
+    });
+    out[classroomName] = slots;
+  });
+  return out;
+})();
+
+// ======================== SEL SESSIONS (detailed) ========================
+const SEL_SESSIONS: Record<string, Array<SELSessionDetailed>> = (() => {
+  const out: Record<string, Array<SELSessionDetailed>> = {};
+  const topics = ["Managing Emotions", "Building Empathy", "Self-Awareness", "Conflict Resolution", "Mindfulness & Focus", "Stress Management", "Anger Management", "Social Skills"];
+  const facilitators = [
+    { id: "f-1", name: "Priya Sharma" },
+    { id: "f-2", name: "Dr. Anil Kumar" },
+    { id: "f-3", name: "Sneha Reddy" },
+  ];
+  SEED_CLASSROOMS.forEach((classroomName, idx) => {
+    const sessionCount = 3 + (idx % 3);
+    const arr: Array<SELSessionDetailed> = [];
+    for (let i = 0; i < sessionCount; i++) {
+      const topic = topics[(idx + i) % topics.length];
+      const f = facilitators[(idx + i) % facilitators.length];
+      const isCompleted = i < 2;
+      const isNoShow = i === 2 && idx % 2 === 0;
+      const daysOffset = i * 7 - 3;
+      arr.push({
+        id: `sess-${classroomName}-${i}`,
+        classroomId: `class-${classroomName}`,
+        topic,
+        scheduledAt: new Date(NOW + daysOffset * D).toISOString(),
+        durationMins: 45,
+        facilitatorId: f.id,
+        facilitatorName: f.name,
+        status: isCompleted ? "COMPLETED" : isNoShow ? "NO_SHOW" : "SCHEDULED",
+        feedback: isCompleted ? {
+          studentEngagement: "High",
+          learningUnderstanding: "Strong",
+          emotionalClimate: "Open & Receptive",
+          followUpNeed: "No Concerns",
+          planCompletion: "Yes",
+          activityCompletion: "Yes",
+          activityQuality: "Good",
+          notes: "Excellent participation from the cohort. Students engaged with the role-play scenario.",
+          submittedAt: new Date(NOW + daysOffset * D + 45 * 60 * 1000).toISOString(),
+          submittedBy: f.name,
+        } : null,
+      });
+    }
+    out[classroomName] = arr;
+  });
+  return out;
+})();
+
+// ======================== IEPS (sample for select students) ========================
+const IEPS: Record<string, IEP> = (() => {
+  const out: Record<string, IEP> = {};
+  const targets = [
+    { id: "s4", title: "IEP — Tier 3 Care Plan (Ananya Reddy)" },
+    { id: "s7", title: "IEP — Behavioural Support (Aryan Joshi)" },
+    { id: "s1", title: "IEP — Academic & Emotional Support (Arjun Patel)" },
+    { id: "s11", title: "IEP — Social Skills (Aditya Mishra)" },
+  ];
+  targets.forEach((t) => {
+    out[t.id] = {
+      id: `iep-${t.id}`,
+      studentId: t.id,
+      title: t.title,
+      uploadedBy: "Priya Sharma",
+      consentLogged: true,
+      createdAt: new Date(NOW - 30 * D).toISOString(),
+      goals: [
+        { id: `g-${t.id}-1`, title: "Manage emotional responses in classroom", description: "Use grounding technique when triggered; check in with CT after episode.", status: "IN_PROGRESS", accommodation: "5-minute cool-off pass; alternative workspace" },
+        { id: `g-${t.id}-2`, title: "Improve peer relationships", description: "Participate in at least one structured group activity per week.", status: "NOT_STARTED", accommodation: "Paired with peer mentor" },
+        { id: `g-${t.id}-3`, title: "Academic catch-up", description: "Close 60% of the gap in core subjects by term end.", status: "ACHIEVED", accommodation: "Extended time on tests" },
+      ],
+      feedback: [],
+    };
+  });
+  return out;
+})();
+
 // ======================== CLASSROOM ACTIVITY FEED ========================
-const CLASSROOM_ACTIVITY: Record<string, Array<any>> = {
+const CLASSROOM_ACTIVITY: Record<string, Array<ClassroomActivityItem>> = {
   "8A": [
     { id:"ca-1", type:"OBSERVATION_ADDED", studentId:"s13", studentName:"Karan Mehta", description:"Outburst during group activity", createdAt:new Date(NOW-3*H).toISOString(), createdBy:"Rajesh Kumar" },
     { id:"ca-2", type:"FLAG_RAISED", studentId:"s13", studentName:"Karan Mehta", description:"Aggressive behaviour — Emotional Distress", createdAt:new Date(NOW-2*H).toISOString(), createdBy:"Rajesh Kumar" },
@@ -287,6 +519,16 @@ const DASHBOARDS: Record<string, DashboardOverview> = {
 };
 
 // ======================== MAIN HANDLER ========================
+function parseBody(init: RequestInit | undefined): Record<string, unknown> {
+  if (!init?.body) return {};
+  const raw = typeof init.body === "string" ? init.body : String(init.body);
+  try { return JSON.parse(raw); } catch { return {}; }
+}
+
+function isPost(init: RequestInit | undefined): boolean {
+  return init?.method === "POST";
+}
+
 export async function mockRequest<T>(url: string, _init?: RequestInit, user?: AuthUser | null): Promise<T> {
   await new Promise(r => setTimeout(r, 200 + Math.random() * 180));
   const role = user?.role ?? "ADMIN";
@@ -317,13 +559,41 @@ export async function mockRequest<T>(url: string, _init?: RequestInit, user?: Au
       return { data: filtered.slice(start, start+pageSize), pagination: { page, pageSize, total: filtered.length, totalPages: Math.ceil(filtered.length/pageSize) } } as T;
     }
     const sid = basePath.replace("/students/", "");
-    const s = STUDENTS.find(x => x.id === sid);
+
+    // POST IEP feedback: /students/{id}/iep-feedback
+    if (basePath.endsWith("/iep-feedback") && isPost(_init)) {
+      const body = parseBody(_init);
+      const iep = IEPS[sid];
+      if (!iep) throw new Error("No IEP found for this student");
+      const fb: IEPFeedback = {
+        id: `fb-${Date.now()}`,
+        iepId: iep.id,
+        goalId: body.goalId as string,
+        progress: body.progress as IEPFeedbackProgress,
+        comment: (body.comment as string) || "",
+        submittedAt: new Date().toISOString(),
+        submittedBy: user?.fullName || ROLE_NAMES.COUNSELLOR,
+      };
+      iep.feedback.unshift(fb);
+      const goal = iep.goals.find((g) => g.id === body.goalId);
+      if (goal) goal.status = body.progress as IEPGoalStatus;
+      return fb as T;
+    }
+
+    const s = ALL_STUDENTS.find(x => x.id === sid);
     if (s) return {
       ...s,
-      academic: ACADEMIC_DATA[s.id] ?? { attendancePercent: 85, assignmentCompletionPercent: 80, recentPerformance: "Average" },
+      academic: ACADEMIC_DATA[s.id] ?? {
+        attendancePercent: 70 + (parseInt(s.id.replace(/\D/g, "") || "0") % 30),
+        assignmentCompletionPercent: 60 + (parseInt(s.id.replace(/\D/g, "") || "0") % 35),
+        recentPerformance: "Stable — average performance",
+      },
       wellbeing: WELLBEING_DATA[s.id] ?? { selParticipation: 70, emotionalWellnessScore: 65 },
       selProgress: SEL_PROGRESS[s.id] ?? { assigned: 5, completed: 3, pending: 1 },
       counsellor: { id:"couns-1", fullName:"Priya Sharma", email:"counsellor@firefly.local" },
+      demographics: DEMOGRAPHICS[s.id] ?? null,
+      iep: IEPS[s.id] ?? null,
+      iepFeedback: IEPS[s.id]?.feedback ?? [],
       assessments: [],
       assessmentTrend: [{ id:"as-1", score: s.riskScore, riskLevel: s.riskScore>=70?"HIGH":s.riskScore>=40?"MEDIUM":"LOW", createdAt: new Date(NOW-D).toISOString() }],
       cases: CASES.filter(c => c.student.id === sid),
@@ -414,16 +684,17 @@ export async function mockRequest<T>(url: string, _init?: RequestInit, user?: Au
 
   // =========== CLASSROOMS ==========
   if (basePath === "/classrooms") {
-    const unique = Array.from(new Set(STUDENTS.map(s => s.classroom))).sort();
+    const unique = Array.from(new Set(ALL_STUDENTS.map(s => s.classroom))).sort();
     const data = unique.map(name => {
-      const students = STUDENTS.filter(s => s.classroom === name);
+      const students = ALL_STUDENTS.filter(s => s.classroom === name);
       const tierCounts: Record<string, number> = {};
       students.forEach(s => { tierCounts[s.tier] = (tierCounts[s.tier] || 0) + 1; });
+      const ct = TEACHERS_BY_CLASSROOM[name]?.find(t => t.isClassTeacher);
       return {
         id: `class-${name}`,
         name,
         grade: students[0]?.grade ?? "",
-        teacher: { id: `t-${name}`, fullName: ROLE_NAMES.CLASS_TEACHER ?? ROLE_NAMES.TEACHER },
+        teacher: ct ? { id: ct.id, fullName: ct.fullName } : { id: `t-${name}`, fullName: ROLE_NAMES.CLASS_TEACHER ?? ROLE_NAMES.TEACHER },
         studentsCount: students.length,
         tierDistribution: Object.entries(tierCounts).map(([tier,count])=>({ tier, count }))
       };
@@ -437,54 +708,189 @@ export async function mockRequest<T>(url: string, _init?: RequestInit, user?: Au
     if (tail.endsWith("/students")) {
       const id = tail.replace("/students", "").replace(/^\//, "");
       const classroomName = id.startsWith("class-") ? id.replace("class-", "") : id;
-      const students = STUDENTS.filter(s => s.classroom === classroomName);
+      const students = ALL_STUDENTS.filter(s => s.classroom === classroomName);
       return { data: students } as T;
     }
 
     // flags for a classroom or create flag
-    if (tail.endsWith("/flags")) {
+    if (tail.endsWith("/flags") && !tail.includes("/resolve")) {
       const id = tail.replace("/flags", "").replace(/^\//, "");
       const classroomName = id.startsWith("class-") ? id.replace("class-", "") : id;
-      if ((_init as any)?.method === "POST") {
+      if (isPost(_init)) {
         try {
-          const body = typeof (_init as any).body === "string" ? JSON.parse(( _init as any).body) : ( _init as any).body;
-          const newFlag = { id: `f-${Date.now()}`, classroom: classroomName, studentId: body.studentId, raisedBy: (body.raisedBy||ROLE_NAMES.TEACHER), reason: body.reason||"", createdAt: new Date().toISOString() };
-          FLAGS.unshift(newFlag);
+          const body = parseBody(_init);
+          const newFlag: FlagEntry = {
+            id: `f-${Date.now()}`,
+            classroom: classroomName,
+            studentId: body.studentId as string,
+            category: body.category as FlagCategory,
+            priority: body.priority as FlagPriority,
+            notes: (body.reason as string) || (body.notes as string) || "",
+            status: "OPEN",
+            createdBy: (body.raisedBy as string) || ROLE_NAMES.TEACHER,
+            createdAt: new Date().toISOString(),
+          };
+          FLAGS_HISTORY.unshift(newFlag);
           return newFlag as T;
-        } catch (e) {
+        } catch {
           throw new Error("Invalid flag payload");
         }
       }
-      return { data: FLAGS.filter(f => f.classroom === classroomName) } as T;
+      // Surface full flag history (5 active / 3 resolved demo data)
+      return { data: FLAGS_HISTORY.filter(f => f.classroom === classroomName) } as T;
+    }
+
+    // resolve flag
+    if (tail.includes("/flags/") && tail.endsWith("/resolve")) {
+      const flagId = tail.split("/flags/")[1].split("/")[0];
+      if (isPost(_init)) {
+        const body = parseBody(_init);
+        const flag = FLAGS_HISTORY.find(f => f.id === flagId);
+        if (!flag) throw new Error("Flag not found");
+        flag.status = "RESOLVED";
+        flag.resolvedAt = new Date().toISOString();
+        flag.resolutionNote = (body?.resolutionNote as string) || "";
+        return flag as T;
+      }
+      throw new Error("Method not allowed");
     }
 
     // observations for a classroom or create observation
     if (tail.endsWith("/observations")) {
       const id = tail.replace("/observations", "").replace(/^\//, "");
       const classroomName = id.startsWith("class-") ? id.replace("class-", "") : id;
-      if ((_init as any)?.method === "POST") {
+      if (isPost(_init)) {
         try {
-          const body = typeof (_init as any).body === "string" ? JSON.parse(( _init as any).body) : ( _init as any).body;
-          const newObs = { id: `o-${Date.now()}`, classroom: classroomName, studentId: body.studentId, observedBy: (body.observedBy||ROLE_NAMES.TEACHER), notes: body.notes||"", createdAt: new Date().toISOString() };
+          const body = parseBody(_init);
+          const newObs: ObservationEntry = {
+            id: `o-${Date.now()}`,
+            classroom: classroomName,
+            studentId: body.studentId as string,
+            type: (body.type as ObservationType) || "BEHAVIOURAL",
+            severity: (body.severity as "LOW" | "MEDIUM" | "HIGH" | "CRITICAL") || "MEDIUM",
+            notes: (body.notes as string) || "",
+            createdAt: new Date().toISOString(),
+            createdBy: (body.observedBy as string) || ROLE_NAMES.TEACHER,
+          };
           OBSERVATIONS.unshift(newObs);
+          OBSERVATIONS_RICH.unshift(newObs);
           return newObs as T;
-        } catch (e) {
+        } catch {
           throw new Error("Invalid observation payload");
         }
       }
-      return { data: OBSERVATIONS.filter(o => o.classroom === classroomName) } as T;
+      // Use rich observations so timeline has all entries
+      return { data: OBSERVATIONS_RICH.filter(o => o.classroom === classroomName) } as T;
+    }
+
+    // teachers list
+    if (tail.endsWith("/teachers")) {
+      const id = tail.replace("/teachers", "").replace(/^\//, "");
+      const classroomName = id.startsWith("class-") ? id.replace("class-", "") : id;
+      return { data: TEACHERS_BY_CLASSROOM[classroomName] ?? [] } as T;
+    }
+
+    // timetable
+    if (tail.endsWith("/timetable")) {
+      const id = tail.replace("/timetable", "").replace(/^\//, "");
+      const classroomName = id.startsWith("class-") ? id.replace("class-", "") : id;
+      return { data: CLASSROOM_TIMETABLES[classroomName] ?? [] } as T;
+    }
+
+    // SEL request (from timetable free period)
+    if (tail.endsWith("/sel-request")) {
+      if (isPost(_init)) {
+        const body = parseBody(_init);
+        return { id: `sel-req-${Date.now()}`, status: "PENDING", day: body?.day, period: body?.period, requestedBy: user?.fullName || ROLE_NAMES.TEACHER, createdAt: new Date().toISOString() } as T;
+      }
+      throw new Error("Method not allowed");
+    }
+
+    // SEL sessions
+    if (tail.endsWith("/sessions") && !tail.includes("/feedback")) {
+      const id = tail.replace("/sessions", "").replace(/^\//, "");
+      const classroomName = id.startsWith("class-") ? id.replace("class-", "") : id;
+      return { data: SEL_SESSIONS[classroomName] ?? [] } as T;
+    }
+
+    // session feedback
+    if (tail.includes("/sessions/") && tail.endsWith("/feedback")) {
+      const id = tail.replace("/sessions/", "").split("/")[0].replace(/^\//, "");
+      const classroomName = id.startsWith("class-") ? id.replace("class-", "") : id;
+      const sessionId = tail.split("/sessions/")[1].split("/")[0];
+      if (isPost(_init)) {
+        const body = parseBody(_init);
+        const session = (SEL_SESSIONS[classroomName] ?? []).find((s) => s.id === sessionId);
+        if (!session) throw new Error("Session not found");
+        session.status = "COMPLETED";
+        session.feedback = {
+          studentEngagement: body.studentEngagement as SessionFeedback["studentEngagement"],
+          learningUnderstanding: body.learningUnderstanding as SessionFeedback["learningUnderstanding"],
+          emotionalClimate: body.emotionalClimate as SessionFeedback["emotionalClimate"],
+          followUpNeed: body.followUpNeed as SessionFeedback["followUpNeed"],
+          planCompletion: body.planCompletion as SessionFeedback["planCompletion"],
+          activityCompletion: body.activityCompletion as SessionFeedback["activityCompletion"],
+          activityQuality: body.activityQuality as SessionFeedback["activityQuality"],
+          notes: body.notes as string | undefined,
+          submittedAt: new Date().toISOString(),
+          submittedBy: user?.fullName || ROLE_NAMES.COUNSELLOR,
+        };
+        return session as T;
+      }
+      throw new Error("Method not allowed");
+    }
+
+    // class analytics
+    if (tail.endsWith("/analytics")) {
+      const id = tail.replace("/analytics", "").replace(/^\//, "");
+      const classroomName = id.startsWith("class-") ? id.replace("class-", "") : id;
+      const classroomStudents = ALL_STUDENTS.filter(st => st.classroom === classroomName);
+      const tierCounts: Record<string, number> = {};
+      classroomStudents.forEach(st => { tierCounts[st.tier] = (tierCounts[st.tier] || 0) + 1; });
+      const flags = FLAGS_HISTORY.filter(f => f.classroom === classroomName);
+      const obs = OBSERVATIONS_RICH.filter(o => o.classroom === classroomName);
+      let assigned = 0, completed = 0;
+      classroomStudents.forEach(st => {
+        const p = SEL_PROGRESS[st.id] ?? { assigned: 5, completed: 3, pending: 1 };
+        assigned += p.assigned; completed += p.completed;
+      });
+      const trend = [
+        { day: "Mon", count: 2 + (classroomStudents.length % 4) },
+        { day: "Tue", count: 1 + (classroomStudents.length % 5) },
+        { day: "Wed", count: 3 + (classroomStudents.length % 3) },
+        { day: "Thu", count: 0 + (classroomStudents.length % 2) },
+        { day: "Fri", count: 2 + (classroomStudents.length % 4) },
+      ];
+      return {
+        classroomId: `class-${classroomName}`,
+        totalStudents: classroomStudents.length,
+        tierDistribution: Object.entries(tierCounts).map(([tier, count]) => ({ tier, count })),
+        flagCount: { open: flags.filter(f => f.status === "OPEN").length, resolved: flags.filter(f => f.status === "RESOLVED").length },
+        selCompletionRate: assigned > 0 ? Math.round((completed / assigned) * 100) : 0,
+        observationCount: obs.length,
+        trend,
+      } as T;
     }
 
     // classroom detail
     const id = tail.replace(/^\//, "");
     const classroomName = id.startsWith("class-") ? id.replace("class-", "") : id;
-    const students = STUDENTS.filter(s => s.classroom === classroomName);
+    const students = ALL_STUDENTS.filter(s => s.classroom === classroomName);
     if (students.length === 0) throw new Error("Classroom not found");
-    const timetable = [
-      { day: "Mon", slots: [ { time: "09:00", subject: "Math" }, { time: "10:00", subject: "Science" } ] },
-      { day: "Tue", slots: [ { time: "09:00", subject: "English" }, { time: "10:00", subject: "Social Studies" } ] },
-    ];
-    return { id: `class-${classroomName}`, name: classroomName, grade: students[0].grade, teacher: { id:`t-${classroomName}`, fullName: ROLE_NAMES.CLASS_TEACHER ?? ROLE_NAMES.TEACHER }, students, timetable, flags: FLAGS.filter(f => f.classroom === classroomName), observations: OBSERVATIONS.filter(o=>o.classroom===classroomName) } as T;
+    const ct = TEACHERS_BY_CLASSROOM[classroomName]?.find(t => t.isClassTeacher);
+    return {
+      id: `class-${classroomName}`,
+      name: classroomName,
+      grade: students[0].grade,
+      section: classroomName.replace(/[0-9]/g, ""),
+      teacher: ct ? { id: ct.id, fullName: ct.fullName } : { id:`t-${classroomName}`, fullName: ROLE_NAMES.CLASS_TEACHER ?? ROLE_NAMES.TEACHER },
+      students,
+      teachers: TEACHERS_BY_CLASSROOM[classroomName] ?? [],
+      timetable: CLASSROOM_TIMETABLES[classroomName] ?? [],
+      sessions: SEL_SESSIONS[classroomName] ?? [],
+      flags: FLAGS_HISTORY.filter(f => f.classroom === classroomName),
+      observations: OBSERVATIONS_RICH.filter(o => o.classroom === classroomName),
+    } as T;
   }
 
   // =========== STUDENT FULL PROFILE ===========
@@ -516,10 +922,11 @@ export async function mockRequest<T>(url: string, _init?: RequestInit, user?: Au
     const tail = basePath.replace("/classrooms/", "").replace("/sel-progress", "");
     const classroomName = tail.startsWith("class-") ? tail.replace("class-", "") : tail;
     const classroomStudents = STUDENTS.filter(st => st.classroom === classroomName);
-    let assigned = 0, completed = 0, pending = 0;
+    let assigned = 0, completed = 0, pending = 0, participationSum = 0;
     classroomStudents.forEach(st => {
       const p = SEL_PROGRESS[st.id] ?? { assigned: 5, completed: 3, pending: 1 };
       assigned += p.assigned; completed += p.completed; pending += p.pending;
+      participationSum += WELLBEING_DATA[st.id]?.selParticipation ?? 70;
     });
     const total = classroomStudents.length;
     return {
@@ -527,6 +934,7 @@ export async function mockRequest<T>(url: string, _init?: RequestInit, user?: Au
       totalStudents: total,
       assigned, completed, pending,
       completionRate: assigned > 0 ? Math.round((completed / assigned) * 100) : 0,
+      participationRate: total > 0 ? Math.round(participationSum / total) : 0,
     } as T;
   }
 

@@ -9,6 +9,9 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/hooks/use-auth";
 import { formatDate } from "@/lib/utils";
+import { DemographicsCard } from "@/components/modules/students/demographics-card";
+import { IEPSection } from "@/components/modules/students/iep-section";
+import type { StudentDemographics, IEP, IEPFeedback } from "@/lib/types";
 import { GraduationCap, Heart, TrendingUp, Activity } from "lucide-react";
 
 type StudentDetail = {
@@ -20,6 +23,9 @@ type StudentDetail = {
   tier: string;
   status: string;
   riskScore: number;
+  demographics?: StudentDemographics | null;
+  iep?: IEP | null;
+  iepFeedback?: IEPFeedback[];
   academic?: {
     attendancePercent: number;
     assignmentCompletionPercent: number;
@@ -118,6 +124,9 @@ export default function StudentDetailPage({ params }: { params: { studentId: str
             </div>
             <p className="text-zinc-600">Status: {student.status.replaceAll("_", " ")}</p>
             <p className="text-zinc-600">Tier: {student.tier.replaceAll("_", " ")}</p>
+            {student.demographics && (
+              <p className="text-xs text-zinc-400">Student ID: {student.demographics.admissionNumber}</p>
+            )}
           </CardContent>
         </Card>
 
@@ -146,6 +155,9 @@ export default function StudentDetailPage({ params }: { params: { studentId: str
           </CardContent>
         </Card>
       </div>
+
+      {/* Demographics */}
+      {student.demographics && <DemographicsCard demographics={student.demographics} />}
 
       {/* Academic + Wellbeing row */}
       <div className="grid gap-4 lg:grid-cols-2">
@@ -238,6 +250,13 @@ export default function StudentDetailPage({ params }: { params: { studentId: str
           </CardContent>
         </Card>
       ) : null}
+
+      {/* IEP Section */}
+      <IEPSection
+        studentId={student.id}
+        iep={student.iep ?? null}
+        feedback={student.iepFeedback ?? []}
+      />
 
       <div className="grid gap-4 lg:grid-cols-2">
         <Card>

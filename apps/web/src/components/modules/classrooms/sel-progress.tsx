@@ -4,13 +4,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { SELProgress } from "@/lib/types";
 
 interface SELProgressProps {
-  progress: SELProgress;
+  progress: SELProgress & { participationRate?: number };
   studentName?: string;
   showDetails?: boolean;
 }
 
 export function SELProgressCard({ progress, studentName, showDetails = true }: SELProgressProps) {
-  const { assigned, completed, pending } = progress;
+  const { assigned, completed, pending, participationRate } = progress;
   const total = assigned;
   const completionRate = total > 0 ? Math.round((completed / total) * 100) : 0;
 
@@ -48,6 +48,12 @@ export function SELProgressCard({ progress, studentName, showDetails = true }: S
               <p className="text-lg font-bold text-amber-600">{pending}</p>
               <p className="text-xs text-zinc-500">Pending</p>
             </div>
+          </div>
+        )}
+        {participationRate !== undefined && (
+          <div className="rounded-lg bg-blue-50 px-3 py-2 text-center">
+            <p className="text-sm font-medium text-blue-900">{participationRate}%</p>
+            <p className="text-xs text-blue-600">Participation Rate</p>
           </div>
         )}
       </CardContent>

@@ -63,6 +63,7 @@ export interface StudentSummary {
   lastName: string;
   grade: string;
   classroom: string;
+  age?: number;
   tier: "TIER_1" | "TIER_2" | "TIER_3";
   status: "STABLE" | "NEEDS_SUPPORT" | "NEEDS_INTERVENTION";
   riskScore: number;
@@ -262,18 +263,6 @@ export interface Flag {
   resolvedAt?: string | null;
 }
 
-export interface IEP {
-  id: string;
-  studentId: string;
-  uploadedById: string;
-  title: string;
-  documentUrl: string;
-  consentLogged: boolean;
-  consentGivenById?: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
 export interface SelSessionSummary {
   id: string;
   classroomId: string;
@@ -294,7 +283,7 @@ export interface ObservationEntry {
   studentId: string;
   classroom: string;
   type: ObservationType;
-  severity: "LOW" | "MEDIUM" | "HIGH";
+  severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
   notes: string;
   createdAt: string;
   createdBy: string;
@@ -310,7 +299,10 @@ export interface FlagEntry {
   status: "OPEN" | "RESOLVED";
   createdAt: string;
   createdBy: string;
+  updatedAt?: string;
+  updatedBy?: string;
   resolvedAt?: string;
+  resolutionNote?: string;
 }
 
 export interface AcademicSnapshot {
@@ -357,4 +349,112 @@ export interface ClassroomSELProgress {
   completed: number;
   pending: number;
   completionRate: number;
+  participationRate: number;
+}
+
+// =============== Module 3: Timetable, Teachers, IEP, Analytics ===============
+
+export interface Teacher {
+  id: string;
+  fullName: string;
+  subject?: string | null;
+  isClassTeacher: boolean;
+  initials: string;
+}
+
+export type TimetableSlotType = "ACADEMIC" | "SEL" | "FREE" | "BREAK";
+
+export interface TimetableSlot {
+  day: "Mon" | "Tue" | "Wed" | "Thu" | "Fri";
+  period: number;
+  time: string;
+  subject: string;
+  teacherName?: string | null;
+  type: TimetableSlotType;
+}
+
+export type SessionFeedbackOption = string;
+
+export interface SessionFeedback {
+  studentEngagement: "High" | "Moderate" | "Minimal" | "Resistant" | "Mixed";
+  learningUnderstanding: "Strong" | "Basic" | "Partial" | "Poor" | "Needs Reinforcement";
+  emotionalClimate: "Open & Receptive" | "Mixed / Neutral" | "Resistant / Disengaged" | "Anxious / Restless" | "Low Mood" | "Emotionally Reactive";
+  followUpNeed: "No Concerns" | "Monitoring Needed" | "Immediate Follow-Up Recommended";
+  planCompletion: "Yes" | "Rushed / Partial" | "No";
+  activityCompletion: "Yes" | "Rushed / Partial" | "No";
+  activityQuality: "Good" | "Average / Can Improve" | "Low";
+  notes?: string;
+  submittedAt: string;
+  submittedBy: string;
+}
+
+export interface SELSessionDetailed {
+  id: string;
+  classroomId: string;
+  topic: string;
+  scheduledAt: string;
+  durationMins: number;
+  facilitatorId: string;
+  facilitatorName: string;
+  status: "SCHEDULED" | "COMPLETED" | "NO_SHOW" | "CANCELLED";
+  feedback?: SessionFeedback | null;
+}
+
+export interface StudentDemographics {
+  dateOfBirth: string;
+  age: number;
+  gender: "Male" | "Female" | "Other";
+  fatherName: string;
+  motherName: string;
+  parentContact: string;
+  admissionNumber: string;
+  standard: string;
+  section: string;
+}
+
+export type IEPGoalStatus = "NOT_STARTED" | "IN_PROGRESS" | "ACHIEVED";
+export type IEPFeedbackProgress = IEPGoalStatus;
+
+export interface IEPGoal {
+  id: string;
+  title: string;
+  description: string;
+  status: IEPGoalStatus;
+  accommodation?: string;
+}
+
+export interface IEPFeedback {
+  id: string;
+  iepId: string;
+  goalId: string;
+  progress: IEPFeedbackProgress;
+  comment: string;
+  submittedAt: string;
+  submittedBy: string;
+}
+
+export interface IEP {
+  id: string;
+  studentId: string;
+  title: string;
+  uploadedBy: string;
+  consentLogged: boolean;
+  createdAt: string;
+  goals: IEPGoal[];
+  feedback: IEPFeedback[];
+}
+
+export interface ClassAnalyticsTrendPoint {
+  day: string;
+  count: number;
+}
+
+export interface ClassAnalytics {
+  classroomId: string;
+  totalStudents: number;
+  tierDistribution: { tier: string; count: number }[];
+  flagCount: { open: number; resolved: number };
+  selCompletionRate: number;
+  observationCount: number;
+  trend: ClassAnalyticsTrendPoint[];
 }
