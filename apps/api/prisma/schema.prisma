@@ -66,6 +66,46 @@ enum IncidentSeverity {
   CRITICAL
 }
 
+enum LessonStatus {
+  DRAFT
+  PENDING_APPROVAL
+  APPROVED
+  REJECTED
+}
+
+enum WorkshopStatus {
+  DRAFT
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+}
+
+enum SelCategory {
+  SELF_AWARENESS
+  EMOTIONAL_REGULATION
+  EMPATHY
+  COMMUNICATION
+  LEADERSHIP
+  CONFLICT_RESOLUTION
+  RESILIENCE
+}
+
+enum WorkshopCategory {
+  BULLYING_PREVENTION
+  CAREER_GUIDANCE
+  MENTAL_HEALTH_AWARENESS
+  DIGITAL_SAFETY
+  STRESS_MANAGEMENT
+  PARENT_AWARENESS
+  TEACHER_WELLNESS
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  EXCUSED
+}
+
 model User {
   id                String              @id @default(uuid()) @db.Uuid
   email             String              @unique
@@ -82,6 +122,11 @@ model User {
   incidentReports   Incident[]          @relation("ReportedIncidents")
   timelineEvents    CaseTimelineEvent[] @relation("TimelineCreatedBy")
   counsellorStudents Student[]          @relation("CounsellorStudents")
+  facilitatedSelSessions SelSession[]   @relation("FacilitatedSelSessions")
+  approvedLessons   SelLesson[]         @relation("ApprovedLessons")
+  createdLessons SelLesson[]         @relation("CreatedLessons")
+  createdTemplates SelLessonTemplate[]
+  facilitator Facilitator?
 }
 
 model RefreshToken {
@@ -309,18 +354,177 @@ model IEP {
 
 model SelSession {
   id           String        @id @default(uuid()) @db.Uuid
+  lessonId     String?       @db.Uuid
   classroomId  String        @db.Uuid
+  title        String
   topic        String
   scheduledAt  DateTime
   durationMins Int           @default(45)
-  counsellorId String        @db.Uuid
+  facilitatorId String       @db.Uuid
   status       SessionStatus @default(SCHEDULED)
   feedback     Json?
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 
-  classroom    Classroom     @relation(fields: [classroomId], references: [id], onDelete: Cascade)
-  counsellor   User          @relation(fields: [counsellorId], references: [id], onDelete: Cascade)
+  lesson          SelLesson?     @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+  classroom       Classroom      @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+  facilitator     Facilitator    @relation(fields: [facilitatorId], references: [id], onDelete: Cascade)
+  attendance      SelSessionAttendance[]
+  feedbackEntries SelSessionFeedback[]
 
   @@index([classroomId, scheduledAt])
+}
+
+model SelLessonTemplate {
+  id String      @id @default(uuid()) @db.Uuid
+  title             String
+  grade             String
+  category          SelCategory
+  durationMins      Int         @default(45)
+  learningObjectives String[]
+  activities Json
+  reflectionQuestions String[]
+  createdById       String      @db.Uuid
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  lessons    SelLesson[] @relation
+  createdBy  User        @relation(fields: [createdById], references: [id])
+}
+
+model SelLesson {
+  id                   String        @id @default(uuid()) @db.Uuid
+  templateId           String?       @db.Uuid
+  title String
+  grade                String
+  topic                String
+  category             SelCategory
+  learningObjectives   String[]
+  activities           Json
+  reflectionQuestions String[]
+  durationMins         Int           @default(45)
+  status               LessonStatus  @default(DRAFT)
+  approvedById         String?       @db.Uuid
+  approvedAt           DateTime?
+  rejectionReason     String?
+  createdById          String        @db.Uuid
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+
+  template    SelLessonTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  approvedBy  User?              @relation("ApprovedLessons", fields: [approvedById], references: [id])
+  createdBy   User               @relation("CreatedLessons", fields: [createdById], references: [id])
+  selSessions SelSession[]
+}
+
+model WorkshopTemplate {
+  id           String           @id @default(uuid()) @db.Uuid
+  title        String
+  description  String
+  category     WorkshopCategory
+  audience     String
+  durationMins Int @default(90)
+  materials    String[]
+  createdById  String           @db.Uuid
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  workshops  Workshop[]
+  createdBy  User      @relation(fields: [createdById], references: [id])
+}
+
+model Workshop {
+  id             String         @id @default(uuid()) @db.Uuid
+  templateId     String?        @db.Uuid
+  title          String
+  description    String
+  category       WorkshopCategory
+  audience       String
+  venue String
+  date           DateTime
+  durationMins   Int            @default(90)
+  facilitatorId  String        @db.Uuid
+  materials String[]
+  status         WorkshopStatus @default(DRAFT)
+  feedbackScore  Float?
+  createdById    String        @db.Uuid
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  template   WorkshopTemplate?     @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  facilitator Facilitator          @relation(fields: [facilitatorId], references: [id])
+  createdBy   User                 @relation(fields: [createdById], references: [id])
+  attendance WorkshopAttendance[]
+  feedback   WorkshopFeedback[]
+}
+
+model Facilitator {
+  id String   @id @default(uuid()) @db.Uuid
+  userId    String?  @db.Uuid
+  fullName  String
+  email     String
+  expertise String[]
+  type      String
+  bio       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user         User? @relation(fields: [userId], references: [id])
+  selSessions  SelSession[]
+  workshops    Workshop[]
+}
+
+model SelSessionAttendance {
+  id String           @id @default(uuid()) @db.Uuid
+  sessionId String @db.Uuid
+  studentId String           @db.Uuid
+  status    AttendanceStatus @default(PRESENT)
+  createdAt DateTime        @default(now())
+
+  session SelSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  student Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, studentId])
+}
+
+model SelSessionFeedback {
+  id              String   @id @default(uuid()) @db.Uuid
+  sessionId       String   @db.Uuid
+  respondentName  String?
+  usefulnessScore Int
+  learnedNew      Boolean
+  wouldRecommend Boolean
+  rating          Int
+  comments        String?
+  submittedAt     DateTime @default(now())
+
+  session SelSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+}
+
+model WorkshopAttendance {
+  id           String           @id @default(uuid()) @db.Uuid
+  workshopId   String           @db.Uuid
+  studentId    String?          @db.Uuid
+  attendeeName String?
+  status       AttendanceStatus @default(PRESENT)
+  createdAt    DateTime        @default(now())
+
+  workshop Workshop  @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+  student  Student?  @relation(fields: [studentId], references: [id], onDelete: SetNull)
+
+  @@unique([workshopId, studentId])
+}
+
+model WorkshopFeedback {
+  id              String   @id @default(uuid()) @db.Uuid
+  workshopId      String   @db.Uuid
+  respondentName  String?
+  usefulnessScore Int
+  learnedNew      Boolean
+  wouldRecommend Boolean
+  rating          Int
+  comments        String?
+  submittedAt     DateTime @default(now())
+
+  workshop Workshop @relation(fields: [workshopId], references: [id], onDelete: Cascade)
 }

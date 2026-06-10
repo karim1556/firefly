@@ -1,3 +1,194 @@
+// =============== Module 4: SEL & Workshop Management ===============
+
+export type LessonStatus = "DRAFT" | "PENDING_APPROVAL" | "APPROVED" | "REJECTED";
+export type WorkshopStatus = "DRAFT" | "SCHEDULED" | "COMPLETED" | "CANCELLED";
+export type SelCategory = "SELF_AWARENESS" | "EMOTIONAL_REGULATION" | "EMPATHY" | "COMMUNICATION" | "LEADERSHIP" | "CONFLICT_RESOLUTION" | "RESILIENCE";
+export type WorkshopCategory = "BULLYING_PREVENTION" | "CAREER_GUIDANCE" | "MENTAL_HEALTH_AWARENESS" | "DIGITAL_SAFETY" | "STRESS_MANAGEMENT" | "PARENT_AWARENESS" | "TEACHER_WELLNESS";
+export type AttendanceStatus = "PRESENT" | "ABSENT" | "EXCUSED";
+
+export const SEL_CATEGORIES: SelCategory[] = [
+  "SELF_AWARENESS", "EMOTIONAL_REGULATION", "EMPATHY", "COMMUNICATION",
+  "LEADERSHIP", "CONFLICT_RESOLUTION", "RESILIENCE"
+];
+
+export const WORKSHOP_CATEGORIES: WorkshopCategory[] = [
+  "BULLYING_PREVENTION", "CAREER_GUIDANCE", "MENTAL_HEALTH_AWARENESS",
+  "DIGITAL_SAFETY", "STRESS_MANAGEMENT", "PARENT_AWARENESS", "TEACHER_WELLNESS"
+];
+
+export interface SelLessonTemplate {
+  id: string;
+  title: string;
+  grade: string;
+  category: SelCategory;
+  durationMins: number;
+  learningObjectives: string[];
+  activities: string[];
+  reflectionQuestions: string[];
+  createdById: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SelLesson {
+  id: string;
+  templateId?: string | null;
+  title: string;
+  grade: string;
+  topic: string;
+  category: SelCategory;
+  learningObjectives: string[];
+  activities: string[];
+  reflectionQuestions: string[];
+  durationMins: number;
+  status: LessonStatus;
+  approvedById?: string | null;
+  approvedAt?: string | null;
+  rejectionReason?: string | null;
+  createdById: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WorkshopTemplate {
+  id: string;
+  title: string;
+  description: string;
+  category: WorkshopCategory;
+  audience: string;
+  durationMins: number;
+  materials: string[];
+  createdById: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Workshop {
+  id: string;
+  templateId?: string | null;
+  title: string;
+  description: string;
+  category: WorkshopCategory;
+  audience: string;
+  venue: string;
+  date: string;
+  durationMins: number;
+  facilitatorId: string;
+  materials: string[];
+  status: WorkshopStatus;
+  feedbackScore?: number | null;
+  createdById: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Facilitator {
+  id: string;
+  userId?: string | null;
+  fullName: string;
+  email: string;
+  expertise: string[];
+  type: "SCHOOL_COUNSELLOR" | "TEACHER" | "PRINCIPAL" | "EXTERNAL_EXPERT";
+  bio?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SelSessionAttendance {
+  id: string;
+  sessionId: string;
+  studentId: string;
+  status: AttendanceStatus;
+  createdAt: string;
+}
+
+export interface WorkshopAttendance {
+  id: string;
+  workshopId: string;
+  studentId?: string | null;
+  attendeeName?: string | null;
+  status: AttendanceStatus;
+  createdAt: string;
+}
+
+export interface SelSessionFeedback {
+  id: string;
+  sessionId: string;
+  respondentName?: string | null;
+  usefulnessScore: number;
+  learnedNew: boolean;
+  wouldRecommend: boolean;
+  rating: number;
+  comments?: string | null;
+  submittedAt: string;
+}
+
+export interface WorkshopFeedback {
+  id: string;
+  workshopId: string;
+  respondentName?: string | null;
+  usefulnessScore: number;
+  learnedNew: boolean;
+  wouldRecommend: boolean;
+  rating: number;
+  comments?: string | null;
+  submittedAt: string;
+}
+
+export interface SelDashboardStats {
+  totalPrograms: number;
+  activeSessions: number;
+  completionRate: number;
+  upcomingSessions: number;
+  studentParticipation: number;
+  workshopAttendance: number;
+  highestCompletionGrade: string;
+  studentsRequiringIntervention: number;
+  upcomingWorkshopsThisWeek: number;
+  recentFeedback: Array<{ sessionTitle: string; rating: number; facilitatorName: string; date: string }>;
+}
+
+export interface WorkshopDashboardStats {
+  totalWorkshops: number;
+  upcomingWorkshops: number;
+  completedWorkshops: number;
+  averageAttendance: number;
+  feedbackScore: number;
+}
+
+export interface WellbeingAnalytics {
+  totalSessionsConducted: number;
+  workshopAttendanceRate: number;
+  studentEngagementRate: number;
+  selCompletionRate: number;
+  flaggedStudentTrends: Array<{ month: string; count: number }>;
+  monthlyParticipation: Array<{ month: string; attended: number; total: number }>;
+  gradeWiseCompletion: Array<{ grade: string; completed: number; total: number }>;
+  workshopAttendanceTrend: Array<{ month: string; attended: number; missed: number }>;
+}
+
+export interface CalendarEvent {
+  id: string;
+  type: "SEL_SESSION" | "WORKSHOP" | "AWARENESS_CAMPAIGN" | "PARENT_SESSION";
+  title: string;
+  date: string;
+  time: string;
+  venue?: string;
+  facilitatorName?: string;
+  grade?: string;
+  classroom?: string;
+}
+
+export interface SelProgress {
+  grade: string;
+  classroom: string;
+  assigned: number;
+  completed: number;
+  pending: number;
+  completionRate: number;
+  participationRate: number;
+}
+
 export type Role =
   | "ADMIN"
   | "COUNSELLOR"

@@ -468,7 +468,7 @@ const COMPLIANCE_REPORT = {
     {code:"SC III",title:"SEL and Counselling Systems",status:"active"},
     {code:"SC IV",title:"School Wellbeing Workflows",status:"in_progress"},
     {code:"SC V",title:"Crisis Escalation Protocols",status:"active"},
-    {code:"SC VIII",title:"Case Management & Referrals",status:"active"},
+    {code:"SC VIII",title:"Case Management& Referrals",status:"active"},
     {code:"SC IX",title:"Safety & Monitoring Practices",status:"active"},
     {code:"SC X",title:"Supportive Policy Infrastructure",status:"in_progress"},
     {code:"SC XII",title:"Audit & Documentation",status:"active"},
@@ -476,6 +476,170 @@ const COMPLIANCE_REPORT = {
   ],
   metrics:{activeCases:124,incidentCount:29,sessionsCount:86}
 };
+
+// ======================== MODULE 4: SEL & WORKSHOP MOCK DATA ========================
+
+const SEL_CATEGORIES_LIST = ["SELF_AWARENESS","EMOTIONAL_REGULATION","EMPATHY","COMMUNICATION","LEADERSHIP","CONFLICT_RESOLUTION","RESILIENCE"];
+const WORKSHOP_CATEGORIES_LIST = ["BULLYING_PREVENTION","CAREER_GUIDANCE","MENTAL_HEALTH_AWARENESS","DIGITAL_SAFETY","STRESS_MANAGEMENT","PARENT_AWARENESS","TEACHER_WELLNESS"];
+
+const SEL_LESSON_TEMPLATES = [
+  { id:"tpl-1",title:"Understanding My Emotions",grade:"5-6",category:"SELF_AWARENESS",durationMins:45,learningObjectives:["Identify primary emotions","Recognize emotional triggers","Develop emotion vocabulary"],activities:["Emotion charades","Feelings journal","Body scan meditation"],reflectionQuestions:["What emotion did you feel most strongly today?","What triggered that emotion?","How did you respond?"],createdById:"u-couns",createdAt:new Date(NOW-60*D).toISOString(),updatedAt:new Date(NOW-60*D).toISOString() },
+  { id:"tpl-2",title:"Managing Exam Anxiety",grade:"7-8",category:"EMOTIONAL_REGULATION",durationMins:45,learningObjectives:["Recognize anxiety symptoms","Apply relaxation techniques","Develop coping strategies"],activities:["Deep breathing exercises","Progressive muscle relaxation","Grounding techniques"],reflectionQuestions:["What helps you feel calmer before a test?","Where do you feel anxiety in your body?"],createdById:"u-couns",createdAt:new Date(NOW-55*D).toISOString(),updatedAt:new Date(NOW-55*D).toISOString() },
+  { id:"tpl-3",title:"Walking in Someone Else's Shoes",grade:"6-7",category:"EMPATHY",durationMins:45,learningObjectives:["Understand different perspectives","Practice active listening","Show compassion to peers"],activities:["Perspective role-play","Active listening pairs","Empathy mapping"],reflectionQuestions:["How did it feel to see from another person's view?","How can you show empathy to someone who is struggling?"],createdById:"u-couns",createdAt:new Date(NOW-50*D).toISOString(),updatedAt:new Date(NOW-50*D).toISOString() },
+  { id:"tpl-4",title:"Effective Communication Skills",grade:"5-6",category:"COMMUNICATION",durationMins:45,learningObjectives:["Use assertive vs aggressive vs passive language","Practice active listening","Give and receive feedback"],activities:["I-statements practice","Role-play scenarios","Peer feedback exercise"],reflectionQuestions:["When do you find it hardest to speak up?","How does it feel when someone really listens to you?"],createdById:"u-couns",createdAt:new Date(NOW-45*D).toISOString(),updatedAt:new Date(NOW-45*D).toISOString() },
+  { id:"tpl-5",title:"Leadership Through Action",grade:"8-10",category:"LEADERSHIP",durationMins:45,learningObjectives:["Identify leadership styles","Practice collaborative decision-making","Take initiative responsibly"],activities:["Group challenge activity","Leadership style self-assessment","Community service planning"],reflectionQuestions:["What kind of leader are you?","How do you motivate others?"],createdById:"u-couns",createdAt:new Date(NOW-40*D).toISOString(),updatedAt:new Date(NOW-40*D).toISOString() },
+  { id:"tpl-6",title:"Resolving Conflicts Peacefully",grade:"6-8",category:"CONFLICT_RESOLUTION",durationMins:45,learningObjectives:["Understand conflict cycles","Practice win-win problem solving","Use 'I' statements"],activities:["Conflict scenario analysis","Mediation role-play","Peace agreement drafting"],reflectionQuestions:["What usually happens when you disagree with a friend?","How can you turn a conflict into an opportunity?"],createdById:"u-couns",createdAt:new Date(NOW-35*D).toISOString(),updatedAt:new Date(NOW-35*D).toISOString() },
+  { id:"tpl-7",title:"Bouncing Back from Setbacks",grade:"7-9",category:"RESILIENCE",durationMins:45,learningObjectives:["Understand resilience as a skill","Develop growth mindset","Build problem-solving confidence"],activities:["Failure recovery stories","Growth mindset workshop","Resilience action plan"],reflectionQuestions:["What is your biggest fear of failure?","What helps you get back up after a setback?"],createdById:"u-couns",createdAt:new Date(NOW-30*D).toISOString(),updatedAt:new Date(NOW-30*D).toISOString() },
+  { id:"tpl-8",title:"Building Healthy Friendships",grade:"5-6",category:"EMPATHY",durationMins:45,learningObjectives:["Identify qualities of good friends","Set healthy boundaries","Practice friendship skills"],activities:["Friendship qualities sorting","Boundary practice scenarios","Kindness challenge"],reflectionQuestions:["What makes a friendship healthy?","How do you handle it when a friendship becomes unhealthy?"],createdById:"u-couns",createdAt:new Date(NOW-25*D).toISOString(),updatedAt:new Date(NOW-25*D).toISOString() },
+  { id:"tpl-9",title:"Mindfulness for Focus",grade:"6-10",category:"SELF_AWARENESS",durationMins:45,learningObjectives:["Practice present-moment awareness","Improve concentration","Reduce distractions"],activities:["Guided meditation","Mindful eating exercise","Focus breathing"],reflectionQuestions:["How often do you get distracted during class?","What mindfulness technique will you use to focus?"],createdById:"u-couns",createdAt:new Date(NOW-20*D).toISOString(),updatedAt:new Date(NOW-20*D).toISOString() },
+  { id:"tpl-10",title:"Digital Citizenship & Online Safety",grade:"7-8",category:"COMMUNICATION",durationMins:45,learningObjectives:["Understand digital footprint","Recognize online risks","Practice safe online communication"],activities:["Digital footprint audit","Cyberbullying scenario analysis","Safe online pledge"],reflectionQuestions:["What is your digital footprint?","How can you be a positive influence online?"],createdById:"u-couns",createdAt:new Date(NOW-15*D).toISOString(),updatedAt:new Date(NOW-15*D).toISOString() },
+  { id:"tpl-11",title:"Stress Management Strategies",grade:"8-10",category:"EMOTIONAL_REGULATION",durationMins:45,learningObjectives:["Identify personal stress triggers","Apply stress management techniques","Develop personal wellness plan"],activities:["Stress trigger mapping","Coping technique toolbox","Wellness plan creation"],reflectionQuestions:["What is your biggest source of stress?","Which technique will work best for you?"],createdById:"u-couns",createdAt:new Date(NOW-10*D).toISOString(),updatedAt:new Date(NOW-10*D).toISOString() },
+  { id:"tpl-12",title:"Standing Up to Bullying",grade:"5-7",category:"LEADERSHIP",durationMins:45,learningObjectives:["Recognize different forms of bullying","Practice bystander intervention","Build inclusive communities"],activities:["Bullying scenario analysis","Bystander intervention practice","Inclusion activity"],reflectionQuestions:["What would you do if you saw someone being bullied?","How can you be an upstander instead of a bystander?"],createdById:"u-couns",createdAt:new Date(NOW-5*D).toISOString(),updatedAt:new Date(NOW-5*D).toISOString() },
+];
+
+const SEL_LESSONS = [
+  { id:"les-1",templateId:"tpl-2",title:"Managing Exam Anxiety",grade:"7",topic:"Emotional Regulation",category:"EMOTIONAL_REGULATION",learningObjectives:["Recognize anxiety symptoms","Apply relaxation techniques"],activities:["Deep breathing","Grounding"],reflectionQuestions:["What helps you feel calmer?"],durationMins:45,status:"APPROVED",approvedById:"u-admin",approvedAt:new Date(NOW-20*D).toISOString(),createdById:"u-couns",createdAt:new Date(NOW-25*D).toISOString(),updatedAt:new Date(NOW-20*D).toISOString() },
+  { id:"les-2",templateId:"tpl-1",title:"Understanding My Emotions",grade:"5",topic:"Self Awareness",category:"SELF_AWARENESS",learningObjectives:["Identify emotions","Build emotion vocabulary"],activities:["Emotion charades","Journaling"],reflectionQuestions:["What did you feel today?"],durationMins:45,status:"APPROVED",approvedById:"u-admin",approvedAt:new Date(NOW-18*D).toISOString(),createdById:"u-couns",createdAt:new Date(NOW-22*D).toISOString(),updatedAt:new Date(NOW-18*D).toISOString() },
+  { id:"les-3",templateId:"tpl-3",title:"Walking in Someone Else's Shoes",grade:"6",topic:"Empathy",category:"EMPATHY",learningObjectives:["Understand perspectives","Practice empathy"],activities:["Role-play","Empathy mapping"],reflectionQuestions:["How did it feel?"],durationMins:45,status:"APPROVED",approvedById:"u-admin",approvedAt:new Date(NOW-15*D).toISOString(),createdById:"u-couns",createdAt:new Date(NOW-20*D).toISOString(),updatedAt:new Date(NOW-15*D).toISOString() },
+  { id:"les-4",templateId:"tpl-6",title:"Resolving Conflicts Peacefully",grade:"7",topic:"Conflict Resolution",category:"CONFLICT_RESOLUTION",learningObjectives:["Understand conflict cycles","Practice win-win solving"],activities:["Mediation role-play","Peace agreement"],reflectionQuestions:["How do you resolve conflicts?"],durationMins:45,status:"PENDING_APPROVAL",createdById:"u-couns",createdAt:new Date(NOW-5*D).toISOString(),updatedAt:new Date(NOW-5*D).toISOString() },
+  { id:"les-5",templateId:"tpl-5",title:"Leadership Through Action",grade:"9",topic:"Leadership",category:"LEADERSHIP",learningObjectives:["Identify leadership styles","Practice collaboration"],activities:["Group challenge","Leadership assessment"],reflectionQuestions:["What kind of leader are you?"],durationMins:45,status:"PENDING_APPROVAL",createdById:"u-couns",createdAt:new Date(NOW-4*D).toISOString(),updatedAt:new Date(NOW-4*D).toISOString() },
+  { id:"les-6",templateId:"tpl-7",title:"Bouncing Back from Setbacks",grade:"8",topic:"Resilience",category:"RESILIENCE",learningObjectives:["Develop growth mindset","Build confidence"],activities:["Failure stories","Resilience plan"],reflectionQuestions:["How do you recover from setbacks?"],durationMins:45,status:"DRAFT",createdById:"u-couns",createdAt:new Date(NOW-2*D).toISOString(),updatedAt:new Date(NOW-2*D).toISOString() },
+  { id:"les-7",templateId:"tpl-4",title:"Effective Communication",grade:"6",topic:"Communication",category:"COMMUNICATION",learningObjectives:["Practice active listening","Use I-statements"],activities:["I-statement practice","Peer feedback"],reflectionQuestions:["How do you communicate under stress?"],durationMins:45,status:"DRAFT",createdById:"u-couns",createdAt:new Date(NOW-1*D).toISOString(),updatedAt:new Date(NOW-1*D).toISOString() },
+  { id:"les-8",templateId:"tpl-9",title:"Mindfulness for Focus",grade:"10",topic:"Self Awareness",category:"SELF_AWARENESS",learningObjectives:["Practice present-moment awareness","Improve concentration"],activities:["Guided meditation","Focus breathing"],reflectionQuestions:["How often do you get distracted?"],durationMins:45,status:"REJECTED",rejectionReason:"Needs more interactive activities",createdById:"u-couns",createdAt:new Date(NOW-8*D).toISOString(),updatedAt:new Date(NOW-6*D).toISOString() },
+  { id:"les-9",templateId:"tpl-11",title:"Stress Management",grade:"9",topic:"Emotional Regulation",category:"EMOTIONAL_REGULATION",learningObjectives:["Identify stress triggers","Apply coping techniques"],activities:["Trigger mapping","Coping toolbox"],reflectionQuestions:["What is your biggest stressor?"],durationMins:45,status:"APPROVED",approvedById:"u-admin",approvedAt:new Date(NOW-10*D).toISOString(),createdById:"u-couns",createdAt:new Date(NOW-15*D).toISOString(),updatedAt:new Date(NOW-10*D).toISOString() },
+  { id:"les-10",templateId:"tpl-8",title:"Building Healthy Friendships",grade:"5",topic:"Empathy",category:"EMPATHY",learningObjectives:["Identify healthy friendship qualities","Set boundaries"],activities:["Friendship sorting","Boundary practice"],reflectionQuestions:["What makes a friendship healthy?"],durationMins:45,status:"APPROVED",approvedById:"u-admin",approvedAt:new Date(NOW-12*D).toISOString(),createdById:"u-couns",createdAt:new Date(NOW-16*D).toISOString(),updatedAt:new Date(NOW-12*D).toISOString() },
+  { id:"les-11",templateId:"tpl-12",title:"Standing Up to Bullying",grade:"6",topic:"Leadership",category:"LEADERSHIP",learningObjectives:["Recognize bullying","Practice intervention"],activities:["Scenario analysis","Inclusion activity"],reflectionQuestions:["How can you be an upstander?"],durationMins:45,status:"APPROVED",approvedById:"u-admin",approvedAt:new Date(NOW-8*D).toISOString(),createdById:"u-couns",createdAt:new Date(NOW-12*D).toISOString(),updatedAt:new Date(NOW-8*D).toISOString() },
+  { id:"les-12",templateId:"tpl-10",title:"Digital Citizenship",grade:"8",topic:"Communication",category:"COMMUNICATION",learningObjectives:["Understand digital footprint","Practice safe online communication"],activities:["Digital audit","Cyberbullying analysis"],reflectionQuestions:["What is your digital footprint?"],durationMins:45,status:"PENDING_APPROVAL",createdById:"u-couns",createdAt:new Date(NOW-3*D).toISOString(),updatedAt:new Date(NOW-3*D).toISOString() },
+];
+
+const FACILITATORS = [
+  { id:"fac-1",userId:"u-couns",fullName:"Priya Sharma",email:"priya@firefly.school",expertise:["Emotional Regulation","Self-Awareness","Counselling"],type:"SCHOOL_COUNSELLOR",bio:"Certified school counsellor with 8 years of experience in SEL program delivery.",createdAt:new Date(NOW-365*D).toISOString(),updatedAt:new Date(NOW-365*D).toISOString() },
+  { id:"fac-2",userId:"u-doc",fullName:"Dr. Anil Kumar",email:"anil@firefly.school",expertise:["Mental Health","Trauma-Informed Practice","SEL Curriculum"],type:"SCHOOL_COUNSELLOR",bio:"Clinical psychologist specializing in adolescent mental health and SEL.",createdAt:new Date(NOW-365*D).toISOString(),updatedAt:new Date(NOW-365*D).toISOString() },
+  { id:"fac-3",userId:"u-teach",fullName:"Sneha Reddy",email:"sneha@firefly.school",expertise:["Physical Education","Social Skills","Team Building"],type:"TEACHER",bio:"Physical education teacher with a passion for social-emotional learning through movement.",createdAt:new Date(NOW-300*D).toISOString(),updatedAt:new Date(NOW-300*D).toISOString() },
+  { id:"fac-4",userId:"u-principal",fullName:"Dr. Suresh Iyengar",email:"suresh@firefly.school",expertise:["Leadership","School Culture","Policy"],type:"PRINCIPAL",bio:"School principal with 20 years of experience in education leadership.",createdAt:new Date(NOW-365*D).toISOString(),updatedAt:new Date(NOW-365*D).toISOString() },
+  { id:"fac-5",userId:null,fullName:"Meera Joshi",email:"meera.joshi@external.com",expertise:["Career Guidance","Adolescent Development","Parent Education"],type:"EXTERNAL_EXPERT",bio:"Career guidance counsellor and parent educator with 15 years of experience.",createdAt:new Date(NOW-200*D).toISOString(),updatedAt:new Date(NOW-200*D).toISOString() },
+  { id:"fac-6",userId:"u-couns2",fullName:"Lakshmi Nair",email:"lakshmi@firefly.school",expertise:["Bullying Prevention","Social Skills","Peer Mediation"],type:"SCHOOL_COUNSELLOR",bio:"Counsellor specializing in bullying prevention and peer mediation programs.",createdAt:new Date(NOW-250*D).toISOString(),updatedAt:new Date(NOW-250*D).toISOString() },
+  { id:"fac-7",userId:null,fullName:"Ravi Deshmukh",email:"ravi.deshmukh@external.com",expertise:["Digital Safety","Cyber Wellness","Technology Ethics"],type:"EXTERNAL_EXPERT",bio:"Digital safety expert and cyber wellness counsellor for adolescents.",createdAt:new Date(NOW-150*D).toISOString(),updatedAt:new Date(NOW-150*D).toISOString() },
+  { id:"fac-8",userId:"u-teach2",fullName:"Deepa Menon",email:"deepa@firefly.school",expertise:["Computer Science","Digital Citizenship","Ethical Technology Use"],type:"TEACHER",bio:"Computer science teacher focused on digital citizenship and online safety.",createdAt:new Date(NOW-280*D).toISOString(),updatedAt:new Date(NOW-280*D).toISOString() },
+  { id:"fac-9",userId:null,fullName:"Dr. Sanjay Gupta",email:"sanjay.gupta@external.com",expertise:["Mental Health Awareness","Stress Management","Adolescent Psychology"],type:"EXTERNAL_EXPERT",bio:"Psychiatrist specializing in adolescent mental health awareness and stress management.",createdAt:new Date(NOW-180*D).toISOString(),updatedAt:new Date(NOW-180*D).toISOString() },
+  { id:"fac-10",userId:"u-vp",fullName:"Lakshmi Nair",email:"lakshmi.nair@firefly.school",expertise:["Teacher Wellness","Professional Development","Work-Life Balance"],type:"TEACHER",bio:"Vice principal focused on teacher wellness and professional development programs.",createdAt:new Date(NOW-320*D).toISOString(),updatedAt:new Date(NOW-320*D).toISOString() },
+];
+
+const WORKSHOP_TEMPLATES = [
+  { id:"wtpl-1",title:"Bullying Prevention Workshop",description:"Interactive workshop helping students identify, prevent, and respond to bullying behaviours including cyberbullying.",category:"BULLYING_PREVENTION",audience:"Grades 5-8",durationMins:90,materials:["Scenario cards","Role-play scripts","Bullying prevention handbook","Digital citizenship guide"],createdById:"u-couns",createdAt:new Date(NOW-60*D).toISOString(),updatedAt:new Date(NOW-60*D).toISOString() },
+  { id:"wtpl-2",title:"Career Discovery Workshop",description:"Help students explore career paths, understand labour market trends, and develop career planning skills.",category:"CAREER_GUIDANCE",audience:"Grades 8-10",durationMins:120,materials:["Career interest inventory","Labour market fact sheets","Goal setting worksheets","Industry guest speaker guide"],createdById:"u-couns",createdAt:new Date(NOW-55*D).toISOString(),updatedAt:new Date(NOW-55*D).toISOString() },
+  { id:"wtpl-3",title:"Mental Health Awareness Workshop",description:"Break the stigma around mental health. Students learn to recognize signs, offer support, and access resources.",category:"MENTAL_HEALTH_AWARENESS",audience:"Grades 6-10",durationMins:90,materials:["Mental health awareness booklet","Support resource cards","First aid for mental health guide","Peer support manual"],createdById:"u-couns",createdAt:new Date(NOW-50*D).toISOString(),updatedAt:new Date(NOW-50*D).toISOString() },
+  { id:"wtpl-4",title:"Digital Safety & Online Wellness",description:"Equip students with skills to navigate the digital world safely, recognize online risks, and maintain digital wellbeing.",category:"DIGITAL_SAFETY",audience:"Grades 5-10",durationMins:90,materials:["Digital footprint worksheet","Privacy settings guide","Online safety checklist","Social media impact report"],createdById:"u-couns",createdAt:new Date(NOW-45*D).toISOString(),updatedAt:new Date(NOW-45*D).toISOString() },
+  { id:"wtpl-5",title:"Stress Management for Students",description:"Practical stress management techniques including mindfulness, time management, and healthy coping strategies.",category:"STRESS_MANAGEMENT",audience:"Grades 7-10",durationMins:90,materials:["Stress trigger diary","Mindfulness audio guide","Time management planner","Coping strategies card deck"],createdById:"u-couns",createdAt:new Date(NOW-40*D).toISOString(),updatedAt:new Date(NOW-40*D).toISOString() },
+  { id:"wtpl-6",title:"Parent Awareness Workshop",description:"Equipping parents with tools to support their child's mental health, academics, and social development at home.",category:"PARENT_AWARENESS",audience:"Parents of Grades 5-10",durationMins:120,materials:["Parent handbook","Communication guide","Screen time agreement template","Support resources list"],createdById:"u-couns",createdAt:new Date(NOW-35*D).toISOString(),updatedAt:new Date(NOW-35*D).toISOString() },
+  { id:"wtpl-7",title:"Teacher Wellness & Burnout Prevention",description:"Supporting teachers' mental health with practical self-care strategies, workload management, and resilience building.",category:"TEACHER_WELLNESS",audience:"All School Staff",durationMins:90,materials:["Wellness self-assessment","Burnout prevention guide","Self-care action plan","Peer support protocol"],createdById:"u-couns",createdAt:new Date(NOW-30*D).toISOString(),updatedAt:new Date(NOW-30*D).toISOString() },
+  { id:"wtpl-8",title:"Building Emotional Resilience",description:"Help students develop emotional resilience through cognitive behavioural techniques and practical exercises.",category:"MENTAL_HEALTH_AWARENESS",audience:"Grades 6-10",durationMins:90,materials:["Resilience journal","CBT thought records","Coping strategy cards","Resilience building activities"],createdById:"u-couns",createdAt:new Date(NOW-25*D).toISOString(),updatedAt:new Date(NOW-25*D).toISOString() },
+  { id:"wtpl-9",title:"Study Skills & Academic Confidence",description:"Build academic confidence with proven study techniques, test preparation strategies, and learning mindset training.",category:"STRESS_MANAGEMENT",audience:"Grades 6-10",durationMins:90,materials:["Study schedule template","Active recall guide","Spaced repetition worksheet","Exam preparation checklist"],createdById:"u-couns",createdAt:new Date(NOW-20*D).toISOString(),updatedAt:new Date(NOW-20*D).toISOString() },
+  { id:"wtpl-10",title:"Peer Conflict Resolution Skills",description:"Teach students effective peer conflict resolution through communication skills, empathy building, and mediation practice.",category:"BULLYING_PREVENTION",audience:"Grades 5-8",durationMins:90,materials:["Conflict resolution scenarios","Mediation scripts","I-statements practice worksheets","Peer mediation manual"],createdById:"u-couns",createdAt:new Date(NOW-15*D).toISOString(),updatedAt:new Date(NOW-15*D).toISOString() },
+];
+
+const WORKSHOPS = [
+  { id:"ws-1",templateId:"wtpl-5",title:"Stress Management Workshop",description:"Practical stress management techniques for board exam preparation.",category:"STRESS_MANAGEMENT",audience:"Grade 10 Students",venue:"Main Hall",date:new Date(NOW+3*D).toISOString(),durationMins:90,facilitatorId:"fac-9",materials:["Stress diary","Mindfulness guide"],status:"SCHEDULED",createdById:"u-couns",createdAt:new Date(NOW-10*D).toISOString(),updatedAt:new Date(NOW-10*D).toISOString() },
+  { id:"ws-2",templateId:"wtpl-1",title:"Bullying Prevention Workshop",description:"Interactive session on identifying and preventing bullying.",category:"BULLYING_PREVENTION",audience:"Grades 6-7",venue:"Room 201",date:new Date(NOW+5*D).toISOString(),durationMins:90,facilitatorId:"fac-6",materials:["Scenario cards","Handbook"],status:"SCHEDULED",createdById:"u-couns",createdAt:new Date(NOW-8*D).toISOString(),updatedAt:new Date(NOW-8*D).toISOString() },
+  { id:"ws-3",templateId:"wtpl-3",title:"Mental Health Awareness",description:"Breaking the stigma around mental health for adolescents.",category:"MENTAL_HEALTH_AWARENESS",audience:"Grades 8-10",venue:"Auditorium",date:new Date(NOW-5*D).toISOString(),durationMins:90,facilitatorId:"fac-9",materials:["Awareness booklet","Resource cards"],status:"COMPLETED",feedbackScore:4.7,createdById:"u-couns",createdAt:new Date(NOW-15*D).toISOString(),updatedAt:new Date(NOW-5*D).toISOString() },
+  { id:"ws-4",templateId:"wtpl-2",title:"Career Discovery Workshop",description:"Career exploration and planning for future success.",category:"CAREER_GUIDANCE",audience:"Grade 9 Students",venue:"Career Centre",date:new Date(NOW-10*D).toISOString(),durationMins:120,facilitatorId:"fac-5",materials:["Career inventory","Fact sheets"],status:"COMPLETED",feedbackScore:4.5,createdById:"u-couns",createdAt:new Date(NOW-20*D).toISOString(),updatedAt:new Date(NOW-10*D).toISOString() },
+  { id:"ws-5",templateId:"wtpl-4",title:"Digital Safety Workshop",description:"Online safety and digital citizenship for the digital age.",category:"DIGITAL_SAFETY",audience:"Grades 7-8",venue:"Computer Lab",date:new Date(NOW+7*D).toISOString(),durationMins:90,facilitatorId:"fac-7",materials:["Digital footprint worksheet","Safety checklist"],status:"SCHEDULED",createdById:"u-couns",createdAt:new Date(NOW-5*D).toISOString(),updatedAt:new Date(NOW-5*D).toISOString() },
+  { id:"ws-6",templateId:"wtpl-6",title:"Parent Awareness Session",description:"Equipping parents to support child's wellbeing at home.",category:"PARENT_AWARENESS",audience:"Parents Grade 7",venue:"Main Hall",date:new Date(NOW+10*D).toISOString(),durationMins:120,facilitatorId:"fac-5",materials:["Parent handbook","Communication guide"],status:"SCHEDULED",createdById:"u-couns",createdAt:new Date(NOW-3*D).toISOString(),updatedAt:new Date(NOW-3*D).toISOString() },
+  { id:"ws-7",templateId:"wtpl-7",title:"Teacher Wellness Workshop",description:"Self-care and burnout prevention for teaching staff.",category:"TEACHER_WELLNESS",audience:"All Staff",venue:"Staff Room",date:new Date(NOW-15*D).toISOString(),durationMins:90,facilitatorId:"fac-10",materials:["Wellness assessment","Self-care plan"],status:"COMPLETED",feedbackScore:4.8,createdById:"u-admin",createdAt:new Date(NOW-25*D).toISOString(),updatedAt:new Date(NOW-15*D).toISOString() },
+  { id:"ws-8",templateId:"wtpl-8",title:"Building Emotional Resilience",description:"CBT-based resilience building for adolescents.",category:"MENTAL_HEALTH_AWARENESS",audience:"Grades 8-9",venue:"Room 105",date:new Date(NOW-20*D).toISOString(),durationMins:90,facilitatorId:"fac-2",materials:["Resilience journal","CBT records"],status:"COMPLETED",feedbackScore:4.6,createdById:"u-couns",createdAt:new Date(NOW-30*D).toISOString(),updatedAt:new Date(NOW-20*D).toISOString() },
+  { id:"ws-9",templateId:"wtpl-9",title:"Study Skills Workshop",description:"Proven study techniques and exam preparation strategies.",category:"STRESS_MANAGEMENT",audience:"Grades 9-10",venue:"Main Hall",date:new Date(NOW+14*D).toISOString(),durationMins:90,facilitatorId:"fac-2",materials:["Study schedule","Active recall guide"],status:"SCHEDULED",createdById:"u-couns",createdAt:new Date(NOW-2*D).toISOString(),updatedAt:new Date(NOW-2*D).toISOString() },
+  { id:"ws-10",templateId:"wtpl-10",title:"Peer Conflict Resolution",description:"Effective communication and mediation skills for students.",category:"BULLYING_PREVENTION",audience:"Grades 5-6",venue:"Room 203",date:new Date(NOW-8*D).toISOString(),durationMins:90,facilitatorId:"fac-6",materials:["Scenario cards","Mediation scripts"],status:"COMPLETED",feedbackScore:4.4,createdById:"u-couns",createdAt:new Date(NOW-18*D).toISOString(),updatedAt:new Date(NOW-8*D).toISOString() },
+  { id:"ws-11",templateId:"wtpl-1",title:"Bullying Prevention - Grade 8",description:"Bullying awareness for Grade 8 students.",category:"BULLYING_PREVENTION",audience:"Grade 8",venue:"Room 301",date:new Date(NOW+12*D).toISOString(),durationMins:90,facilitatorId:"fac-6",materials:["Scenario cards","Handbook"],status:"SCHEDULED",createdById:"u-couns",createdAt:new Date(NOW-1*D).toISOString(),updatedAt:new Date(NOW-1*D).toISOString() },
+  { id:"ws-12",templateId:"wtpl-3",title:"Mental Health - Grade 6",description:"Mental health basics for younger students.",category:"MENTAL_HEALTH_AWARENESS",audience:"Grade 6",venue:"Room 102",date:new Date(NOW-12*D).toISOString(),durationMins:90,facilitatorId:"fac-1",materials:["Awareness booklet"],status:"COMPLETED",feedbackScore:4.3,createdById:"u-couns",createdAt:new Date(NOW-22*D).toISOString(),updatedAt:new Date(NOW-12*D).toISOString() },
+  { id:"ws-13",templateId:"wtpl-2",title:"Career Guidance - Grade 8",description:"Introduction to career planning for Grade 8.",category:"CAREER_GUIDANCE",audience:"Grade 8",venue:"Career Centre",date:new Date(NOW+20*D).toISOString(),durationMins:120,facilitatorId:"fac-5",materials:["Career inventory"],status:"SCHEDULED",createdById:"u-couns",createdAt:new Date(NOW-1*D).toISOString(),updatedAt:new Date(NOW-1*D).toISOString() },
+  { id:"ws-14",templateId:"wtpl-4",title:"Digital Wellness - Grade 9",description:"Digital safety for Grade 9 students.",category:"DIGITAL_SAFETY",audience:"Grade 9",venue:"Computer Lab",date:new Date(NOW-18*D).toISOString(),durationMins:90,facilitatorId:"fac-8",materials:["Digital footprint worksheet"],status:"COMPLETED",feedbackScore:4.5,createdById:"u-couns",createdAt:new Date(NOW-28*D).toISOString(),updatedAt:new Date(NOW-18*D).toISOString() },
+  { id:"ws-15",templateId:"wtpl-5",title:"Stress Management - Grade 7",description:"Stress relief techniques for Grade 7 students.",category:"STRESS_MANAGEMENT",audience:"Grade 7",venue:"Room 204",date:new Date(NOW+8*D).toISOString(),durationMins:90,facilitatorId:"fac-2",materials:["Stress diary","Mindfulness guide"],status:"SCHEDULED",createdById:"u-couns",createdAt:new Date(NOW-4*D).toISOString(),updatedAt:new Date(NOW-4*D).toISOString() },
+];
+
+// Generate 50 SEL sessions across classrooms
+const sessionTopics = ["Managing Emotions","Building Empathy","Self-Awareness","Conflict Resolution","Mindfulness & Focus","Stress Management","Anger Management","Social Skills","Communication","Resilience"];
+const SEL_SESSIONS_M4: Array<{id:string;lessonId:string;classroomId:string;title:string;topic:string;scheduledAt:string;durationMins:number;facilitatorId:string;status:string;feedbackScore?:number}> = [];
+SEED_CLASSROOMS.forEach((classroomName, classIdx) => {
+  const grade = classroomName.replace(/[A-Z]/g, "");
+  for (let i = 0; i < 4; i++) {
+    const topic = sessionTopics[(classIdx + i) % sessionTopics.length];
+    const status = i < 2 ? "COMPLETED" : (i === 2 && classIdx % 3 === 0 ? "NO_SHOW" : "SCHEDULED");
+    const daysOffset = i * 7 - 10 + classIdx;
+    const feedbackScore = status === "COMPLETED" ? 3.5 + Math.random() * 1.5 : undefined;
+    SEL_SESSIONS_M4.push({
+      id:`sel-m4-${classroomName}-${i}`,
+      lessonId:`les-${(classIdx % 12) + 1}`,
+      classroomId:`class-${classroomName}`,
+      title:`${topic} - ${classroomName}`,
+      topic,
+      scheduledAt: new Date(NOW + daysOffset * D).toISOString(),
+      durationMins: 45,
+      facilitatorId: FACILITATORS[classIdx % FACILITATORS.length].id,
+      status,
+      feedbackScore,
+    });
+  }
+});
+
+// Generate feedback for completed sessions (100+ responses)
+const SEL_FEEDBACK_M4: Array<{id:string;sessionId:string;respondentName:string;usefulnessScore:number;learnedNew:boolean;wouldRecommend:boolean;rating:number;comments:string;submittedAt:string}> = [];
+let fbId = 1;
+SEL_SESSIONS_M4.filter(s => s.status === "COMPLETED").forEach(session => {
+  const numFeedback = 5 + Math.floor(Math.random() * 10);
+  for (let i = 0; i < numFeedback; i++) {
+    const firstName = FIRST_NAMES_M[(fbId * 7) % FIRST_NAMES_M.length];
+    const lastName = LAST_NAMES[(fbId * 11) % LAST_NAMES.length];
+    SEL_FEEDBACK_M4.push({
+      id:`fb-sel-${fbId}`,
+      sessionId:session.id,
+      respondentName:`${firstName} ${lastName}`,
+      usefulnessScore:3 + Math.floor(Math.random() * 3),
+      learnedNew:Math.random() > 0.2,
+      wouldRecommend:Math.random() > 0.15,
+      rating:3 + Math.floor(Math.random() * 3),
+      comments:fbId % 3 === 0 ? "Very helpful session!" : fbId % 3 === 1 ? "Learned some useful techniques." : "Could be more interactive.",
+      submittedAt:new Date(NOW + (fbId % 30) * H).toISOString(),
+    });
+    fbId++;
+  }
+});
+
+// Workshop feedback
+const WORKSHOP_FEEDBACK_M4: Array<{id:string;workshopId:string;respondentName:string;usefulnessScore:number;learnedNew:boolean;wouldRecommend:boolean;rating:number;comments:string;submittedAt:string}> = [];
+let wfbId = 1;
+WORKSHOPS.filter(w => w.status === "COMPLETED").forEach(workshop => {
+  const numFeedback = 8 + Math.floor(Math.random() * 15);
+  for (let i = 0; i < numFeedback; i++) {
+    const firstName = FIRST_NAMES_M[(wfbId * 13) % FIRST_NAMES_M.length];
+    const lastName = LAST_NAMES[(wfbId * 17) % LAST_NAMES.length];
+    WORKSHOP_FEEDBACK_M4.push({
+      id:`fb-ws-${wfbId}`,
+      workshopId:workshop.id,
+      respondentName:`${firstName} ${lastName}`,
+      usefulnessScore:3 + Math.floor(Math.random() * 3),
+      learnedNew:Math.random() > 0.15,
+      wouldRecommend:Math.random() > 0.1,
+      rating:3 + Math.floor(Math.random() * 3),
+      comments:wfbId % 4 === 0 ? "Excellent workshop!" : wfbId % 4 === 1 ? "Very informative." : wfbId % 4 === 2 ? "Good practical tips." : "Helpful but could be longer.",
+      submittedAt:new Date(NOW + (wfbId % 20) * H).toISOString(),
+    });
+    wfbId++;
+  }
+});
+
+// Calendar events
+const CALENDAR_EVENTS = [
+  ...SEL_SESSIONS_M4.filter(s => s.status === "SCHEDULED").map(s => ({
+    id:s.id,title:s.title,type:"SEL_SESSION" as const,date:s.scheduledAt.slice(0,10),time:s.scheduledAt.slice(11,16),grade:s.classroomId.replace("class-","").replace(/[A-Z]/g,""),classroom:s.classroomId.replace("class-",""),facilitatorName:FACILITATORS.find(f => f.id === s.facilitatorId)?.fullName,
+  })),
+  ...WORKSHOPS.filter(w => w.status === "SCHEDULED").map(w => ({
+    id:w.id,title:w.title,type:"WORKSHOP" as const,date:w.date.slice(0,10),time:w.date.slice(11,16),venue:w.venue,facilitatorName:FACILITATORS.find(f => f.id === w.facilitatorId)?.fullName,
+  })),
+  {id:"ev-ac-1",title:"Anti-Bullying Awareness Week",type:"AWARENESS_CAMPAIGN" as const,date:new Date(NOW+14*D).toISOString().slice(0,10),time:"09:00",venue:"School Campus"},
+  {id:"ev-ac-2",title:"World Mental Health Day",type:"AWARENESS_CAMPAIGN" as const,date:new Date(NOW+30*D).toISOString().slice(0,10),time:"10:00",venue:"Main Hall"},
+  {id:"ev-ps-1",title:"Grade 7 Parent-Teacher Meeting",type:"PARENT_SESSION" as const,date:new Date(NOW+7*D).toISOString().slice(0,10),time:"15:00",venue:"Room 101"},
+  {id:"ev-ps-2",title:"Grade 10 PTM - Board Prep",type:"PARENT_SESSION" as const,date:new Date(NOW+12*D).toISOString().slice(0,10),time:"16:00",venue:"Main Hall"},
+];
 
 // ======================== DASHBOARDS ========================
 const DASHBOARDS: Record<string, DashboardOverview> = {
@@ -1022,6 +1186,343 @@ export async function mockRequest<T>(url: string, _init?: RequestInit, user?: Au
     { id:"a-7", action:"Referral Created", actor:"Rajesh Kumar", target:"Aditya Mishra", category:"case", severity:"info", details:"Referred for anxiety concerns", timestamp:Date.now()-14400000, ipAddress:"192.168.1.50" },
     { id:"a-8", action:"Data Export", actor:"Aarav Mehta", target:"Q4 Analytics", category:"config", severity:"warning", details:"Exported 124 case records", timestamp:Date.now()-86400000, ipAddress:"203.0.113.100" },
   ] as T;
+
+  // =========== MODULE 4: SEL TEMPLATES ===========
+  if (basePath === "/sel/templates") {
+    const category = params.get("category");
+    const grade = params.get("grade");
+    let filtered = [...SEL_LESSON_TEMPLATES];
+    if (category) filtered = filtered.filter(t => t.category === category);
+    if (grade) filtered = filtered.filter(t => t.grade === grade || t.grade.includes(grade));
+    return { data: filtered } as T;
+  }
+
+  if (basePath.startsWith("/sel/templates/")) {
+    const id = basePath.replace("/sel/templates/", "");
+    const tpl = SEL_LESSON_TEMPLATES.find(t => t.id === id);
+    if (!tpl) throw new Error("Template not found");
+    return tpl as T;
+  }
+
+  // =========== MODULE 4: SEL LESSONS ===========
+  if (basePath === "/sel/lessons") {
+    const status = params.get("status");
+    const category = params.get("category");
+    const grade = params.get("grade");
+    let filtered = [...SEL_LESSONS];
+    if (status) filtered = filtered.filter(l => l.status === status);
+    if (category) filtered = filtered.filter(l => l.category === category);
+    if (grade) filtered = filtered.filter(l => l.grade === grade);
+    return { data: filtered } as T;
+  }
+
+  if (basePath.startsWith("/sel/lessons/") && !basePath.includes("/status")) {
+    const id = basePath.replace("/sel/lessons/", "");
+    const lesson = SEL_LESSONS.find(l => l.id === id);
+    if (!lesson) throw new Error("Lesson not found");
+    return lesson as T;
+  }
+
+  if (basePath.startsWith("/sel/lessons/") && basePath.endsWith("/status") && isPost(_init)) {
+    const id = basePath.replace("/sel/lessons/", "").replace("/status", "");
+    const body = parseBody(_init);
+    const lesson = SEL_LESSONS.find(l => l.id === id);
+    if (!lesson) throw new Error("Lesson not found");
+    if (body.status === "APPROVED") { lesson.status = "APPROVED"; lesson.approvedById = "u-admin"; lesson.approvedAt = new Date().toISOString(); }
+    else if (body.status === "REJECTED") { lesson.status = "REJECTED"; lesson.rejectionReason = (body.reason as string) || "Not approved"; }
+    else if (body.status === "PENDING_APPROVAL") { lesson.status = "PENDING_APPROVAL"; }
+    return lesson as T;
+  }
+
+  if (basePath === "/sel/lessons" && isPost(_init)) {
+    const body = parseBody(_init) as any;
+    const newLesson = {
+      id:`les-${Date.now()}`,
+      templateId: body.templateId || null,
+      title: body.title as string,
+      grade: body.grade as string,
+      topic: body.topic as string,
+      category: body.category as string,
+      learningObjectives: (body.learningObjectives as string[]) || [],
+      activities: (body.activities as string[]) || [],
+      reflectionQuestions: (body.reflectionQuestions as string[]) || [],
+      durationMins: (body.durationMins as number) || 45,
+      status: "DRAFT",
+      createdById: "u-couns",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    SEL_LESSONS.unshift(newLesson as any);
+    return newLesson as T;
+  }
+
+  // =========== MODULE 4: SEL SESSIONS (Module 4 version) ===========
+  if (basePath === "/sel/sessions") {
+    const view = params.get("view") || "list";
+    const status = params.get("status");
+    const classroomId = params.get("classroomId");
+    let filtered = [...SEL_SESSIONS_M4];
+    if (status) filtered = filtered.filter(s => s.status === status);
+    if (classroomId) filtered = filtered.filter(s => s.classroomId === classroomId);
+    if (view === "calendar") {
+      const grouped: Record<string, typeof filtered> = {};
+      filtered.forEach(s => {
+        const key = s.scheduledAt.slice(0, 10);
+        if (!grouped[key]) grouped[key] = [];
+        grouped[key].push(s);
+      });
+      return { data: grouped } as T;
+    }
+    return { data: filtered } as T;
+  }
+
+  if (basePath === "/sel/sessions" && isPost(_init)) {
+    const body = parseBody(_init) as any;
+    const newSession = {
+      id:`sel-m4-new-${Date.now()}`,
+      lessonId: (body.lessonId as string) || null,
+      classroomId: body.classroomId as string,
+      title: body.title as string,
+      topic: (body.topic as string) || body.title,
+      scheduledAt: new Date(body.scheduledAt as string).toISOString(),
+      durationMins: (body.durationMins as number) || 45,
+      facilitatorId: body.facilitatorId as string,
+      status: "SCHEDULED",
+    };
+    SEL_SESSIONS_M4.push(newSession as any);
+    return newSession as T;
+  }
+
+  // =========== MODULE 4: SEL DASHBOARD STATS ===========
+  if (basePath === "/sel/dashboard/stats") {
+    const completed = SEL_SESSIONS_M4.filter(s => s.status === "COMPLETED");
+    const scheduled = SEL_SESSIONS_M4.filter(s => s.status === "SCHEDULED");
+    const totalFeedback = SEL_FEEDBACK_M4.length;
+    const avgRating = totalFeedback > 0 ? SEL_FEEDBACK_M4.reduce((sum, f) => sum + f.rating, 0) / totalFeedback : 0;
+    const avgParticipation = 75 + Math.random() * 15;
+    return {
+      totalPrograms: SEL_LESSONS.filter(l => l.status === "APPROVED").length,
+      activeSessions: scheduled.length,
+      completionRate: completed.length > 0 ? Math.round((completed.length / SEL_SESSIONS_M4.length) * 100) : 0,
+      upcomingSessions: scheduled.length,
+      studentParticipation: Math.round(avgParticipation),
+      workshopAttendance: Math.round(70 + Math.random() * 20),
+      highestCompletionGrade: "8",
+      studentsRequiringIntervention:24,
+      upcomingWorkshopsThisWeek: WORKSHOPS.filter(w => w.status === "SCHEDULED" && new Date(w.date).getTime() < NOW + 7 * D).length,
+      recentFeedback: [
+        { sessionTitle: "Managing Exam Anxiety - 7A", rating: 4.5, facilitatorName: "Priya Sharma", date: new Date(NOW - 2 * D).toISOString() },
+        { sessionTitle: "Building Empathy - 6B", rating: 4.2, facilitatorName: "Dr. Anil Kumar", date: new Date(NOW - 3 * D).toISOString() },
+        { sessionTitle: "Mindfulness for Focus - 9A", rating: 4.7, facilitatorName: "Sneha Reddy", date: new Date(NOW - 5 * D).toISOString() },
+      ],
+    } as T;
+  }
+
+  // =========== MODULE 4: SEL PROGRESS ===========
+  if (basePath === "/sel/progress") {
+    const byGrade: Record<string, { assigned: number; completed: number; pending: number }> = {};
+    SEED_CLASSROOMS.forEach(cn => {
+      const grade = cn.replace(/[A-Z]/g, "");
+      if (!byGrade[grade]) byGrade[grade] = { assigned: 0, completed: 0, pending: 0 };
+      const sessions = SEL_SESSIONS_M4.filter(s => s.classroomId === `class-${cn}`);
+      byGrade[grade].assigned += sessions.length;
+      byGrade[grade].completed += sessions.filter(s => s.status === "COMPLETED").length;
+      byGrade[grade].pending += sessions.filter(s => s.status === "SCHEDULED").length;
+    });
+    return {
+      byGrade: Object.entries(byGrade).map(([grade, data]) => ({
+        grade,
+        assigned: data.assigned,
+        completed: data.completed,
+        pending: data.pending,
+        completionRate: data.assigned > 0 ? Math.round((data.completed / data.assigned) * 100) : 0,
+        participationRate: 70 + Math.round(Math.random() * 20),
+      })),
+      overallCompletion: Math.round((SEL_SESSIONS_M4.filter(s => s.status === "COMPLETED").length / SEL_SESSIONS_M4.length) * 100),
+      overallParticipation: 75 + Math.round(Math.random() * 15),
+    } as T;
+  }
+
+  // =========== MODULE 4: WORKSHOPS ===========
+  if (basePath === "/workshops") {
+    const status = params.get("status");
+    const category = params.get("category");
+    let filtered = [...WORKSHOPS];
+    if (status) filtered = filtered.filter(w => w.status === status);
+    if (category) filtered = filtered.filter(w => w.category === category);
+    return { data: filtered } as T;
+  }
+
+  if (basePath === "/workshops" && isPost(_init)) {
+    const body = parseBody(_init) as any;
+    const newWorkshop = {
+      id:`ws-new-${Date.now()}`,
+      templateId: body.templateId || null,
+      title: body.title as string,
+      description: (body.description as string) || "",
+      category: body.category as string,
+      audience: body.audience as string,
+      venue: body.venue as string,
+      date: new Date(body.date as string).toISOString(),
+      durationMins: (body.durationMins as number) || 90,
+      facilitatorId: body.facilitatorId as string,
+      materials: (body.materials as string[]) || [],
+      status: "SCHEDULED",
+      createdById: "u-couns",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      feedbackScore: 0,
+    };
+    WORKSHOPS.unshift(newWorkshop as any);
+    return newWorkshop as T;
+  }
+
+  if (basePath.startsWith("/workshops/") && !basePath.includes("/feedback") && !basePath.includes("/attendance")) {
+    const id = basePath.replace("/workshops/", "");
+    const workshop = WORKSHOPS.find(w => w.id === id);
+    if (!workshop) throw new Error("Workshop not found");
+    return workshop as T;
+  }
+
+  if (basePath === "/workshops/templates") {
+    const category = params.get("category");
+    let filtered = [...WORKSHOP_TEMPLATES];
+    if (category) filtered = filtered.filter(t => t.category === category);
+    return { data: filtered } as T;
+  }
+
+  if (basePath === "/workshops/dashboard/stats") {
+    const completed = WORKSHOPS.filter(w => w.status === "COMPLETED");
+    const scheduled = WORKSHOPS.filter(w => w.status === "SCHEDULED");
+    const avgScore = completed.length > 0 ? completed.reduce((sum, w) => sum + (w.feedbackScore || 0), 0) / completed.length : 0;
+    return {
+      totalWorkshops: WORKSHOPS.length,
+      upcomingWorkshops: scheduled.length,
+      completedWorkshops: completed.length,
+      averageAttendance: 78 + Math.round(Math.random() * 15),
+      feedbackScore: Math.round(avgScore * 10) / 10,
+    } as T;
+  }
+
+  if (basePath.includes("/workshops/") && basePath.endsWith("/feedback") && isPost(_init)) {
+    const id = basePath.replace("/workshops/", "").replace("/feedback", "");
+    const body = parseBody(_init) as any;
+    const workshop = WORKSHOPS.find(w => w.id === id);
+    if (!workshop) throw new Error("Workshop not found");
+    const fb = {
+      id:`fb-ws-new-${Date.now()}`,
+      workshopId: id,
+      respondentName: (body.name as string) || "Anonymous",
+      usefulnessScore: body.usefulnessScore as number,
+      learnedNew: body.learnedNew as boolean,
+      wouldRecommend: body.wouldRecommend as boolean,
+      rating: body.rating as number,
+      comments: (body.comments as string) || "",
+      submittedAt: new Date().toISOString(),
+    };
+    WORKSHOP_FEEDBACK_M4.push(fb as any);
+    // Update workshop feedback score
+    const workshopFeedback = WORKSHOP_FEEDBACK_M4.filter(f => f.workshopId === id);
+    if (workshopFeedback.length > 0) {
+      workshop.feedbackScore = workshopFeedback.reduce((sum, f) => sum + f.rating, 0) / workshopFeedback.length;
+    }
+    return fb as T;
+  }
+
+  // =========== MODULE 4: FACILITATORS ===========
+  if (basePath === "/facilitators") {
+    const type = params.get("type");
+    let filtered = [...FACILITATORS];
+    if (type) filtered = filtered.filter(f => f.type === type);
+    return { data: filtered } as T;
+  }
+
+  if (basePath.startsWith("/facilitators/") && !basePath.includes("/sessions")) {
+    const id = basePath.replace("/facilitators/", "");
+    const facilitator = FACILITATORS.find(f => f.id === id);
+    if (!facilitator) throw new Error("Facilitator not found");
+    const assignedSessions = SEL_SESSIONS_M4.filter(s => s.facilitatorId === id);
+    const assignedWorkshops = WORKSHOPS.filter(w => w.facilitatorId === id);
+    return { ...facilitator, assignedSessions: assignedSessions.length, upcomingWorkshops: assignedWorkshops.filter(w => w.status === "SCHEDULED").length } as T;
+  }
+
+  if (basePath.startsWith("/facilitators/") && basePath.endsWith("/sessions")) {
+    const id = basePath.replace("/facilitators/", "").replace("/sessions", "");
+    const sessions = SEL_SESSIONS_M4.filter(s => s.facilitatorId === id);
+    const workshops = WORKSHOPS.filter(w => w.facilitatorId === id);
+    return { selSessions: sessions, workshops } as T;
+  }
+
+  // =========== MODULE 4: CALENDAR EVENTS ===========
+  if (basePath === "/calendar/events") {
+    const type = params.get("type");
+    const from = params.get("from");
+    const to = params.get("to");
+    let filtered = [...CALENDAR_EVENTS];
+    if (type) filtered = filtered.filter(e => e.type === type);
+    if (from) filtered = filtered.filter(e => e.date >= from.slice(0, 10));
+    if (to) filtered = filtered.filter(e => e.date <= to.slice(0, 10));
+    return { data: filtered } as T;
+  }
+
+  // =========== MODULE 4: SEL FEEDBACK ===========
+  if (basePath === "/sel/feedback") {
+    const enriched = SEL_FEEDBACK_M4.map(fb => {
+      const session = SEL_SESSIONS_M4.find(s => s.id === fb.sessionId);
+      return {
+        ...fb,
+        sessionTitle: session?.title || "SEL Session",
+        facilitatorName: session?.facilitatorId ? FACILITATORS.find(f => f.id === session.facilitatorId)?.fullName || "Facilitator" : "Facilitator",
+        contentClarity: 3 + Math.floor(Math.random() * 3),
+        engagementLevel: 3 + Math.floor(Math.random() * 3),
+        practicalTips: 3 + Math.floor(Math.random() * 3),
+      };
+    });
+    return { data: enriched } as T;
+  }
+
+  // =========== MODULE 4: WORKSHOP FEEDBACK ===========
+  if (basePath === "/workshops/feedback") {
+    const enriched = WORKSHOP_FEEDBACK_M4.map(fb => {
+      const workshop = WORKSHOPS.find(w => w.id === fb.workshopId);
+      return {
+        ...fb,
+        workshopTitle: workshop?.title || "Workshop",
+      };
+    });
+    return { data: enriched } as T;
+  }
+
+  // =========== MODULE 4: WELLBEING ANALYTICS ===========
+  if (basePath === "/analytics/wellbeing") {
+    const completedSessions = SEL_SESSIONS_M4.filter(s => s.status === "COMPLETED");
+    const completedWorkshops = WORKSHOPS.filter(w => w.status === "COMPLETED");
+    return {
+      totalSessionsConducted: completedSessions.length,
+      workshopAttendanceRate:75 + Math.round(Math.random() * 20),
+      studentEngagementRate: 70 + Math.round(Math.random() * 20),
+      selCompletionRate: completedSessions.length > 0 ? Math.round((completedSessions.length / SEL_SESSIONS_M4.length) * 100) : 0,
+      flaggedStudentTrends: [
+        { month: "Jan", count: 12 }, { month: "Feb", count: 15 }, { month: "Mar", count: 10 },
+        { month: "Apr", count: 18 }, { month: "May", count: 14 }, { month: "Jun", count: 8 },
+      ],
+      monthlyParticipation: [
+        { month: "Jan", attended: 420, total: 500 }, { month: "Feb", attended: 445, total: 500 },
+        { month: "Mar", attended: 410, total: 500 }, { month: "Apr", attended: 460, total: 500 },
+        { month: "May", attended: 435, total: 500 }, { month: "Jun", attended: 480, total: 500 },
+      ],
+      gradeWiseCompletion: [
+        { grade: "5", completed: 85, total: 100 }, { grade: "6", completed: 78, total: 100 },
+        { grade: "7", completed: 82, total: 100 }, { grade: "8", completed: 75, total: 100 },
+        { grade: "9", completed: 88, total: 100 }, { grade: "10", completed: 92, total: 100 },
+      ],
+      workshopAttendanceTrend: [
+        { month: "Jan", attended: 120, missed: 30 }, { month: "Feb", attended: 135, missed: 25 },
+        { month: "Mar", attended: 128, missed: 22 }, { month: "Apr", attended: 140, missed: 20 },
+        { month: "May", attended: 132, missed: 18 }, { month: "Jun", attended: 145, missed: 15 },
+      ],
+    } as T;
+  }
 
   throw new Error(`No mock data for: ${url}`);
 }
