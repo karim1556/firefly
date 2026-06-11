@@ -19,6 +19,7 @@ const statusConfig: Record<AssistanceStatus, { label: string; variant: "success"
   OPEN: { label: "Open", variant: "default" },
   ASSIGNED: { label: "Assigned", variant: "info" },
   IN_PROGRESS: { label: "In Progress", variant: "warning" },
+  ESCALATED: { label: "Escalated", variant: "danger" },
   RESOLVED: { label: "Resolved", variant: "success" },
   CLOSED: { label: "Closed", variant: undefined },
 };
