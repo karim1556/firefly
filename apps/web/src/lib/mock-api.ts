@@ -1055,6 +1055,194 @@ const ASSISTANCE_ANALYTICS = {
   ],
 };
 
+// =============== MODULE 8: CRISIS REPORTING & ESCALATIONS ===============
+
+const CRISIS_INCIDENTS: Array<{
+  id: string; incidentId: string; studentName: string; studentGrade: string; studentClassroom: string; schoolName: string;
+  incidentCategory: string; severity: string; status: string; description: string; location: string;
+  reportedBy: string; createdAt: string; updatedAt: string;
+  _count: { actions: number; communications: number; timelineEvents: number; escalations: number };
+}> = [
+  { id:"ci-1", incidentId:"CI-2024-001", studentName:"Ananya Reddy", studentGrade:"9", studentClassroom:"9A", schoolName:"Firefly Public School",
+    incidentCategory:"SELF_HARM_RISK", severity:"CRITICAL", status:"INVESTIGATING", description:"Student found with self-harm marks on forearm. Reports feeling overwhelmed by exams.", location:"Classroom 9A", reportedBy:"Rajesh Kumar", createdAt:new Date(NOW-2*H).toISOString(), updatedAt:new Date(NOW-H/2).toISOString(), _count:{actions:4,communications:2,timelineEvents:6,escalations:1} },
+  { id:"ci-2", incidentId:"CI-2024-002", studentName:"Vikram Singh", studentGrade:"10", studentClassroom:"10B", schoolName:"Delhi Public School",
+    incidentCategory:"SUICIDE_IDEATION", severity:"EMERGENCY", status:"ESCALATED", description:"Student expressed suicidal thoughts during class. Immediate safety assessment required.", location:"School Grounds", reportedBy:"Priya Sharma", createdAt:new Date(NOW-H).toISOString(), updatedAt:new Date(NOW-30*60*1000).toISOString(), _count:{actions:5,communications:3,timelineEvents:8,escalations:2} },
+  { id:"ci-3", incidentId:"CI-2024-003", studentName:"Aarav Mehta", studentGrade:"8", studentClassroom:"8C", schoolName:"Green Valley International",
+    incidentCategory:"BULLYING_ESCALATION", severity:"HIGH", status:"ACKNOWLEDGED", description:"Reports of severe bullying including physical aggression. Victim showing signs of anxiety and withdrawal.", location:"Playground", reportedBy:"Lakshmi Iyer", createdAt:new Date(NOW-4*H).toISOString(), updatedAt:new Date(NOW-2*H).toISOString(), _count:{actions:3,communications:1,timelineEvents:4,escalations:0} },
+  { id:"ci-4", incidentId:"CI-2024-004", studentName:"Saanvi Patel", studentGrade:"7", studentClassroom:"7A", schoolName:"National High School",
+    incidentCategory:"VIOLENCE_THREAT", severity:"CRITICAL", status:"INVESTIGATING", description:"Student made explicit threat of violence against classmates. Confiscated written manifesto.", location:"Classroom 7A", reportedBy:"Neha Kapoor", createdAt:new Date(NOW-6*H).toISOString(), updatedAt:new Date(NOW-3*H).toISOString(), _count:{actions:4,communications:2,timelineEvents:5,escalations:1} },
+  { id:"ci-5", incidentId:"CI-2024-005", studentName:"Arjun Reddy", studentGrade:"6", studentClassroom:"6B", schoolName:"St. Mary's Academy",
+    incidentCategory:"ABUSE_CONCERNS", severity:"CRITICAL", status:"ESCALATED", description:"Student disclosed physical abuse at home during counselling session. Visible marks on arms.", location:"Counselling Room", reportedBy:"Dr. Anil Kumar", createdAt:new Date(NOW-8*H).toISOString(), updatedAt:new Date(NOW-4*H).toISOString(), _count:{actions:6,communications:4,timelineEvents:9,escalations:2} },
+  { id:"ci-6", incidentId:"CI-2024-006", studentName:"Myra Nair", studentGrade:"5", studentClassroom:"5A", schoolName:"Firefly Public School",
+    incidentCategory:"SEVERE_EMOTIONAL_DISTREESS", severity:"HIGH", status:"MONITORING", description:"Student experiencing severe panic attacks. History of anxiety disorder. Parent requests immediate support.", location:"School Reception", reportedBy:"Anita Desai", createdAt:new Date(NOW-12*H).toISOString(), updatedAt:new Date(NOW-6*H).toISOString(), _count:{actions:2,communications:1,timelineEvents:3,escalations:0} },
+  { id:"ci-7", incidentId:"CI-2024-007", studentName:"Kabir Joshi", studentGrade:"9", studentClassroom:"9B", schoolName:"Delhi Public School",
+    incidentCategory:"SUBSTANCE_CONCERN", severity:"HIGH", status:"REPORTED", description:"Teacher found student with suspected alcohol on school premises. Student appears intoxicated.", location:"School Canteen", reportedBy:"Rajesh Kumar", createdAt:new Date(NOW-H*2).toISOString(), updatedAt:new Date(NOW-H*2).toISOString(), _count:{actions:2,communications:0,timelineEvents:2,escalations:0} },
+  { id:"ci-8", incidentId:"CI-2024-008", studentName:"Anika Sharma", studentGrade:"8", studentClassroom:"8A", schoolName:"Green Valley International",
+    incidentCategory:"SAFETY_CONCERN", severity:"HIGH", status:"REPORTED", description:"Student reported seeing a stranger photographing students near school entrance.", location:"School Entrance", reportedBy:"Lakshmi Iyer", createdAt:new Date(NOW-H*3).toISOString(), updatedAt:new Date(NOW-H*3).toISOString(), _count:{actions:1,communications:0,timelineEvents:1,escalations:0} },
+  { id:"ci-9", incidentId:"CI-2024-009", studentName:"Reyansh Kumar", studentGrade:"10", studentClassroom:"10A", schoolName:"National High School",
+    incidentCategory:"MISSING_STUDENT", severity:"EMERGENCY", status:"ESCALATED", description:"Student did not return home after school. Last seen at school at 3 PM. Parents report missing since 5 PM.", location:"School Exit", reportedBy:"Neha Kapoor", createdAt:new Date(NOW-H/4).toISOString(), updatedAt:new Date(NOW-H/6).toISOString(), _count:{actions:5,communications:4,timelineEvents:7,escalations:3} },
+  { id:"ci-10", incidentId:"CI-2024-010", studentName:"Aadhya Verma", studentGrade:"7", studentClassroom:"7C", schoolName:"St. Mary's Academy",
+    incidentCategory:"BULLYING_ESCALATION", severity:"MEDIUM", status:"RESOLVED", description:"Persistent cyberbullying via Instagram. Evidence collected. Perpetrator identified.", location:"Online", reportedBy:"Dr. Anil Kumar", createdAt:new Date(NOW-3*D).toISOString(), updatedAt:new Date(NOW-2*D).toISOString(), _count:{actions:4,communications:3,timelineEvents:6,escalations:0} },
+  { id:"ci-11", incidentId:"CI-2024-011", studentName:"Vihaan Singh", studentGrade:"6", studentClassroom:"6A", schoolName:"Firefly Public School",
+    incidentCategory:"SELF_HARM_RISK", severity:"HIGH", status:"MONITORING", description:"Student recently added to high-risk list. Multiple counselors tracking. Self-harm ideation resurfacing.", location:"Counselling Room", reportedBy:"Priya Sharma", createdAt:new Date(NOW-5*D).toISOString(), updatedAt:new Date(NOW-D).toISOString(), _count:{actions:3,communications:2,timelineEvents:5,escalations:1} },
+  { id:"ci-12", incidentId:"CI-2024-012", studentName:"Ira Patel", studentGrade:"9", studentClassroom:"9C", schoolName:"Delhi Public School",
+    incidentCategory:"SEVERE_EMOTIONAL_DISTREESS", severity:"MEDIUM", status:"INVESTIGATING", description:"Student found crying in bathroom. Reports feeling worthless and having difficulty sleeping.", location:"Girls Bathroom", reportedBy:"Rajesh Kumar", createdAt:new Date(NOW-H*5).toISOString(), updatedAt:new Date(NOW-H*4).toISOString(), _count:{actions:2,communications:1,timelineEvents:3,escalations:0} },
+  { id:"ci-13", incidentId:"CI-2024-013", studentName:"Karan Mehta", studentGrade:"8", studentClassroom:"8B", schoolName:"Green Valley International",
+    incidentCategory:"VIOLENCE_THREAT", severity:"CRITICAL", status:"ESCALATED", description:"Written threat found in student's notebook. School resource officer notified.", location:"Classroom 8B", reportedBy:"Lakshmi Iyer", createdAt:new Date(NOW-H*0.5).toISOString(), updatedAt:new Date(NOW-H/3).toISOString(), _count:{actions:4,communications:2,timelineEvents:6,escalations:2} },
+  { id:"ci-14", incidentId:"CI-2024-014", studentName:"Navya Nair", studentGrade:"5", studentClassroom:"5B", schoolName:"National High School",
+    incidentCategory:"SAFETY_CONCERN", severity:"MEDIUM", status:"REPORTED", description:"Student reports being followed by an unknown adult near school.", location:"Near School", reportedBy:"Anita Desai", createdAt:new Date(NOW-H*6).toISOString(), updatedAt:new Date(NOW-H*6).toISOString(), _count:{actions:1,communications:0,timelineEvents:1,escalations:0} },
+  { id:"ci-15", incidentId:"CI-2024-015", studentName:"Aditya Iyer", studentGrade:"10", studentClassroom:"10C", schoolName:"St. Mary's Academy",
+    incidentCategory:"SUBSTANCE_CONCERN", severity:"HIGH", status:"INVESTIGATING", description:"Multiple students seen vaping in school bathroom. Repeated offense.", location:"Boys Bathroom", reportedBy:"Neha Kapoor", createdAt:new Date(NOW-H*4).toISOString(), updatedAt:new Date(NOW-H*2).toISOString(), _count:{actions:2,communications:1,timelineEvents:3,escalations:0} },
+  // Historical resolved incidents
+  { id:"ci-16", incidentId:"CI-2024-016", studentName:"Rohan Sharma", studentGrade:"8", studentClassroom:"8D", schoolName:"Firefly Public School",
+    incidentCategory:"SELF_HARM_RISK", severity:"HIGH", status:"CLOSED", description:"Self-harm incident. Family counselling arranged. Student now stable.", location:"Hostel", reportedBy:"Priya Sharma", createdAt:new Date(NOW-10*D).toISOString(), updatedAt:new Date(NOW-7*D).toISOString(), _count:{actions:5,communications:3,timelineEvents:8,escalations:1} },
+  { id:"ci-17", incidentId:"CI-2024-017", studentName:"Ananya Gupta", studentGrade:"9", studentClassroom:"9B", schoolName:"Delhi Public School",
+    incidentCategory:"BULLYING_ESCALATION", severity:"MEDIUM", status:"CLOSED", description:"Bullying resolved through peer mediation. Both parties reconciled.", location:"Classroom", reportedBy:"Rajesh Kumar", createdAt:new Date(NOW-14*D).toISOString(), updatedAt:new Date(NOW-10*D).toISOString(), _count:{actions:3,communications:2,timelineEvents:5,escalations:0} },
+  { id:"ci-18", incidentId:"CI-2024-018", studentName:"Ishaan Patel", studentGrade:"7", studentClassroom:"7B", schoolName:"Green Valley International",
+    incidentCategory:"ABUSE_CONCERNS", severity:"CRITICAL", status:"CLOSED", description:"Child protection services notified. Case transferred to external agency.", location:"Home", reportedBy:"Dr. Anil Kumar", createdAt:new Date(NOW-20*D).toISOString(), updatedAt:new Date(NOW-15*D).toISOString(), _count:{actions:8,communications:6,timelineEvents:12,escalations:3} },
+  { id:"ci-19", incidentId:"CI-2024-019", studentName:"Priya Desai", studentGrade:"6", studentClassroom:"6C", schoolName:"National High School",
+    incidentCategory:"SEVERE_EMOTIONAL_DISTREESS", severity:"MEDIUM", status:"CLOSED", description:"Panic attacks managed through therapy. Student returned to normal routine.", location:"School", reportedBy:"Anita Desai", createdAt:new Date(NOW-12*D).toISOString(), updatedAt:new Date(NOW-8*D).toISOString(), _count:{actions:3,communications:2,timelineEvents:4,escalations:0} },
+  { id:"ci-20", incidentId:"CI-2024-020", studentName:"Arjun Nair", studentGrade:"10", studentClassroom:"10D", schoolName:"St. Mary's Academy",
+    incidentCategory:"VIOLENCE_THREAT", severity:"HIGH", status:"CLOSED", description:"Threat assessed as not credible. Student received counselling. Case closed.", location:"School", reportedBy:"Neha Kapoor", createdAt:new Date(NOW-18*D).toISOString(), updatedAt:new Date(NOW-14*D).toISOString(), _count:{actions:4,communications:2,timelineEvents:6,escalations:1} },
+];
+
+const CRISIS_TEAM_MEMBERS: Record<string, Array<{ id: string; fullName: string; role: string; roleType: string; isAvailable: boolean; addedAt: string }>> = {
+  "ci-1": [
+    { id:"u-couns", fullName:"Priya Sharma", role:"School Counsellor", roleType:"OWNER", isAvailable:true, addedAt:new Date(NOW-2*H).toISOString() },
+    { id:"u-admin", fullName:"Neha Kapoor", role:"School Administrator", roleType:"SUPPORTING", isAvailable:true, addedAt:new Date(NOW-2*H).toISOString() },
+    { id:"u-principal", fullName:"Dr. Suresh Iyengar", role:"Principal", roleType:"OBSERVER", isAvailable:true, addedAt:new Date(NOW-H).toISOString() },
+  ],
+  "ci-2": [
+    { id:"u-couns", fullName:"Priya Sharma", role:"School Counsellor", roleType:"OWNER", isAvailable:true, addedAt:new Date(NOW-H).toISOString() },
+    { id:"exp-6", fullName:"Dr. Anil Verma", role:"Clinical Psychologist", roleType:"SUPPORTING", isAvailable:true, addedAt:new Date(NOW-H/2).toISOString() },
+    { id:"u-admin", fullName:"Neha Kapoor", role:"School Administrator", roleType:"SUPPORTING", isAvailable:true, addedAt:new Date(NOW-H/2).toISOString() },
+    { id:"u-principal", fullName:"Dr. Suresh Iyengar", role:"Principal", roleType:"OBSERVER", isAvailable:true, addedAt:new Date(NOW-H/3).toISOString() },
+  ],
+  "ci-5": [
+    { id:"u-couns", fullName:"Priya Sharma", role:"School Counsellor", roleType:"OWNER", isAvailable:true, addedAt:new Date(NOW-8*H).toISOString() },
+    { id:"exp-6", fullName:"Dr. Anil Verma", role:"Clinical Psychologist", roleType:"SUPPORTING", isAvailable:true, addedAt:new Date(NOW-6*H).toISOString() },
+    { id:"u-admin", fullName:"Neha Kapoor", role:"School Administrator", roleType:"SUPPORTING", isAvailable:true, addedAt:new Date(NOW-4*H).toISOString() },
+  ],
+};
+
+const CRISIS_ACTIONS: Array<{
+  id: string; incidentId: string; actionType: string; taskName: string; description: string;
+  assignedTo: { id: string; fullName: string; role: string }; dueTime: string; status: string; completedAt?: string; createdAt: string;
+  createdBy: { id: string; fullName: string };
+}> = [
+  { id:"ca-1", incidentId:"ci-1", actionType:"CONDUCT_SAFETY_CHECK", taskName:"Immediate Safety Assessment", description:"Conduct危机 safety assessment for Ananya Reddy", assignedTo:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, dueTime:new Date(NOW).toISOString(), status:"COMPLETED", completedAt:new Date(NOW-H).toISOString(), createdAt:new Date(NOW-2*H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma"} },
+  { id:"ca-2", incidentId:"ci-1", actionType:"CONTACT_PARENT", taskName:"Parent Notification", description:"Inform parents about the incident and arrange meeting", assignedTo:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, dueTime:new Date(NOW+H).toISOString(), status:"IN_PROGRESS", createdAt:new Date(NOW-2*H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma"} },
+  { id:"ca-3", incidentId:"ci-1", actionType:"SCHEDULE_ASSESSMENT", taskName:"Psychological Assessment", description:"Schedule comprehensive psychological assessment", assignedTo:{id:"exp-6",fullName:"Dr. Anil Verma",role:"Clinical Psychologist"}, dueTime:new Date(NOW+2*D).toISOString(), status:"PENDING", createdAt:new Date(NOW-H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma"} },
+  { id:"ca-4", incidentId:"ci-1", actionType:"ARRANGE_COUNSELLING", taskName:"Crisis Counselling Sessions", description:"Arrange daily counselling sessions for next two weeks", assignedTo:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, dueTime:new Date(NOW+14*D).toISOString(), status:"PENDING", createdAt:new Date(NOW-H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma"} },
+  { id:"ca-5", incidentId:"ci-2", actionType:"CONDUCT_SAFETY_CHECK", taskName:"Emergency Safety Assessment", description:"Immediate safety assessment - student expressed suicidal ideation", assignedTo:{id:"exp-6",fullName:"Dr. Anil Verma",role:"Clinical Psychologist"}, dueTime:new Date(NOW).toISOString(), status:"COMPLETED", completedAt:new Date(NOW-H/2).toISOString(), createdAt:new Date(NOW-H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma"} },
+  { id:"ca-6", incidentId:"ci-2", actionType:"NOTIFY_LEADERSHIP", taskName:"Principal Notification", description:"Notify principal about emergency crisis situation", assignedTo:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"}, dueTime:new Date(NOW).toISOString(), status:"COMPLETED", completedAt:new Date(NOW-H/2).toISOString(), createdAt:new Date(NOW-H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma"} },
+  { id:"ca-7", incidentId:"ci-2", actionType:"ESCALATE_EXTERNALLY", taskName:"Crisis Helpline Contact", description:"Contact emergency crisis helpline for guidance", assignedTo:{id:"exp-6",fullName:"Dr. Anil Verma",role:"Clinical Psychologist"}, dueTime:new Date(NOW).toISOString(), status:"IN_PROGRESS", createdAt:new Date(NOW-H/2).toISOString(), createdBy:{id:"exp-6",fullName:"Dr. Anil Verma"} },
+  { id:"ca-8", incidentId:"ci-2", actionType:"CONTACT_PARENT", taskName:"Emergency Parent Contact", description:"Contact parents immediately - student requires immediate support at home", assignedTo:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, dueTime:new Date(NOW+H/2).toISOString(), status:"PENDING", createdAt:new Date(NOW-H/2).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma"} },
+];
+
+const CRISIS_COMMUNICATIONS: Array<{
+  id: string; incidentId: string; communicationType: string; contactPerson: string; relationship: string;
+  dateTime: string; outcome: string; notes?: string; createdAt: string;
+  createdBy: { id: string; fullName: string };
+}> = [
+  { id:"cc-1", incidentId:"ci-1", communicationType:"PHONE_CALL", contactPerson:"Mrs. Sunita Reddy", relationship:"Mother", dateTime:new Date(NOW-H).toISOString(), outcome:"Mother informed. Will come to school immediately.", createdAt:new Date(NOW-H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma"} },
+  { id:"cc-2", incidentId:"ci-1", communicationType:"MEETING", contactPerson:"Mrs. Sunita Reddy", relationship:"Mother", dateTime:new Date(NOW+H).toISOString(), outcome:"Scheduled for 4 PM", createdAt:new Date(NOW-H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma"} },
+  { id:"cc-3", incidentId:"ci-2", communicationType:"PHONE_CALL", contactPerson:"Mr. Rajesh Singh", relationship:"Father", dateTime:new Date(NOW-H/2).toISOString(), outcome:"Father rushing to school. Crisis protocol explained.", createdAt:new Date(NOW-H/2).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma"} },
+  { id:"cc-4", incidentId:"ci-2", communicationType:"PHONE_CALL", contactPerson:"Emergency Services", relationship:"Crisis Helpline", dateTime:new Date(NOW-H/3).toISOString(), outcome:"Consultation completed. Recommended immediate psychiatric evaluation.", notes:"Contact number: 9152987000", createdAt:new Date(NOW-H/3).toISOString(), createdBy:{id:"exp-6",fullName:"Dr. Anil Verma"} },
+  { id:"cc-5", incidentId:"ci-2", communicationType:"EMAIL", contactPerson:"School Board", relationship:"Safeguarding Lead", dateTime:new Date(NOW-H/4).toISOString(), outcome:"Mandatory safeguarding report submitted.", createdAt:new Date(NOW-H/4).toISOString(), createdBy:{id:"u-admin",fullName:"Neha Kapoor"} },
+];
+
+const CRISIS_TIMELINE_EVENTS: Array<{
+  id: string; incidentId: string; eventType: string; title: string; description: string; createdAt: string;
+  createdBy?: { id: string; fullName: string; role: string };
+}> = [
+  { id:"cte-1", incidentId:"ci-1", eventType:"INCIDENT_REPORTED", title:"Incident Reported", description:"Teacher Rajesh Kumar reported self-harm incident", createdAt:new Date(NOW-2*H).toISOString(), createdBy:{id:"u-teacher",fullName:"Rajesh Kumar",role:"Class Teacher"} },
+  { id:"cte-2", incidentId:"ci-1", eventType:"ESCALATION_TRIGGERED", title:"Escalation Triggered", description:"Case escalated to Principal due to critical severity", createdAt:new Date(NOW-2*H+H/2).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"} },
+  { id:"cte-3", incidentId:"ci-1", eventType:"TEAM_ASSIGNED", title:"Response Team Assigned", description:"Priya Sharma assigned as case owner", createdAt:new Date(NOW-2*H+H/2).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"} },
+  { id:"cte-4", incidentId:"ci-1", eventType:"ASSESSMENT_COMPLETED", title:"Safety Assessment", description:"Initial safety assessment completed - student is safe currently", createdAt:new Date(NOW-H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"} },
+  { id:"cte-5", incidentId:"ci-1", eventType:"PARENT_CONTACTED", title:"Parent Contacted", description:"Mother informed about incident", createdAt:new Date(NOW-H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"} },
+  { id:"cte-6", incidentId:"ci-1", eventType:"ACTION_COMPLETED", title:"Safety Plan Created", description:"Immediate safety plan created and documented", createdAt:new Date(NOW-H/2).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"} },
+  { id:"cte-7", incidentId:"ci-2", eventType:"INCIDENT_REPORTED", title:"Emergency Incident Reported", description:"Student expressed suicidal ideation - immediate response required", createdAt:new Date(NOW-H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"} },
+  { id:"cte-8", incidentId:"ci-2", eventType:"ESCALATION_TRIGGERED", title:"Emergency Escalation", description:"Escalated to Principal and External Authorities", createdAt:new Date(NOW-H/2).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"} },
+  { id:"cte-9", incidentId:"ci-2", eventType:"TEAM_ASSIGNED", title:"Crisis Team Activated", description:"Full crisis response team assembled including external psychologist", createdAt:new Date(NOW-H/2).toISOString(), createdBy:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"} },
+  { id:"cte-10", incidentId:"ci-2", eventType:"ASSESSMENT_COMPLETED", title:"Emergency Assessment", description:"Dr. Anil Verma conducted emergency psychological assessment", createdAt:new Date(NOW-H/3).toISOString(), createdBy:{id:"exp-6",fullName:"Dr. Anil Verma",role:"Clinical Psychologist"} },
+];
+
+const CRISIS_ESCALATIONS: Array<{
+  id: string; incidentId: string; escalatedTo: string; reason: string; triggeredBy: string; escalatedAt: string;
+  escalatedBy: { id: string; fullName: string; role: string }; status: string; acknowledgedAt?: string; resolvedAt?: string;
+}> = [
+  { id:"ce-1", incidentId:"ci-1", escalatedTo:"PRINCIPAL", reason:"Critical severity - self-harm incident", triggeredBy:"CRITICAL", escalatedAt:new Date(NOW-2*H+H/2).toISOString(), escalatedBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, status:"ACKNOWLEDGED", acknowledgedAt:new Date(NOW-2*H+H/2+10*60*1000).toISOString() },
+  { id:"ce-2", incidentId:"ci-2", escalatedTo:"SAFEGUARDING_TEAM", reason:"Emergency - student expressed suicidal ideation", triggeredBy:"EMERGENCY", escalatedAt:new Date(NOW-H/2).toISOString(), escalatedBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, status:"ACKNOWLEDGED", acknowledgedAt:new Date(NOW-H/3).toISOString() },
+  { id:"ce-3", incidentId:"ci-2", escalatedTo:"EXTERNAL_AUTHORITIES", reason:"Immediate external support required for student safety", triggeredBy:"EMERGENCY", escalatedAt:new Date(NOW-H/3).toISOString(), escalatedBy:{id:"exp-6",fullName:"Dr. Anil Verma",role:"Clinical Psychologist"}, status:"PENDING" },
+  { id:"ce-4", incidentId:"ci-5", escalatedTo:"EXTERNAL_AUTHORITIES", reason:"Suspected child abuse - mandatory reporting required", triggeredBy:"CRITICAL", escalatedAt:new Date(NOW-6*H).toISOString(), escalatedBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, status:"ACKNOWLEDGED", acknowledgedAt:new Date(NOW-5*H).toISOString() },
+];
+
+const CRISIS_DASHBOARD_STATS = {
+  activeCrisisCases: 8, criticalIncidents: 4, escalatedCases: 3, openInvestigations: 5,
+  avgResponseTime: "18 min", resolvedIncidents: 12, highRiskStudents: 6, pendingActions: 14,
+  incidentsByStatus: [
+    { status:"REPORTED", count:3 },{ status:"ACKNOWLEDGED", count:2 },{ status:"INVESTIGATING", count:5 },
+    { status:"ESCALATED", count:3 },{ status:"MONITORING", count:2 },{ status:"RESOLVED", count:8 },{ status:"CLOSED", count:4 }
+  ],
+  incidentsBySeverity: [
+    { severity:"HIGH", count:5 },{ severity:"CRITICAL", count:4 },{ severity:"EMERGENCY", count:3 }
+  ],
+  incidentsByCategory: [
+    { category:"SELF_HARM_RISK", count:4 },{ category:"SUICIDE_IDEATION", count:2 },{ category:"BULLYING_ESCALATION", count:3 },
+    { category:"VIOLENCE_THREAT", count:2 },{ category:"ABUSE_CONCERNS", count:2 },{ category:"SEVERE_EMOTIONAL_DISTREESS", count:2 },
+    { category:"SAFETY_CONCERN", count:2 },{ category:"SUBSTANCE_CONCERN", count:2 },{ category:"MISSING_STUDENT", count:1 }
+  ],
+  monthlyTrends: [
+    { month:"Jan", incidents:12, resolved:10 },{ month:"Feb", incidents:15, resolved:12 },{ month:"Mar", incidents:18, resolved:15 },
+    { month:"Apr", incidents:14, resolved:13 },{ month:"May", incidents:16, resolved:14 },{ month:"Jun", incidents:20, resolved:18 }
+  ],
+  responseTimeTrend: [
+    { month:"Jan", avgHours:2.5 },{ month:"Feb", avgHours:2.2 },{ month:"Mar", avgHours:1.8 },
+    { month:"Apr", avgHours:1.5 },{ month:"May", avgHours:1.3 },{ month:"Jun", avgHours:0.8 }
+  ],
+};
+
+const CRISIS_ANALYTICS = {
+  incidentsByCategory: [
+    { name:"Self-Harm Risk", value:4 },{ name:"Suicide Ideation", value:2 },{ name:"Bullying Escalation", value:3 },
+    { name:"Violence Threat", value:2 },{ name:"Abuse Concerns", value:2 },{ name:"Emotional Distress", value:2 },
+    { name:"Safety Concern", value:2 },{ name:"Substance Concern", value:2 },{ name:"Missing Student", value:1 }
+  ],
+  incidentsByGrade: [
+    { name:"Grade 5", value:2 },{ name:"Grade 6", value:3 },{ name:"Grade 7", value:4 },
+    { name:"Grade 8", value:5 },{ name:"Grade 9", value:4 },{ name:"Grade 10", value:2 }
+  ],
+  responseTimeDistribution: [
+    { range:"< 15 min", count:12 },{ range:"15-30 min", count:8 },{ range:"30-60 min", count:5 },{ range:"> 60 min", count:3 }
+  ],
+  escalationTrends: [
+    { month:"Jan", escalations:2 },{ month:"Feb", escalations:3 },{ month:"Mar", escalations:4 },
+    { month:"Apr", escalations:3 },{ month:"May", escalations:5 },{ month:"Jun", escalations:6 }
+  ],
+  resolutionRates: [
+    { month:"Jan", rate:85 },{ month:"Feb", rate:82 },{ month:"Mar", rate:88 },
+    { month:"Apr", rate:90 },{ month:"May", rate:92 },{ month:"Jun", rate:95 }
+  ],
+  repeatIncidents: [
+    { studentName:"Vihaan Singh", count:3, lastIncident:new Date(NOW-5*D).toISOString() },
+    { studentName:"Ananya Reddy", count:2, lastIncident:new Date(NOW-2*H).toISOString() },
+    { studentName:"Kabir Joshi", count:2, lastIncident:new Date(NOW-H*2).toISOString() },
+  ],
+  topEscalationReasons: [
+    { reason:"Critical Severity", count:6 },{ reason:"Student Safety Risk", count:4 },
+    { reason:"Legal Requirement", count:3 },{ reason:"Repeated Incident", count:2 }
+  ],
+};
+
+const HIGH_RISK_STUDENTS: Array<{ studentId: string; studentName: string; studentGrade: string; riskScore: number; openIncidents: number; lastIncident: string; monitoringStatus: string }> = [
+  { studentId:"s-hr-1", studentName:"Vihaan Singh", studentGrade:"9", riskScore:92, openIncidents:2, lastIncident:new Date(NOW-5*D).toISOString(), monitoringStatus:"ACTIVE" },
+  { studentId:"s-hr-2", studentName:"Ananya Reddy", studentGrade:"9", riskScore:88, openIncidents:1, lastIncident:new Date(NOW-2*H).toISOString(), monitoringStatus:"ACTIVE" },
+  { studentId:"s-hr-3", studentName:"Kabir Joshi", studentGrade:"8", riskScore:85, openIncidents:1, lastIncident:new Date(NOW-H*2).toISOString(), monitoringStatus:"ACTIVE" },
+  { studentId:"s-hr-4", studentName:"Arjun Reddy", studentGrade:"6", riskScore:82, openIncidents:1, lastIncident:new Date(NOW-8*H).toISOString(), monitoringStatus:"PENDING_REVIEW" },
+  { studentId:"s-hr-5", studentName:"Saanvi Patel", studentGrade:"7", riskScore:78, openIncidents:1, lastIncident:new Date(NOW-4*H).toISOString(), monitoringStatus:"STABLE" },
+];
+
 // ======================== MAIN HANDLER ========================
 function parseBody(init: RequestInit | undefined): Record<string, unknown> {
   if (!init?.body) return {};
@@ -2060,6 +2248,101 @@ export async function mockRequest<T>(url: string, _init?: RequestInit, user?: Au
     };
     ASSISTANCE_REQUESTS.unshift(newReq as any);
     return newReq as T;
+  }
+
+  // =========== MODULE 8: CRISIS REPORTING ===========
+  // Crisis Dashboard Stats
+  if (basePath === "/crisis/dashboard/stats") {
+    return CRISIS_DASHBOARD_STATS as T;
+  }
+
+  // Crisis incidents list
+  if (basePath === "/crisis/incidents") {
+    const search = params.get("search")?.toLowerCase() || "";
+    const status = params.get("status") || "";
+    const severity = params.get("severity") || "";
+    const category = params.get("category") || "";
+    const page = parseInt(params.get("page") || "1");
+    const pageSize = parseInt(params.get("pageSize") || "10");
+    let filtered = [...CRISIS_INCIDENTS];
+    if (search) filtered = filtered.filter(r => r.studentName.toLowerCase().includes(search) || r.incidentId.toLowerCase().includes(search) || r.schoolName.toLowerCase().includes(search));
+    if (status) filtered = filtered.filter(r => r.status === status);
+    if (severity) filtered = filtered.filter(r => r.severity === severity);
+    if (category) filtered = filtered.filter(r => r.incidentCategory === category);
+    const start = (page-1)*pageSize;
+    return { data: filtered.slice(start, start+pageSize), pagination: { page, pageSize, total: filtered.length, totalPages: Math.ceil(filtered.length/pageSize) } } as T;
+  }
+
+  // Crisis incident detail
+  if (basePath.startsWith("/crisis/incidents/") && !basePath.includes("/actions") && !basePath.includes("/communications") && !basePath.includes("/timeline") && !basePath.includes("/escalations") && !basePath.includes("/team")) {
+    const id = basePath.replace("/crisis/incidents/", "");
+    const req = CRISIS_INCIDENTS.find(r => r.id === id);
+    if (!req) throw new Error("Crisis incident not found");
+    const team = CRISIS_TEAM_MEMBERS[id] || [];
+    const actions = CRISIS_ACTIONS.filter(a => a.incidentId === id);
+    const communications = CRISIS_COMMUNICATIONS.filter(c => c.incidentId === id);
+    const timelineEvents = CRISIS_TIMELINE_EVENTS.filter(t => t.incidentId === id);
+    const escalations = CRISIS_ESCALATIONS.filter(e => e.incidentId === id);
+    return {
+      ...req,
+      studentInfo: {
+        age: 13 + (parseInt(id.replace(/\D/g, "") || "0") % 3),
+        tier: "Tier 3",
+        riskScore: req.severity === "EMERGENCY" ? 95 : req.severity === "CRITICAL" ? 85 : req.severity === "HIGH" ? 72 : 55,
+        existingCases: parseInt(id.replace(/\D/g, "") || "0") % 3,
+        previousIncidents: parseInt(id.replace(/\D/g, "") || "0") % 4,
+      },
+      responseTeam: team,
+      actions,
+      communications,
+      timelineEvents,
+      escalations,
+      investigation: req.status === "INVESTIGATING" ? { status: "IN_PROGRESS" } : req.status === "CLOSED" || req.status === "RESOLVED" ? { status: "COMPLETED", concludedAt: req.updatedAt } : null,
+    } as T;
+  }
+
+  // Crisis Analytics
+  if (basePath === "/crisis/analytics") {
+    return CRISIS_ANALYTICS as T;
+  }
+
+  // High Risk Students
+  if (basePath === "/crisis/high-risk") {
+    return { data: HIGH_RISK_STUDENTS } as T;
+  }
+
+  // Create crisis incident
+  if (basePath === "/crisis/incidents" && isPost(_init)) {
+    const body = parseBody(_init) as any;
+    const newInc = {
+      id: `ci-${Date.now()}`,
+      incidentId: `CI-2024-${String(CRISIS_INCIDENTS.length + 1).padStart(3, "0")}`,
+      studentName: body.studentName as string,
+      studentGrade: body.studentGrade as string,
+      studentClassroom: body.studentClassroom as string,
+      schoolName: body.schoolName as string,
+      incidentCategory: body.incidentCategory as string,
+      severity: (body.severity as string) || "HIGH",
+      status: "REPORTED",
+      description: body.description as string,
+      location: (body.location as string) || "School",
+      reportedBy: user?.fullName || "School Staff",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      _count: { actions: 0, communications: 0, timelineEvents: 1, escalations: 0 },
+    };
+    CRISIS_INCIDENTS.unshift(newInc as any);
+    // Add initial timeline event
+    CRISIS_TIMELINE_EVENTS.unshift({
+      id: `cte-new-${Date.now()}`,
+      incidentId: newInc.id,
+      eventType: "INCIDENT_REPORTED",
+      title: "Incident Reported",
+      description: `Crisis incident reported by ${newInc.reportedBy}`,
+      createdAt: new Date().toISOString(),
+      createdBy: { id: user?.id || "unknown", fullName: newInc.reportedBy, role: "Staff" },
+    });
+    return newInc as T;
   }
 
   throw new Error(`No mock data for: ${url}`);

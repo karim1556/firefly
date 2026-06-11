@@ -1227,3 +1227,191 @@ export interface AssistanceAnalytics {
   resolutionTimes: Array<{ month: string; avgDays: number }>;
   expertUtilization: Array<{ expertName: string; requests: number }>;
 }
+
+// =============== Module 8: Crisis Reporting & Escalations ===============
+
+export type CrisisStatus = "REPORTED" | "ACKNOWLEDGED" | "INVESTIGATING" | "ESCALATED" | "MONITORING" | "RESOLVED" | "CLOSED";
+export type CrisisSeverity = "HIGH" | "CRITICAL" | "EMERGENCY";
+export type IncidentCategory = "SELF_HARM_RISK" | "SUICIDE_IDEATION" | "ABUSE_CONCERNS" | "BULLYING_ESCALATION" | "VIOLENCE_THREAT" | "SEVERE_EMOTIONAL_DISTREESS" | "MISSING_STUDENT" | "SAFETY_CONCERN" | "SUBSTANCE_CONCERN";
+export type CrisisActionStatus = "PENDING" | "IN_PROGRESS" | "COMPLETED" | "OVERDUE";
+export type CrisisActionType = "CONTACT_PARENT" | "SCHEDULE_ASSESSMENT" | "CONDUCT_SAFETY_CHECK" | "ARRANGE_COUNSELLING" | "NOTIFY_LEADERSHIP" | "ESCALATE_EXTERNALLY" | "DOCUMENTATION" | "FOLLOW_UP";
+export type CrisisEscalationLevel = "TEACHER" | "COUNSELLOR" | "COORDINATOR" | "PRINCIPAL" | "SAFEGUARDING_TEAM" | "EXTERNAL_AUTHORITIES";
+export type CommunicationType = "PHONE_CALL" | "EMAIL" | "MEETING" | "NOTIFICATION" | "SMS";
+export type InvestigationStatus = "PENDING" | "IN_PROGRESS" | "COMPLETED" | "CLOSED";
+
+export const CRISIS_STATUSES: CrisisStatus[] = [
+  "REPORTED", "ACKNOWLEDGED", "INVESTIGATING", "ESCALATED", "MONITORING", "RESOLVED", "CLOSED"
+];
+
+export const CRISIS_SEVERITIES: CrisisSeverity[] = ["HIGH", "CRITICAL", "EMERGENCY"];
+
+export const INCIDENT_CATEGORIES: IncidentCategory[] = [
+  "SELF_HARM_RISK", "SUICIDE_IDEATION", "ABUSE_CONCERNS", "BULLYING_ESCALATION",
+  "VIOLENCE_THREAT", "SEVERE_EMOTIONAL_DISTREESS", "MISSING_STUDENT", "SAFETY_CONCERN", "SUBSTANCE_CONCERN"
+];
+
+export const CRISIS_ESCALATION_LEVELS: CrisisEscalationLevel[] = [
+  "TEACHER", "COUNSELLOR", "COORDINATOR", "PRINCIPAL", "SAFEGUARDING_TEAM", "EXTERNAL_AUTHORITIES"
+];
+
+export interface CrisisTeamMember {
+  id: string;
+  fullName: string;
+  role: string;
+  roleType: "OWNER" | "SUPPORTING" | "OBSERVER";
+  isAvailable: boolean;
+  addedAt: string;
+}
+
+export interface CrisisAction {
+  id: string;
+  incidentId: string;
+  actionType: CrisisActionType;
+  taskName: string;
+  description: string;
+  assignedTo: {
+    id: string;
+    fullName: string;
+    role: string;
+  };
+  dueTime: string;
+  status: CrisisActionStatus;
+  completedAt?: string;
+  createdAt: string;
+  createdBy: {
+    id: string;
+    fullName: string;
+  };
+}
+
+export interface CrisisCommunication {
+  id: string;
+  incidentId: string;
+  communicationType: CommunicationType;
+  contactPerson: string;
+  relationship: string;
+  dateTime: string;
+  outcome: string;
+  notes?: string;
+  createdAt: string;
+  createdBy: {
+    id: string;
+    fullName: string;
+  };
+}
+
+export interface CrisisTimelineEvent {
+  id: string;
+  incidentId: string;
+  eventType: "INCIDENT_REPORTED" | "ESCALATION_TRIGGERED" | "TEAM_ASSIGNED" | "PARENT_CONTACTED" | "ASSESSMENT_COMPLETED" | "INTERVENTION_STARTED" | "FOLLOW_UP_CONDUCTED" | "INCIDENT_CLOSED" | "STATUS_UPDATED" | "NOTE_ADDED" | "ACTION_COMPLETED";
+  title: string;
+  description: string;
+  createdAt: string;
+  createdBy?: {
+    id: string;
+    fullName: string;
+    role: string;
+  };
+}
+
+export interface CrisisEscalation {
+  id: string;
+  incidentId: string;
+  escalatedTo: CrisisEscalationLevel;
+  reason: string;
+  triggeredBy: CrisisSeverity | "STUDENT_SAFETY_RISK" | "REPEATED_INCIDENT" | "LEGAL_REQUIREMENT";
+  escalatedAt: string;
+  escalatedBy: {
+    id: string;
+    fullName: string;
+    role: string;
+  };
+  status: "PENDING" | "ACKNOWLEDGED" | "RESOLVED";
+  acknowledgedAt?: string;
+  resolvedAt?: string;
+}
+
+export interface CrisisIncidentSummary {
+  id: string;
+  incidentId: string;
+  studentName: string;
+  studentGrade: string;
+  studentClassroom: string;
+  schoolName: string;
+  incidentCategory: IncidentCategory;
+  severity: CrisisSeverity;
+  status: CrisisStatus;
+  description: string;
+  location: string;
+  reportedBy: string;
+  createdAt: string;
+  updatedAt: string;
+  _count: {
+    actions: number;
+    communications: number;
+    timelineEvents: number;
+    escalations: number;
+  };
+}
+
+export interface CrisisIncidentRecord extends CrisisIncidentSummary {
+  studentInfo: {
+    age: number;
+    tier: string;
+    riskScore: number;
+    existingCases: number;
+    previousIncidents: number;
+  };
+  responseTeam: CrisisTeamMember[];
+  actions: CrisisAction[];
+  communications: CrisisCommunication[];
+  timelineEvents: CrisisTimelineEvent[];
+  escalations: CrisisEscalation[];
+  investigation?: {
+    status: InvestigationStatus;
+    findings?: string;
+    concludedAt?: string;
+  };
+  resolution?: {
+    outcome: "SAFE_RETURN" | "CONTINUED_MONITORING" | "EXTERNAL_REFERRAL" | "NO_FURTHER_ACTION";
+    summary: string;
+    closedAt: string;
+    closedBy: string;
+  };
+}
+
+export interface CrisisDashboardStats {
+  activeCrisisCases: number;
+  criticalIncidents: number;
+  escalatedCases: number;
+  openInvestigations: number;
+  avgResponseTime: string;
+  resolvedIncidents: number;
+  highRiskStudents: number;
+  pendingActions: number;
+  incidentsByStatus: Array<{ status: string; count: number }>;
+  incidentsBySeverity: Array<{ severity: string; count: number }>;
+  incidentsByCategory: Array<{ category: string; count: number }>;
+  monthlyTrends: Array<{ month: string; incidents: number; resolved: number }>;
+  responseTimeTrend: Array<{ month: string; avgHours: number }>;
+}
+
+export interface CrisisAnalytics {
+  incidentsByCategory: Array<{ name: string; value: number }>;
+  incidentsByGrade: Array<{ name: string; value: number }>;
+  responseTimeDistribution: Array<{ range: string; count: number }>;
+  escalationTrends: Array<{ month: string; escalations: number }>;
+  resolutionRates: Array<{ month: string; rate: number }>;
+  repeatIncidents: Array<{ studentName: string; count: number; lastIncident: string }>;
+  topEscalationReasons: Array<{ reason: string; count: number }>;
+}
+
+export interface HighRiskStudent {
+  studentId: string;
+  studentName: string;
+  studentGrade: string;
+  riskScore: number;
+  openIncidents: number;
+  lastIncident: string;
+  monitoringStatus: "ACTIVE" | "PENDING_REVIEW" | "STABLE";
+}
