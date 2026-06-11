@@ -1038,3 +1038,192 @@ export interface HighRiskCase {
   overdueFollowUps: number;
   daysOpen: number;
 }
+
+// =============== Module 6: Hub & Spoke Assistance Requests ===============
+
+export type AssistanceStatus = "OPEN" | "ASSIGNED" | "IN_PROGRESS" | "ESCALATED" | "RESOLVED" | "CLOSED";
+export type AssistancePriority = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+export type ConcernCategory = "EMOTIONAL_WELLBEING" | "BEHAVIORAL_CHALLENGES" | "ATTENDANCE_ISSUES" | "ACADEMIC_CONCERNS" | "PARENT_ENGAGEMENT" | "CRISIS_RISK" | "LEARNING_DIFFICULTIES";
+export type ExpertType = "CLINICAL_PSYCHOLOGIST" | "SCHOOL_COUNSELLOR" | "BEHAVIORAL_SPECIALIST" | "LEARNING_SUPPORT_EXPERT" | "FAMILY_COUNSELLOR" | "SENIOR_SPECIALIST" | "LEADERSHIP";
+export type RecommendationType = "SUGGESTED_INTERVENTION" | "COUNSELLING_PLAN" | "PARENT_ENGAGEMENT_STRATEGY" | "CLASSROOM_SUPPORT_PLAN" | "MONITORING_PLAN" | "EXTERNAL_REFERRAL_RECOMMENDATION";
+export type ActionItemStatus = "PENDING" | "IN_PROGRESS" | "COMPLETED" | "OVERDUE";
+export type EscalationStatus = "PENDING" | "ACKNOWLEDGED" | "RESOLVED";
+
+export const ASSISTANCE_STATUSES: AssistanceStatus[] = [
+  "OPEN", "ASSIGNED", "IN_PROGRESS", "ESCALATED", "RESOLVED", "CLOSED"
+];
+
+export const ASSISTANCE_CONCERN_CATEGORIES: ConcernCategory[] = [
+  "EMOTIONAL_WELLBEING", "BEHAVIORAL_CHALLENGES", "ATTENDANCE_ISSUES",
+  "ACADEMIC_CONCERNS", "PARENT_ENGAGEMENT", "CRISIS_RISK", "LEARNING_DIFFICULTIES"
+];
+
+export interface Expert {
+  id: string;
+  fullName: string;
+  email: string;
+  expertType: ExpertType;
+  specializations: string[];
+  yearsOfExperience: number;
+  isAvailable: boolean;
+  rating: number;
+  requestsHandled: number;
+  avgResponseTime: string;
+}
+
+export interface AssistanceRequest {
+  id: string;
+  requestId: string;
+  studentName: string;
+  studentGrade: string;
+  studentClassroom: string;
+  schoolName: string;
+  concernCategory: ConcernCategory;
+  priority: AssistancePriority;
+  status: AssistanceStatus;
+  summary: string;
+  supportingNotes: string;
+  assignedExpert?: {
+    id: string;
+    fullName: string;
+    expertType: ExpertType;
+  } | null;
+  submittedBy: string;
+  createdAt: string;
+  updatedAt: string;
+  _count: {
+    recommendations: number;
+    actionItems: number;
+    timelineEvents: number;
+  };
+}
+
+export interface AssistanceDashboardStats {
+  totalRequests: number;
+  openRequests: number;
+  inProgressRequests: number;
+  resolvedRequests: number;
+  highPriorityRequests: number;
+  avgResponseTime: string;
+  requestsByStatus: Array<{ status: string; count: number }>;
+  requestsByPriority: Array<{ priority: string; count: number }>;
+  requestsByCategory: Array<{ category: string; count: number }>;
+  monthlyTrends: Array<{ month: string; submitted: number; resolved: number }>;
+}
+
+export interface ExpertRecommendation {
+  id: string;
+  requestId: string;
+  recommendationType: RecommendationType;
+  title: string;
+  description: string;
+  priority: AssistancePriority;
+  dueDate?: string;
+  status: "PENDING" | "ACCEPTED" | "IMPLEMENTED" | "REJECTED";
+  createdAt: string;
+  createdBy: {
+    id: string;
+    fullName: string;
+    expertType: ExpertType;
+  };
+}
+
+export interface ActionItem {
+  id: string;
+  requestId: string;
+  taskName: string;
+  description: string;
+  assignedTo: {
+    id: string;
+    fullName: string;
+    role: string;
+  };
+  dueDate: string;
+  status: ActionItemStatus;
+  completedAt?: string;
+  createdAt: string;
+  createdBy: {
+    id: string;
+    fullName: string;
+  };
+}
+
+export interface AssistanceDiscussion {
+  id: string;
+  requestId: string;
+  authorName: string;
+  authorRole: string;
+  authorType: "SCHOOL_COUNSELLOR" | "COORDINATOR" | "PRINCIPAL" | "HUB_EXPERT" | "SPECIALIST";
+  message: string;
+  attachmentUrl?: string;
+  mentions?: string[];
+  createdAt: string;
+}
+
+export interface AssistanceTimelineEvent {
+  id: string;
+  requestId: string;
+  eventType: "REQUEST_SUBMITTED" | "EXPERT_ASSIGNED" | "RECOMMENDATION_ADDED" | "ACTION_COMPLETED" | "ESCALATED" | "RESOLVED" | "STATUS_UPDATED";
+  title: string;
+  description: string;
+  createdAt: string;
+  createdBy?: {
+    id: string;
+    fullName: string;
+    role: string;
+  };
+}
+
+export interface AssistanceEscalation {
+  id: string;
+  requestId: string;
+  escalatedTo: ExpertType;
+  reason: string;
+  escalatedAt: string;
+  escalatedBy: {
+    id: string;
+    fullName: string;
+  };
+  status: EscalationStatus;
+  resolvedAt?: string;
+}
+
+export interface AssistanceDetail extends AssistanceRequest {
+  studentContext: {
+    age: number;
+    tier: string;
+    riskScore: number;
+    existingCases: number;
+    previousInterventions: string[];
+  };
+  recommendations: ExpertRecommendation[];
+  actionItems: ActionItem[];
+  discussions: AssistanceDiscussion[];
+  timelineEvents: AssistanceTimelineEvent[];
+  escalations: AssistanceEscalation[];
+  resolution?: {
+    outcome: "SUCCESSFULLY_RESOLVED" | "MONITORING_REQUIRED" | "EXTERNAL_REFERRAL_RECOMMENDED";
+    notes: string;
+    closedAt: string;
+    closedBy: string;
+  };
+}
+
+export interface ExpertPerformance {
+  expertId: string;
+  expertName: string;
+  expertType: ExpertType;
+  requestsHandled: number;
+  activeRequests: number;
+  avgResponseTime: string;
+  resolutionRate: number;
+  satisfactionScore: number;
+}
+
+export interface AssistanceAnalytics {
+  requestsByCategory: Array<{ name: string; value: number }>;
+  requestsBySchool: Array<{ name: string; value: number }>;
+  escalationTrends: Array<{ month: string; escalations: number }>;
+  resolutionTimes: Array<{ month: string; avgDays: number }>;
+  expertUtilization: Array<{ expertName: string; requests: number }>;
+}

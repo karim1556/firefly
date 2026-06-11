@@ -883,6 +883,178 @@ const DASHBOARDS: Record<string, DashboardOverview> = {
   }
 };
 
+// =============== MODULE 6: HUB & SPOKE ASSISTANCE ===============
+
+const EXPERTS: Array<{ id: string; fullName: string; email: string; expertType: string; specializations: string[]; yearsOfExperience: number; isAvailable: boolean; rating: number; requestsHandled: number; avgResponseTime: string }> = [
+  { id:"exp-1", fullName:"Dr. Meera Kapoor", email:"meera.kapoor@firefly.local", expertType:"CLINICAL_PSYCHOLOGIST", specializations:["Child Trauma","Anxiety Disorders","PTSD"], yearsOfExperience:12, isAvailable:true, rating:4.9, requestsHandled:45, avgResponseTime:"2h" },
+  { id:"exp-2", fullName:"Arun Sharma", email:"arun.sharma@firefly.local", expertType:"SCHOOL_COUNSELLOR", specializations:["Behavioral Issues","Attention Issues","Parent Coaching"], yearsOfExperience:8, isAvailable:true, rating:4.7, requestsHandled:62, avgResponseTime:"4h" },
+  { id:"exp-3", fullName:"Priya Nair", email:"priya.nair@firefly.local", expertType:"BEHAVIORAL_SPECIALIST", specializations:["Aggression Management","Social Skills","Executive Functioning"], yearsOfExperience:10, isAvailable:false, rating:4.8, requestsHandled:38, avgResponseTime:"6h" },
+  { id:"exp-4", fullName:"Vikram Singh", email:"vikram.singh@firefly.local", expertType:"LEARNING_SUPPORT_EXPERT", specializations:["Dyslexia","ADHD","Individualized Education Plans"], yearsOfExperience:7, isAvailable:true, rating:4.6, requestsHandled:29, avgResponseTime:"3h" },
+  { id:"exp-5", fullName:"Sunita Rao", email:"sunita.rao@firefly.local", expertType:"FAMILY_COUNSELLOR", specializations:["Family Dynamics","Parent Engagement","Communication Barriers"], yearsOfExperience:15, isAvailable:true, rating:4.9, requestsHandled:51, avgResponseTime:"5h" },
+  { id:"exp-6", fullName:"Dr. Anil Verma", email:"anil.verma@firefly.local", expertType:"CLINICAL_PSYCHOLOGIST", specializations:["Depression","Self-harm","Crisis Intervention"], yearsOfExperience:18, isAvailable:true, rating:5.0, requestsHandled:73, avgResponseTime:"1h" },
+  { id:"exp-7", fullName:"Kavya Reddy", email:"kavya.reddy@firefly.local", expertType:"SCHOOL_COUNSELLOR", specializations:["Bullying","Social Isolation","Cyber Safety"], yearsOfExperience:6, isAvailable:true, rating:4.5, requestsHandled:22, avgResponseTime:"8h" },
+  { id:"exp-8", fullName:"Mohammed Faiz", email:"faiz.mohammed@firefly.local", expertType:"BEHAVIORAL_SPECIALIST", specializations:["Autism Spectrum","Sensory Processing","Behavioral Analysis"], yearsOfExperience:9, isAvailable:false, rating:4.7, requestsHandled:34, avgResponseTime:"4h" },
+];
+
+const ASSISTANCE_REQUESTS: Array<{
+  id: string; requestId: string; studentName: string; studentGrade: string; studentClassroom: string; schoolName: string;
+  concernCategory: string; priority: string; status: string; summary: string; supportingNotes: string;
+  assignedExpert?: { id: string; fullName: string; expertType: string } | null;
+  submittedBy: string; createdAt: string; updatedAt: string;
+  _count: { recommendations: number; actionItems: number; timelineEvents: number };
+}> = [
+  { id:"ar-1", requestId:"AR-2024-001", studentName:"Aarav Mehta", studentGrade:"8", studentClassroom:"8A", schoolName:"Firefly Public School",
+    concernCategory:"EMOTIONAL_WELLBEING", priority:"HIGH", status:"IN_PROGRESS", summary:"Student showing signs of anxiety and academic pressure", supportingNotes:"Parent reported declining grades and sleep issues for past 2 weeks.",
+    assignedExpert:{ id:"exp-1", fullName:"Dr. Meera Kapoor", expertType:"CLINICAL_PSYCHOLOGIST" },
+    submittedBy:"Rajesh Kumar", createdAt:new Date(NOW-3*D).toISOString(), updatedAt:new Date(NOW-D).toISOString(), _count:{recommendations:3,actionItems:2,timelineEvents:5} },
+  { id:"ar-2", requestId:"AR-2024-002", studentName:"Saanvi Patel", studentGrade:"6", studentClassroom:"6B", schoolName:"Green Valley International",
+    concernCategory:"BEHAVIORAL_CHALLENGES", priority:"MEDIUM", status:"OPEN", summary:"Repeated incidents of verbal aggression toward classmates", supportingNotes:"Teacher reports name-calling and occasional physical altercations.",
+    assignedExpert:null, submittedBy:"Lakshmi Iyer", createdAt:new Date(NOW-2*D).toISOString(), updatedAt:new Date(NOW-2*D).toISOString(), _count:{recommendations:0,actionItems:0,timelineEvents:2} },
+  { id:"ar-3", requestId:"AR-2024-003", studentName:"Vihaan Sharma", studentGrade:"9", studentClassroom:"9A", schoolName:"Delhi Public School",
+    concernCategory:"ATTENDANCE_ISSUES", priority:"HIGH", status:"ESCALATED", summary:"Significant attendance drop — missing 3 days per week", supportingNotes:"Family relocation suspected; student appears disengaged.",
+    assignedExpert:{ id:"exp-5", fullName:"Sunita Rao", expertType:"FAMILY_COUNSELLOR" },
+    submittedBy:"Priya Sharma", createdAt:new Date(NOW-5*D).toISOString(), updatedAt:new Date(NOW-H).toISOString(), _count:{recommendations:2,actionItems:4,timelineEvents:8} },
+  { id:"ar-4", requestId:"AR-2024-004", studentName:"Ananya Iyer", studentGrade:"7", studentClassroom:"7C", schoolName:"Firefly Public School",
+    concernCategory:"ACADEMIC_CONCERNS", priority:"LOW", status:"RESOLVED", summary:"Struggling with mathematics concepts; requests tutoring support", supportingNotes:"Student is motivated but needs differentiated instruction.",
+    assignedExpert:{ id:"exp-4", fullName:"Vikram Singh", expertType:"LEARNING_SUPPORT_EXPERT" },
+    submittedBy:"Rajesh Kumar", createdAt:new Date(NOW-10*D).toISOString(), updatedAt:new Date(NOW-7*D).toISOString(), _count:{recommendations:4,actionItems:3,timelineEvents:6} },
+  { id:"ar-5", requestId:"AR-2024-005", studentName:"Arjun Reddy", studentGrade:"10", studentClassroom:"10B", schoolName:"National High School",
+    concernCategory:"CRISIS_RISK", priority:"CRITICAL", status:"ESCALATED", summary:"Self-harm ideation expressed during class", supportingNotes:"Immediate crisis protocol activated; parent notification done.",
+    assignedExpert:{ id:"exp-6", fullName:"Dr. Anil Verma", expertType:"CLINICAL_PSYCHOLOGIST" },
+    submittedBy:"Neha Kapoor", createdAt:new Date(NOW-H).toISOString(), updatedAt:new Date(NOW-30*60*1000).toISOString(), _count:{recommendations:1,actionItems:2,timelineEvents:3} },
+  { id:"ar-6", requestId:"AR-2024-006", studentName:"Aadhya Nair", studentGrade:"5", studentClassroom:"5A", schoolName:"St. Mary's Academy",
+    concernCategory:"PARENT_ENGAGEMENT", priority:"MEDIUM", status:"ASSIGNED", summary:"Parent not responding to school communications for 3 weeks", supportingNotes:"Multiple attempts via email and phone unsuccessful.",
+    assignedExpert:{ id:"exp-5", fullName:"Sunita Rao", expertType:"FAMILY_COUNSELLOR" },
+    submittedBy:"Anita Desai", createdAt:new Date(NOW-4*D).toISOString(), updatedAt:new Date(NOW-2*D).toISOString(), _count:{recommendations:1,actionItems:1,timelineEvents:3} },
+  { id:"ar-7", requestId:"AR-2024-007", studentName:"Reyansh Kumar", studentGrade:"8", studentClassroom:"8C", schoolName:"Firefly Public School",
+    concernCategory:"LEARNING_DIFFICULTIES", priority:"MEDIUM", status:"IN_PROGRESS", summary:"Possible dyslexia; reading fluency significantly below grade level", supportingNotes:"Screening recommended; parent consent pending.",
+    assignedExpert:{ id:"exp-4", fullName:"Vikram Singh", expertType:"LEARNING_SUPPORT_EXPERT" },
+    submittedBy:"Rajesh Kumar", createdAt:new Date(NOW-6*D).toISOString(), updatedAt:new Date(NOW-2*D).toISOString(), _count:{recommendations:2,actionItems:2,timelineEvents:4} },
+  { id:"ar-8", requestId:"AR-2024-008", studentName:"Myra Singh", studentGrade:"6", studentClassroom:"6A", schoolName:"Green Valley International",
+    concernCategory:"EMOTIONAL_WELLBEING", priority:"HIGH", status:"OPEN", summary:"Student experiencing bullying; low mood and withdrawal", supportingNotes:"Peer conflict escalated; social isolation observed.",
+    assignedExpert:null, submittedBy:"Lakshmi Iyer", createdAt:new Date(NOW-D).toISOString(), updatedAt:new Date(NOW-D).toISOString(), _count:{recommendations:0,actionItems:0,timelineEvents:1} },
+  { id:"ar-9", requestId:"AR-2024-009", studentName:"Kabir Joshi", studentGrade:"9", studentClassroom:"9B", schoolName:"Delhi Public School",
+    concernCategory:"BEHAVIORAL_CHALLENGES", priority:"LOW", status:"CLOSED", summary:"Classroom disruption and defiance — improved after intervention", supportingNotes:"Behavior plan implemented; significant improvement noted.",
+    assignedExpert:{ id:"exp-3", fullName:"Priya Nair", expertType:"BEHAVIORAL_SPECIALIST" },
+    submittedBy:"Priya Sharma", createdAt:new Date(NOW-15*D).toISOString(), updatedAt:new Date(NOW-12*D).toISOString(), _count:{recommendations:3,actionItems:5,timelineEvents:7} },
+  { id:"ar-10", requestId:"AR-2024-010", studentName:"Anika Verma", studentGrade:"7", studentClassroom:"7A", schoolName:"National High School",
+    concernCategory:"ATTENDANCE_ISSUES", priority:"MEDIUM", status:"IN_PROGRESS", summary:"Frequent late arrivals affecting academic performance", supportingNotes:"Family issues suspected; home visit completed.",
+    assignedExpert:{ id:"exp-2", fullName:"Arun Sharma", expertType:"SCHOOL_COUNSELLOR" },
+    submittedBy:"Neha Kapoor", createdAt:new Date(NOW-7*D).toISOString(), updatedAt:new Date(NOW-3*D).toISOString(), _count:{recommendations:2,actionItems:3,timelineEvents:5} },
+];
+
+const ASSISTANCE_RECOMMENDATIONS: Array<{
+  id: string; requestId: string; recommendationType: string; title: string; description: string; priority: string;
+  status: string; dueDate?: string; createdAt: string;
+  createdBy: { id: string; fullName: string; expertType: string };
+}> = [
+  { id:"rec-1", requestId:"ar-1", recommendationType:"COUNSELLING_PLAN", title:"Weekly Counseling Sessions", description:"6-week anxiety management program with bi-weekly check-ins", priority:"HIGH", status:"ACCEPTED", dueDate:new Date(NOW+14*D).toISOString(), createdAt:new Date(NOW-2*D).toISOString(), createdBy:{id:"exp-1",fullName:"Dr. Meera Kapoor",expertType:"CLINICAL_PSYCHOLOGIST"} },
+  { id:"rec-2", requestId:"ar-1", recommendationType:"CLASSROOM_SUPPORT_PLAN", title:"Academic Accommodations", description:"Allow extended time on tests and reduced homework load during treatment", priority:"MEDIUM", status:"IMPLEMENTED", createdAt:new Date(NOW-D).toISOString(), createdBy:{id:"exp-1",fullName:"Dr. Meera Kapoor",expertType:"CLINICAL_PSYCHOLOGIST"} },
+  { id:"rec-3", requestId:"ar-3", recommendationType:"PARENT_ENGAGEMENT_STRATEGY", title:"Home Visit & Family Counseling", description:"Schedule home visit to understand attendance barriers", priority:"HIGH", status:"PENDING", dueDate:new Date(NOW+7*D).toISOString(), createdAt:new Date(NOW-3*D).toISOString(), createdBy:{id:"exp-5",fullName:"Sunita Rao",expertType:"FAMILY_COUNSELLOR"} },
+  { id:"rec-4", requestId:"ar-5", recommendationType:"EXTERNAL_REFERRAL_RECOMMENDATION", title:"Psychiatric Evaluation", description:"Urgent referral to child psychiatrist for medication evaluation", priority:"CRITICAL", status:"ACCEPTED", dueDate:new Date(NOW+3*D).toISOString(), createdAt:new Date(NOW-H/2).toISOString(), createdBy:{id:"exp-6",fullName:"Dr. Anil Verma",expertType:"CLINICAL_PSYCHOLOGIST"} },
+  { id:"rec-5", requestId:"ar-7", recommendationType:"MONITORING_PLAN", title:"Reading Intervention Program", description:"Daily 30-min reading intervention using Orton-Gillingham approach", priority:"MEDIUM", status:"IMPLEMENTED", createdAt:new Date(NOW-4*D).toISOString(), createdBy:{id:"exp-4",fullName:"Vikram Singh",expertType:"LEARNING_SUPPORT_EXPERT"} },
+];
+
+const ASSISTANCE_ACTION_ITEMS: Array<{
+  id: string; requestId: string; taskName: string; description: string;
+  assignedTo: { id: string; fullName: string; role: string }; dueDate: string; status: string; completedAt?: string; createdAt: string;
+  createdBy: { id: string; fullName: string };
+}> = [
+  { id:"ai-1", requestId:"ar-1", taskName:"Complete intake assessment", description:"Conduct initial anxiety assessment using SCARED scale", assignedTo:{id:"exp-1",fullName:"Dr. Meera Kapoor",role:"Clinical Psychologist"}, dueDate:new Date(NOW+2*D).toISOString(), status:"COMPLETED", completedAt:new Date(NOW-D).toISOString(), createdAt:new Date(NOW-2*D).toISOString(), createdBy:{id:"exp-1",fullName:"Dr. Meera Kapoor"} },
+  { id:"ai-2", requestId:"ar-1", taskName:"Share resources with parent", description:"Send anxiety management parent guide via email", assignedTo:{id:"exp-1",fullName:"Dr. Meera Kapoor",role:"Clinical Psychologist"}, dueDate:new Date(NOW+D).toISOString(), status:"IN_PROGRESS", createdAt:new Date(NOW-D).toISOString(), createdBy:{id:"exp-1",fullName:"Dr. Meera Kapoor"} },
+  { id:"ai-3", requestId:"ar-3", taskName:"Schedule home visit", description:"Coordinate with family for home visit this week", assignedTo:{id:"exp-5",fullName:"Sunita Rao",role:"Family Counsellor"}, dueDate:new Date(NOW+3*D).toISOString(), status:"PENDING", createdAt:new Date(NOW-2*D).toISOString(), createdBy:{id:"exp-5",fullName:"Sunita Rao"} },
+  { id:"ai-4", requestId:"ar-5", taskName:"Activate crisis protocol", description:"Ensure 24/7 crisis support contact provided to family", assignedTo:{id:"exp-6",fullName:"Dr. Anil Verma",role:"Clinical Psychologist"}, dueDate:new Date(NOW).toISOString(), status:"COMPLETED", completedAt:new Date(NOW-30*60*1000).toISOString(), createdAt:new Date(NOW-H/2).toISOString(), createdBy:{id:"exp-6",fullName:"Dr. Anil Verma"} },
+  { id:"ai-5", requestId:"ar-5", taskName:"Coordinate psychiatric referral", description:"Prepare referral letter and contact Dr. Gupta at Sunshine Mental Health", assignedTo:{id:"exp-6",fullName:"Dr. Anil Verma",role:"Clinical Psychologist"}, dueDate:new Date(NOW+2*D).toISOString(), status:"IN_PROGRESS", createdAt:new Date(NOW-H/2).toISOString(), createdBy:{id:"exp-6",fullName:"Dr. Anil Verma"} },
+];
+
+const ASSISTANCE_DISCUSSIONS: Array<{
+  id: string; requestId: string; authorName: string; authorRole: string; authorType: string;
+  message: string; attachmentUrl?: string; mentions?: string[]; createdAt: string;
+}> = [
+  { id:"ad-1", requestId:"ar-1", authorName:"Dr. Meera Kapoor", authorRole:"Clinical Psychologist", authorType:"HUB_EXPERT", message:"Initial assessment complete. Aarav shows moderate anxiety symptoms consistent with academic pressure. Recommending 6-week CBT program.", createdAt:new Date(NOW-2*D).toISOString() },
+  { id:"ad-2", requestId:"ar-1", authorName:"Rajesh Kumar", authorRole:"Class Teacher", authorType:"SCHOOL_COUNSELLOR", message:"Thank you Dr. Kapoor. I'll coordinate with the parent for consent.", mentions:["Dr. Meera Kapoor"], createdAt:new Date(NOW-2*D+H).toISOString() },
+  { id:"ad-3", requestId:"ar-1", authorName:"Anita Desai", authorRole:"School Counsellor", authorType:"SCHOOL_COUNSELLOR", message:"Parent meeting scheduled for tomorrow 3 PM. Will share update after.", createdAt:new Date(NOW-D).toISOString() },
+  { id:"ad-4", requestId:"ar-3", authorName:"Sunita Rao", authorRole:"Family Counsellor", authorType:"HUB_EXPERT", message:"Home visit needed urgently. The attendance pattern suggests deeper family issues.", createdAt:new Date(NOW-3*D).toISOString() },
+  { id:"ad-5", requestId:"ar-3", authorName:"Priya Sharma", authorRole:"School Counsellor", authorType:"COORDINATOR", message:"I've attempted phone contact 5 times without success. Should we consider alternative contact methods?", createdAt:new Date(NOW-2*D).toISOString() },
+  { id:"ad-6", requestId:"ar-5", authorName:"Dr. Anil Verma", authorRole:"Clinical Psychologist", authorType:"HUB_EXPERT", message:"CRISIS ALERT: Arjun expressed self-harm ideation. Immediate psychiatric evaluation required. Crisis protocol activated.", createdAt:new Date(NOW-H/2).toISOString() },
+  { id:"ad-7", requestId:"ar-5", authorName:"Neha Kapoor", authorRole:"School Administrator", authorType:"PRINCIPAL", message:"Crisis protocol confirmed. Parent notified. Dr. Verma please proceed with referral.", createdAt:new Date(NOW-H/3).toISOString() },
+];
+
+const ASSISTANCE_TIMELINE_EVENTS: Array<{
+  id: string; requestId: string; eventType: string; title: string; description: string; createdAt: string;
+  createdBy?: { id: string; fullName: string; role: string };
+}> = [
+  { id:"ate-1", requestId:"ar-1", eventType:"REQUEST_SUBMITTED", title:"Request Submitted", description:"Assistance request created by Rajesh Kumar", createdAt:new Date(NOW-3*D).toISOString(), createdBy:{id:"u-teacher",fullName:"Rajesh Kumar",role:"Class Teacher"} },
+  { id:"ate-2", requestId:"ar-1", eventType:"EXPERT_ASSIGNED", title:"Expert Assigned", description:"Dr. Meera Kapoor assigned to this case", createdAt:new Date(NOW-3*D+H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"} },
+  { id:"ate-3", requestId:"ar-1", eventType:"RECOMMENDATION_ADDED", title:"Recommendation Added", description:"Dr. Meera Kapoor added a counseling plan recommendation", createdAt:new Date(NOW-2*D).toISOString(), createdBy:{id:"exp-1",fullName:"Dr. Meera Kapoor",role:"Clinical Psychologist"} },
+  { id:"ate-4", requestId:"ar-1", eventType:"STATUS_UPDATED", title:"Status Updated", description:"Request moved to In Progress", createdAt:new Date(NOW-D).toISOString(), createdBy:{id:"exp-1",fullName:"Dr. Meera Kapoor",role:"Clinical Psychologist"} },
+  { id:"ate-5", requestId:"ar-3", eventType:"REQUEST_SUBMITTED", title:"Request Submitted", description:"Assistance request created by Priya Sharma", createdAt:new Date(NOW-5*D).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"} },
+  { id:"ate-6", requestId:"ar-3", eventType:"EXPERT_ASSIGNED", title:"Expert Assigned", description:"Sunita Rao assigned as Family Counsellor", createdAt:new Date(NOW-4*D).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"} },
+  { id:"ate-7", requestId:"ar-3", eventType:"ESCALATED", title:"Case Escalated", description:"Escalated to Senior Specialist due to unresponsive family", createdAt:new Date(NOW-2*D).toISOString(), createdBy:{id:"exp-5",fullName:"Sunita Rao",role:"Family Counsellor"} },
+  { id:"ate-8", requestId:"ar-5", eventType:"REQUEST_SUBMITTED", title:"Request Submitted", description:"Crisis assistance request created", createdAt:new Date(NOW-H).toISOString(), createdBy:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"} },
+  { id:"ate-9", requestId:"ar-5", eventType:"EXPERT_ASSIGNED", title:"Expert Assigned", description:"Dr. Anil Verma assigned for crisis intervention", createdAt:new Date(NOW-H/2).toISOString(), createdBy:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"} },
+  { id:"ate-10", requestId:"ar-5", eventType:"ESCALATED", title:"Case Escalated", description:"Escalated to Leadership Team", createdAt:new Date(NOW-H/3).toISOString(), createdBy:{id:"exp-6",fullName:"Dr. Anil Verma",role:"Clinical Psychologist"} },
+];
+
+const ASSISTANCE_ESCALATIONS: Array<{
+  id: string; requestId: string; escalatedTo: string; reason: string; escalatedAt: string;
+  escalatedBy: { id: string; fullName: string }; status: string; resolvedAt?: string;
+}> = [
+  { id:"esc-1", requestId:"ar-3", escalatedTo:"SENIOR_SPECIALIST", reason:"Family unresponsive after 5+ contact attempts", escalatedAt:new Date(NOW-2*D).toISOString(), escalatedBy:{id:"exp-5",fullName:"Sunita Rao"}, status:"PENDING" },
+  { id:"esc-2", requestId:"ar-5", escalatedTo:"LEADERSHIP", reason:"Critical self-harm ideation — requires leadership oversight", escalatedAt:new Date(NOW-H/3).toISOString(), escalatedBy:{id:"exp-6",fullName:"Dr. Anil Verma"}, status:"ACKNOWLEDGED" },
+];
+
+const ASSISTANCE_DASHBOARD_STATS = {
+  totalRequests: 48, openRequests: 12, inProgressRequests: 18, resolvedRequests: 14, highPriorityRequests: 8,
+  avgResponseTime: "4.2h",
+  requestsByStatus: [
+    { status:"OPEN", count:12 },{ status:"ASSIGNED", count:6 },{ status:"IN_PROGRESS", count:18 },{ status:"ESCALATED", count:4 },{ status:"RESOLVED", count:12 },{ status:"CLOSED", count:2 }
+  ],
+  requestsByPriority: [
+    { priority:"LOW", count:8 },{ priority:"MEDIUM", count:22 },{ priority:"HIGH", count:12 },{ priority:"CRITICAL", count:6 }
+  ],
+  requestsByCategory: [
+    { category:"EMOTIONAL_WELLBEING", count:14 },{ category:"BEHAVIORAL_CHALLENGES", count:10 },{ category:"ATTENDANCE_ISSUES", count:8 },
+    { category:"ACADEMIC_CONCERNS", count:6 },{ category:"PARENT_ENGAGEMENT", count:5 },{ category:"CRISIS_RISK", count:3 },{ category:"LEARNING_DIFFICULTIES", count:4 }
+  ],
+  monthlyTrends: [
+    { month:"Jan", submitted:22, resolved:18 },{ month:"Feb", submitted:28, resolved:24 },{ month:"Mar", submitted:35, resolved:30 },
+    { month:"Apr", submitted:30, resolved:28 },{ month:"May", submitted:38, resolved:32 },{ month:"Jun", submitted:42, resolved:36 }
+  ],
+};
+
+const EXPERT_PERFORMANCE: Array<{ expertId: string; expertName: string; expertType: string; requestsHandled: number; activeRequests: number; avgResponseTime: string; resolutionRate: number; satisfactionScore: number }> = [
+  { expertId:"exp-1", expertName:"Dr. Meera Kapoor", expertType:"CLINICAL_PSYCHOLOGIST", requestsHandled:45, activeRequests:6, avgResponseTime:"2h", resolutionRate:92, satisfactionScore:4.9 },
+  { expertId:"exp-2", expertName:"Arun Sharma", expertType:"SCHOOL_COUNSELLOR", requestsHandled:62, activeRequests:8, avgResponseTime:"4h", resolutionRate:88, satisfactionScore:4.7 },
+  { expertId:"exp-3", expertName:"Priya Nair", expertType:"BEHAVIORAL_SPECIALIST", requestsHandled:38, activeRequests:5, avgResponseTime:"6h", resolutionRate:85, satisfactionScore:4.8 },
+  { expertId:"exp-4", expertName:"Vikram Singh", expertType:"LEARNING_SUPPORT_EXPERT", requestsHandled:29, activeRequests:4, avgResponseTime:"3h", resolutionRate:90, satisfactionScore:4.6 },
+  { expertId:"exp-5", expertName:"Sunita Rao", expertType:"FAMILY_COUNSELLOR", requestsHandled:51, activeRequests:7, avgResponseTime:"5h", resolutionRate:87, satisfactionScore:4.9 },
+  { expertId:"exp-6", expertName:"Dr. Anil Verma", expertType:"CLINICAL_PSYCHOLOGIST", requestsHandled:73, activeRequests:10, avgResponseTime:"1h", resolutionRate:95, satisfactionScore:5.0 },
+];
+
+const ASSISTANCE_ANALYTICS = {
+  requestsByCategory: [
+    { name:"Emotional Wellbeing", value:14 },{ name:"Behavioral Challenges", value:10 },{ name:"Attendance Issues", value:8 },
+    { name:"Academic Concerns", value:6 },{ name:"Parent Engagement", value:5 },{ name:"Crisis Risk", value:3 },{ name:"Learning Difficulties", value:4 }
+  ],
+  requestsBySchool: [
+    { name:"Firefly Public School", value:18 },{ name:"Green Valley International", value:10 },{ name:"Delhi Public School", value:8 },
+    { name:"National High School", value:6 },{ name:"St. Mary's Academy", value:4 },{ name:"Others", value:4 }
+  ],
+  escalationTrends: [
+    { month:"Jan", escalations:3 },{ month:"Feb", escalations:4 },{ month:"Mar", escalations:6 },
+    { month:"Apr", escalations:5 },{ month:"May", escalations:7 },{ month:"Jun", escalations:8 }
+  ],
+  resolutionTimes: [
+    { month:"Jan", avgDays:5.2 },{ month:"Feb", avgDays:4.8 },{ month:"Mar", avgDays:6.1 },
+    { month:"Apr", avgDays:5.5 },{ month:"May", avgDays:4.2 },{ month:"Jun", avgDays:3.8 }
+  ],
+  expertUtilization: [
+    { expertName:"Dr. Anil Verma", requests:73 },{ expertName:"Arun Sharma", requests:62 },{ expertName:"Sunita Rao", requests:51 },
+    { expertName:"Dr. Meera Kapoor", requests:45 },{ expertName:"Priya Nair", requests:38 },{ expertName:"Vikram Singh", requests:29 }
+  ],
+};
+
 // ======================== MAIN HANDLER ========================
 function parseBody(init: RequestInit | undefined): Record<string, unknown> {
   if (!init?.body) return {};
@@ -1774,6 +1946,120 @@ export async function mockRequest<T>(url: string, _init?: RequestInit, user?: Au
         { month: "May", attended: 132, missed: 18 }, { month: "Jun", attended: 145, missed: 15 },
       ],
     } as T;
+  }
+
+  // =========== MODULE 6: ASSISTANCE ===========
+  // Assistance Dashboard Stats
+  if (basePath === "/assistance/dashboard/stats") {
+    return ASSISTANCE_DASHBOARD_STATS as T;
+  }
+
+  // Experts list
+  if (basePath === "/assistance/experts") {
+    return { data: EXPERTS } as T;
+  }
+
+  // Expert performance
+  if (basePath === "/assistance/experts/performance") {
+    return { data: EXPERT_PERFORMANCE } as T;
+  }
+
+  // Assistance Analytics
+  if (basePath === "/assistance/analytics") {
+    return ASSISTANCE_ANALYTICS as T;
+  }
+
+  // Assistance requests list
+  if (basePath === "/assistance") {
+    const search = params.get("search")?.toLowerCase() || "";
+    const status = params.get("status") || "";
+    const priority = params.get("priority") || "";
+    const category = params.get("category") || "";
+    const page = parseInt(params.get("page") || "1");
+    const pageSize = parseInt(params.get("pageSize") || "10");
+    let filtered = [...ASSISTANCE_REQUESTS];
+    if (search) filtered = filtered.filter(r => r.studentName.toLowerCase().includes(search) || r.requestId.toLowerCase().includes(search) || r.schoolName.toLowerCase().includes(search));
+    if (status) filtered = filtered.filter(r => r.status === status);
+    if (priority) filtered = filtered.filter(r => r.priority === priority);
+    if (category) filtered = filtered.filter(r => r.concernCategory === category);
+    const start = (page-1)*pageSize;
+    return { data: filtered.slice(start, start+pageSize), pagination: { page, pageSize, total: filtered.length, totalPages: Math.ceil(filtered.length/pageSize) } } as T;
+  }
+
+  // Assistance request detail
+  if (basePath.startsWith("/assistance/") && !basePath.includes("/recommendations") && !basePath.includes("/action-items") && !basePath.includes("/discussions") && !basePath.includes("/timeline") && !basePath.includes("/escalations") && !basePath.includes("/experts")) {
+    const id = basePath.replace("/assistance/", "");
+    const req = ASSISTANCE_REQUESTS.find(r => r.id === id);
+    if (!req) throw new Error("Assistance request not found");
+    const recommendations = ASSISTANCE_RECOMMENDATIONS.filter(r => r.requestId === id);
+    const actionItems = ASSISTANCE_ACTION_ITEMS.filter(a => a.requestId === id);
+    const discussions = ASSISTANCE_DISCUSSIONS.filter(d => d.requestId === id);
+    const timelineEvents = ASSISTANCE_TIMELINE_EVENTS.filter(t => t.requestId === id);
+    const escalations = ASSISTANCE_ESCALATIONS.filter(e => e.requestId === id);
+    return {
+      ...req,
+      studentContext: {
+        age: 13 + (parseInt(id.replace(/\D/g, "") || "0") % 3),
+        tier: "Tier 2",
+        riskScore: req.priority === "CRITICAL" ? 88 : req.priority === "HIGH" ? 72 : req.priority === "MEDIUM" ? 55 : 35,
+        existingCases: parseInt(id.replace(/\D/g, "") || "0") % 3,
+        previousInterventions: ["Check-in", "SEL Session", "Teacher Consultation"].slice(0, (parseInt(id.replace(/\D/g, "") || "0") % 3)),
+      },
+      recommendations,
+      actionItems,
+      discussions,
+      timelineEvents,
+      escalations,
+    } as T;
+  }
+
+  // Recommendations for a request
+  if (basePath.startsWith("/assistance/") && basePath.includes("/recommendations")) {
+    const requestId = basePath.split("/")[2];
+    return { data: ASSISTANCE_RECOMMENDATIONS.filter(r => r.requestId === requestId) } as T;
+  }
+
+  // Action items for a request
+  if (basePath.startsWith("/assistance/") && basePath.includes("/action-items")) {
+    const requestId = basePath.split("/")[2];
+    return { data: ASSISTANCE_ACTION_ITEMS.filter(a => a.requestId === requestId) } as T;
+  }
+
+  // Discussions for a request
+  if (basePath.startsWith("/assistance/") && basePath.includes("/discussions")) {
+    const requestId = basePath.split("/")[2];
+    return { data: ASSISTANCE_DISCUSSIONS.filter(d => d.requestId === requestId) } as T;
+  }
+
+  // Timeline for a request
+  if (basePath.startsWith("/assistance/") && basePath.includes("/timeline")) {
+    const requestId = basePath.split("/")[2];
+    return { data: ASSISTANCE_TIMELINE_EVENTS.filter(t => t.requestId === requestId) } as T;
+  }
+
+  // Create assistance request
+  if (basePath === "/assistance" && isPost(_init)) {
+    const body = parseBody(_init) as any;
+    const newReq = {
+      id: `ar-${Date.now()}`,
+      requestId: `AR-2024-${String(ASSISTANCE_REQUESTS.length + 1).padStart(3, "0")}`,
+      studentName: body.studentName as string,
+      studentGrade: body.studentGrade as string,
+      studentClassroom: body.studentClassroom as string,
+      schoolName: body.schoolName as string,
+      concernCategory: body.concernCategory as string,
+      priority: (body.priority as string) || "MEDIUM",
+      status: "OPEN",
+      summary: body.summary as string,
+      supportingNotes: (body.supportingNotes as string) || "",
+      assignedExpert: null,
+      submittedBy: user?.fullName || "School Staff",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      _count: { recommendations: 0, actionItems: 0, timelineEvents: 1 },
+    };
+    ASSISTANCE_REQUESTS.unshift(newReq as any);
+    return newReq as T;
   }
 
   throw new Error(`No mock data for: ${url}`);
