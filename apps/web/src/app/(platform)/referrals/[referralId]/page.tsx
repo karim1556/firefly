@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/hooks/use-auth";
-import { formatDate, formatDateTime } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 import type { ReferralDetail, ReferralStatus, Priority, MilestoneStatus, FollowUpStatus } from "@/lib/types";
 
 const statusConfig: Record<ReferralStatus, { label: string; variant: "success" | "warning" | "danger" | "info" | "default" }> = {
@@ -44,6 +44,7 @@ const followUpStatusConfig: Record<FollowUpStatus, { label: string; variant: "su
   SCHEDULED: { label: "Scheduled", variant: "info" },
   COMPLETED: { label: "Completed", variant: "success" },
   MISSED: { label: "Missed", variant: "danger" },
+  RESCHEDULED: { label: "Rescheduled", variant: "warning" },
   CANCELLED: { label: "Cancelled", variant: "default" },
 };
 
@@ -419,7 +420,7 @@ export default function ReferralDetailPage() {
                 referral.followUps.map((followUp) => (
                   <div key={followUp.id} className="flex items-center justify-between p-3 bg-zinc-50 rounded-lg">
                     <div>
-                      <p className="text-sm font-medium">{formatDateTime(followUp.scheduledAt)}</p>
+                      <p className="text-sm font-medium">{formatDate(followUp.scheduledAt)}</p>
                       {followUp.notes && <p className="text-xs text-zinc-500">{followUp.notes}</p>}
                     </div>
                     <div className="flex items-center gap-2">
@@ -481,7 +482,7 @@ export default function ReferralDetailPage() {
                         <div className="flex-1 pb-4">
                           <div className="flex items-center gap-2">
                             <span className="font-medium">{event.title}</span>
-                            <span className="text-xs text-zinc-500">{formatDateTime(event.createdAt)}</span>
+                            <span className="text-xs text-zinc-500">{formatDate(event.createdAt)}</span>
                           </div>
                           <p className="text-sm text-zinc-600 mt-1">{event.description}</p>
                           <p className="text-xs text-zinc-400 mt-1">
@@ -510,7 +511,7 @@ export default function ReferralDetailPage() {
                     <div key={log.id} className="p-3 bg-zinc-50 rounded-lg">
                       <div className="flex items-center justify-between mb-1">
                         <span className="font-medium text-sm">{log.authorName}</span>
-                        <span className="text-xs text-zinc-500">{formatDateTime(log.createdAt)}</span>
+                        <span className="text-xs text-zinc-500">{formatDate(log.createdAt)}</span>
                       </div>
                       <Badge variant="default" className="text-xs mb-2">{log.authorRole}</Badge>
                       <p className="text-sm">{log.message}</p>

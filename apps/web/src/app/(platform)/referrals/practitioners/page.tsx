@@ -184,7 +184,7 @@ export default function PractitionersPage() {
                     </div>
                     <div className="flex gap-2">
                       {practitioner.consultationModes.map((mode) => (
-                        <Badge key={mode} variant="outline" className="text-xs">
+                        <Badge key={mode} variant="default" className="text-xs">
                           {mode}
                         </Badge>
                       ))}

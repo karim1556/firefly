@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, MapPin, Star, Clock, Globe, Phone, Mail, Lock, Unlock, Calendar, FileText } from "lucide-react";
+import { ArrowLeft, MapPin, Star, Clock, Globe, Phone, Mail, Lock, Unlock, Calendar, FileText, GraduationCap } from "lucide-react";
 import { PageHeader } from "@/components/modules/common/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -206,7 +206,7 @@ export default function PractitionerProfilePage() {
             <CardContent>
               <div className="flex flex-wrap gap-2">
                 {practitioner.consultationModes.map((mode) => (
-                  <Badge key={mode} variant="outline" className="text-sm px-3 py-1">
+                  <Badge key={mode} variant="default" className="text-sm px-3 py-1">
                     {mode}
                   </Badge>
                 ))}

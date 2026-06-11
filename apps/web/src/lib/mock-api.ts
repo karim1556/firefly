@@ -66,6 +66,207 @@ const CASES = [
   { id:"c8", title:"Anger management - Aditya Mishra", tier:"TIER_2", type:"SEL", riskLevel:"MEDIUM", status:"ON_HOLD", openedAt:new Date(NOW-12*D).toISOString(), closedAt:null, student:{id:"s11",firstName:"Aditya",lastName:"Mishra",grade:"6",classroom:"6A"}, _count:{sessions:2,timelineEvents:3} },
 ];
 
+// ======================== MODULE 5: CASE MANAGEMENT MOCK DATA ========================
+
+// Case Dashboard Stats
+const CASE_DASHBOARD_STATS = {
+  totalCases: 70,
+  activeCases: 40,
+  closedCases: 20,
+  highRiskCases: 10,
+  casesAwaitingAction: 8,
+  upcomingFollowUps: 15,
+  casesByStatus: [
+    { status: "OPEN", count: 15 },
+    { status: "ASSESSMENT_IN_PROGRESS", count: 8 },
+    { status: "INTERVENTION_ACTIVE", count: 12 },
+    { status: "MONITORING", count: 5 },
+    { status: "ESCALATED", count: 3 },
+    { status: "RESOLVED", count: 7 },
+    { status: "CLOSED", count: 20 },
+  ],
+  casesByPriority: [
+    { priority: "LOW", count: 12 },
+    { priority: "MEDIUM", count: 28 },
+    { priority: "HIGH", count: 18 },
+    { priority: "CRITICAL", count: 12 },
+  ],
+  casesByCategory: [
+    { category: "Emotional Wellbeing", count: 18 },
+    { category: "Academic Stress", count: 15 },
+    { category: "Bullying", count: 10 },
+    { category: "Attendance Issues", count: 8 },
+    { category: "Family Concerns", count: 7 },
+    { category: "Behavioral Challenges", count: 8 },
+    { category: "Social Isolation", count: 4 },
+  ],
+  monthlyTrends: [
+    { month: "Jan", opened: 12, closed: 8 },
+    { month: "Feb", opened: 15, closed: 10 },
+    { month: "Mar", opened: 18, closed: 14 },
+    { month: "Apr", opened: 14, closed: 12 },
+    { month: "May", opened: 16, closed: 15 },
+    { month: "Jun", opened: 10, closed: 8 },
+  ],
+};
+
+// Case Interventions
+const CASE_INTERVENTIONS = [
+  { id: "int-1", caseId: "c1", interventionType: "COUNSELLING_SESSION", name: "Weekly Counselling Sessions", objective: "Provide ongoing emotional support and coping strategies", owner: { id: "u-couns", fullName: "Priya Sharma" }, dueDate: new Date(NOW + 14 * D).toISOString(), successCriteria: "Student reports reduced anxiety levels and demonstrates coping techniques", status: "IN_PROGRESS", createdAt: new Date(NOW - 3 * D).toISOString() },
+  { id: "int-2", caseId: "c1", interventionType: "EXTERNAL_REFERRAL", name: "External Psychiatry Referral", objective: "Assess need for medication support", owner: { id: "u-couns", fullName: "Priya Sharma" }, dueDate: new Date(NOW + 7 * D).toISOString(), successCriteria: "External assessment completed", status: "IN_PROGRESS", createdAt: new Date(NOW - 2 * D).toISOString() },
+  { id: "int-3", caseId: "c2", interventionType: "COUNSELLING_SESSION", name: "Safety Planning Sessions", objective: "Develop and reinforce safety plan", owner: { id: "u-couns", fullName: "Priya Sharma" }, dueDate: new Date(NOW + 10 * D).toISOString(), successCriteria: "Student has a current safety plan and can articulate it", status: "IN_PROGRESS", createdAt: new Date(NOW - 4 * D).toISOString() },
+  { id: "int-4", caseId: "c2", interventionType: "PARENT_MEETING", name: "Parent Support Session", objective: "Train parents on safety monitoring and support", owner: { id: "u-couns", fullName: "Priya Sharma" }, dueDate: new Date(NOW + 5 * D).toISOString(), successCriteria: "Parents demonstrate understanding of safety protocols", status: "COMPLETED", createdAt: new Date(NOW - 5 * D).toISOString() },
+  { id: "int-5", caseId: "c3", interventionType: "ACADEMIC_ASSISTANCE", name: "Study Skills Workshop", objective: "Help student develop better study habits", owner: { id: "u-teach", fullName: "Rajesh Kumar" }, dueDate: new Date(NOW + 21 * D).toISOString(), successCriteria: "Student shows improvement in assignment completion", status: "NOT_STARTED", createdAt: new Date(NOW - 2 * D).toISOString() },
+  { id: "int-6", caseId: "c4", interventionType: "PEER_SUPPORT", name: "Peer Mentoring Program", objective: "Pair student with a positive peer mentor", owner: { id: "u-couns", fullName: "Priya Sharma" }, dueDate: new Date(NOW + 14 * D).toISOString(), successCriteria: "Student engages positively with mentor", status: "IN_PROGRESS", createdAt: new Date(NOW - 3 * D).toISOString() },
+  { id: "int-7", caseId: "c5", interventionType: "COUNSELLING_SESSION", name: "Social Skills Group", objective: "Improve social interaction skills", owner: { id: "u-couns", fullName: "Sneha Reddy" }, dueDate: new Date(NOW + 10 * D).toISOString(), successCriteria: "Student demonstrates improved peer interactions", status: "IN_PROGRESS", createdAt: new Date(NOW - 5 * D).toISOString() },
+  { id: "int-8", caseId: "c7", interventionType: "TEACHER_SUPPORT", name: "Classroom Accommodations", objective: "Implement behavioral support strategies in class", owner: { id: "u-couns", fullName: "Dr. Anil Kumar" }, dueDate: new Date(NOW + 7 * D).toISOString(), successCriteria: "Teachers report reduced disruptive behavior", status: "IN_PROGRESS", createdAt: new Date(NOW - 8 * D).toISOString() },
+];
+
+// Case Follow-ups
+const CASE_FOLLOW_UPS = [
+  { id: "fu-1", caseId: "c1", scheduledAt: new Date(NOW + 1 * D).toISOString(), status: "SCHEDULED", notes: "Weekly check-in to assess progress", completedAt: null, createdAt: new Date(NOW - 2 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  { id: "fu-2", caseId: "c1", scheduledAt: new Date(NOW - 2 * D).toISOString(), status: "COMPLETED", notes: "Reviewed safety plan - student feeling supported", completedAt: new Date(NOW - 2 * D).toISOString(), createdAt: new Date(NOW - 5 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  { id: "fu-3", caseId: "c2", scheduledAt: new Date(NOW - 1 * D).toISOString(), status: "MISSED", notes: "Student was absent", completedAt: null, createdAt: new Date(NOW - 4 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  { id: "fu-4", caseId: "c2", scheduledAt: new Date(NOW + 2 * D).toISOString(), status: "SCHEDULED", notes: "Rescheduled follow-up", completedAt: null, createdAt: new Date(NOW - 1 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  { id: "fu-5", caseId: "c3", scheduledAt: new Date(NOW + 3 * D).toISOString(), status: "SCHEDULED", notes: "Academic progress review", completedAt: null, createdAt: new Date(NOW - 1 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Dr. Anil Kumar" } },
+  { id: "fu-6", caseId: "c4", scheduledAt: new Date(NOW + 5 * D).toISOString(), status: "SCHEDULED", notes: "Peer mentor check-in", completedAt: null, createdAt: new Date(NOW - 2 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  { id: "fu-7", caseId: "c5", scheduledAt: new Date(NOW - 3 * D).toISOString(), status: "COMPLETED", notes: "Social skills progress reviewed", completedAt: new Date(NOW - 3 * D).toISOString(), createdAt: new Date(NOW - 6 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Sneha Reddy" } },
+  { id: "fu-8", caseId: "c7", scheduledAt: new Date(NOW + 1 * D).toISOString(), status: "SCHEDULED", notes: "Behavioral support plan review with teachers", completedAt: null, createdAt: new Date(NOW - 1 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Dr. Anil Kumar" } },
+];
+
+// Case Notes
+const CASE_NOTES = [
+  { id: "cn-1", caseId: "c1", noteType: "COUNSELLOR_NOTE", title: "Initial Assessment", content: "Student presented with significant emotional distress. Self-harm ideation disclosed during check-in. Crisis protocol activated immediately.", createdAt: new Date(NOW - 3 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma", role: "COUNSELLOR" } },
+  { id: "cn-2", caseId: "c1", noteType: "TEACHER_NOTE", title: "Classroom Observation", content: "Student appeared withdrawn during class. Did not participate in group activities. Teacher concerned about academic decline.", createdAt: new Date(NOW - 2.5 * D).toISOString(), createdBy: { id: "u-teach", fullName: "Rajesh Kumar", role: "TEACHER" } },
+  { id: "cn-3", caseId: "c1", noteType: "ADMINISTRATIVE_NOTE", title: "Escalation Record", content: "Case escalated to Principal due to critical risk level. External referral initiated.", createdAt: new Date(NOW - 2 * D).toISOString(), createdBy: { id: "u-admin", fullName: "Aarav Mehta", role: "ADMIN" } },
+  { id: "cn-4", caseId: "c2", noteType: "COUNSELLOR_NOTE", title: "Safety Plan Discussion", content: "Developed a comprehensive safety plan with student. Identified trusted adults and coping strategies. Student agreed to daily check-ins.", createdAt: new Date(NOW - 4 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma", role: "COUNSELLOR" } },
+  { id: "cn-5", caseId: "c3", noteType: "COUNSELLOR_NOTE", title: "Academic Anxiety Assessment", content: "Student reports feeling overwhelmed by board exam preparations. Sleep patterns affected. Introduced relaxation techniques.", createdAt: new Date(NOW - 6 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Dr. Anil Kumar", role: "COUNSELLOR" } },
+  { id: "cn-6", caseId: "c4", noteType: "TEACHER_NOTE", title: "Behavioral Incident", content: "Student involved in physical altercation during recess. No injuries but situation escalated quickly. Mediation scheduled.", createdAt: new Date(NOW - 4 * D).toISOString(), createdBy: { id: "u-teach", fullName: "Lakshmi Iyer", role: "TEACHER" } },
+  { id: "cn-7", caseId: "c5", noteType: "COUNSELLOR_NOTE", title: "Social Skills Progress", content: "Student showed improved engagement during group session. Making eye contact and participating more. Continue current approach.", createdAt: new Date(NOW - 3 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Sneha Reddy", role: "COUNSELLOR" } },
+  { id: "cn-8", caseId: "c7", noteType: "COUNSELLOR_NOTE", title: "Emotional Regulation Update", content: "Student used grounding technique during frustrating situation - first time applying learned skill independently. Positive progress.", createdAt: new Date(NOW - 2 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Dr. Anil Kumar", role: "COUNSELLOR" } },
+];
+
+// Parent Interactions
+const PARENT_INTERACTIONS = [
+  { id: "pi-1", caseId: "c1", interactionType: "PHONE_CALL", date: new Date(NOW - 2 * D).toISOString(), outcome: "Parents informed about crisis protocol. Agreed to increased monitoring at home and scheduling external evaluation.", nextActions: "Complete external psychiatric evaluation", createdBy: { id: "u-couns", fullName: "Priya Sharma" }, createdAt: new Date(NOW - 2 * D).toISOString() },
+  { id: "pi-2", caseId: "c1", interactionType: "PARENT_MEETING", date: new Date(NOW - 1 * D).toISOString(), outcome: "Met with parents and student together. Safety plan reviewed and reinforced. Parents committed to daily check-ins.", nextActions: "Weekly updates to parents", createdBy: { id: "u-couns", fullName: "Priya Sharma" }, createdAt: new Date(NOW - 1 * D).toISOString() },
+  { id: "pi-3", caseId: "c2", interactionType: "PARENT_MEETING", date: new Date(NOW - 5 * D).toISOString(), outcome: "Trained parents on safety monitoring. Provided emergency contacts and crisis resources.", nextActions: "Follow-up in 2 weeks to assess home environment", createdBy: { id: "u-couns", fullName: "Priya Sharma" }, createdAt: new Date(NOW - 5 * D).toISOString() },
+  { id: "pi-4", caseId: "c2", interactionType: "PHONE_CALL", date: new Date(NOW - 1 * D).toISOString(), outcome: "Student missed scheduled session. Parents confirmed absence and will ensure attendance.", nextActions: "Reschedule missed session", createdBy: { id: "u-couns", fullName: "Priya Sharma" }, createdAt: new Date(NOW - 1 * D).toISOString() },
+  { id: "pi-5", caseId: "c3", interactionType: "EMAIL", date: new Date(NOW - 3 * D).toISOString(), outcome: "Sent parents information about managing exam stress at home. Provided resources and tips.", nextActions: null, createdBy: { id: "u-couns", fullName: "Dr. Anil Kumar" }, createdAt: new Date(NOW - 3 * D).toISOString() },
+  { id: "pi-6", caseId: "c4", interactionType: "PARENT_MEETING", date: new Date(NOW - 3 * D).toISOString(), outcome: "Discussed behavioral incident with parents. They agreed to family counselling. Student will have reduced screen time.", nextActions: "Family counselling appointment scheduled", createdBy: { id: "u-couns", fullName: "Priya Sharma" }, createdAt: new Date(NOW - 3 * D).toISOString() },
+  { id: "pi-7", caseId: "c7", interactionType: "PHONE_CALL", date: new Date(NOW - 4 * D).toISOString(), outcome: "Parents reported positive behavior at home this week. Student is using coping techniques.", nextActions: "Continue weekly check-ins", createdBy: { id: "u-couns", fullName: "Dr. Anil Kumar" }, createdAt: new Date(NOW - 4 * D).toISOString() },
+];
+
+// Risk Assessments
+const RISK_ASSESSMENTS = [
+  { id: "ra-1", caseId: "c1", riskLevel: "CRITICAL_RISK", riskScore: 91, riskFactors: [{ factor: "Self-harm ideation", currentValue: "Active", previousValue: "None", trend: "declining" }, { factor: "Academic performance", currentValue: "Declining", previousValue: "Stable", trend: "declining" }, { factor: "Social engagement", currentValue: "Isolated", previousValue: "Moderate", trend: "declining" }, { factor: "Sleep patterns", currentValue: "Poor", previousValue: "Average", trend: "declining" }], assessedAt: new Date(NOW - 1 * D).toISOString(), assessedBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  { id: "ra-2", caseId: "c2", riskLevel: "HIGH_RISK", riskScore: 78, riskFactors: [{ factor: "Self-harm ideation", currentValue: "Present", previousValue: "None", trend: "declining" }, { factor: "Safety plan adherence", currentValue: "Good", previousValue: "N/A", trend: "improving" }, { factor: "Support system", currentValue: "Moderate", previousValue: "Limited", trend: "improving" }], assessedAt: new Date(NOW - 2 * D).toISOString(), assessedBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  { id: "ra-3", caseId: "c3", riskLevel: "MODERATE_RISK", riskScore: 55, riskFactors: [{ factor: "Academic stress", currentValue: "High", previousValue: "Moderate", trend: "stable" }, { factor: "Sleep quality", currentValue: "Fair", previousValue: "Good", trend: "declining" }, { factor: "Coping strategies", currentValue: "Developing", previousValue: "Limited", trend: "improving" }], assessedAt: new Date(NOW - 3 * D).toISOString(), assessedBy: { id: "u-couns", fullName: "Dr. Anil Kumar" } },
+  { id: "ra-4", caseId: "c4", riskLevel: "HIGH_RISK", riskScore: 72, riskFactors: [{ factor: "Behavioral incidents", currentValue: "Frequent", previousValue: "Moderate", trend: "stable" }, { factor: "Peer relationships", currentValue: "Conflict", previousValue: "Neutral", trend: "declining" }, { factor: "Impulse control", currentValue: "Poor", previousValue: "Fair", trend: "declining" }], assessedAt: new Date(NOW - 2 * D).toISOString(), assessedBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  { id: "ra-5", caseId: "c7", riskLevel: "HIGH_RISK", riskScore: 68, riskFactors: [{ factor: "Emotional regulation", currentValue: "Improving", previousValue: "Poor", trend: "improving" }, { factor: "Classroom behavior", currentValue: "Occasional issues", previousValue: "Frequent issues", trend: "improving" }, { factor: "Academic engagement", currentValue: "Moderate", previousValue: "Low", trend: "improving" }], assessedAt: new Date(NOW - 1 * D).toISOString(), assessedBy: { id: "u-couns", fullName: "Dr. Anil Kumar" } },
+];
+
+// Escalation Events
+const ESCALATION_EVENTS = [
+  { id: "esc-1", caseId: "c1", escalatedTo: "COORDINATOR", reason: "Critical risk level - requires additional oversight", escalatedAt: new Date(NOW - 2 * D).toISOString(), escalatedBy: { id: "u-couns", fullName: "Priya Sharma" }, status: "ACKNOWLEDGED" },
+  { id: "esc-2", caseId: "c1", escalatedTo: "PRINCIPAL", reason: "Student disclosed self-harm ideation - immediate escalation required", escalatedAt: new Date(NOW - 3 * D).toISOString(), escalatedBy: { id: "u-couns", fullName: "Priya Sharma" }, status: "RESOLVED" },
+  { id: "esc-3", caseId: "c2", escalatedTo: "COORDINATOR", reason: "High risk with recent deterioration", escalatedAt: new Date(NOW - 3 * D).toISOString(), escalatedBy: { id: "u-couns", fullName: "Priya Sharma" }, status: "ACKNOWLEDGED" },
+  { id: "esc-4", caseId: "c4", escalatedTo: "COORDINATOR", reason: "Physical altercation - safety concern", escalatedAt: new Date(NOW - 4 * D).toISOString(), escalatedBy: { id: "u-couns", fullName: "Priya Sharma" }, status: "RESOLVED" },
+];
+
+// Student Journey Events (per student)
+const STUDENT_JOURNEY_EVENTS: Record<string, Array<{ id: string; studentId: string; eventType: string; title: string; description: string; createdAt: string; createdBy?: { id: string; fullName: string } }>> = {
+  "s4": [
+    { id: "je-s4-1", studentId: "s4", eventType: "OBSERVATION_ADDED", title: "Teacher Observation", description: "Student appeared withdrawn in class. Not participating in group activities.", createdAt: new Date(NOW - 10 * D).toISOString(), createdBy: { id: "u-teach", fullName: "Rajesh Kumar" } },
+    { id: "je-s4-2", studentId: "s4", eventType: "FLAG_RAISED", title: "Emotional Distress Flag", description: "Student flagged for emotional wellbeing concerns by class teacher.", createdAt: new Date(NOW - 8 * D).toISOString(), createdBy: { id: "u-teach", fullName: "Rajesh Kumar" } },
+    { id: "je-s4-3", studentId: "s4", eventType: "CASE_OPENED", title: "Case Opened", description: "Crisis intervention case opened after self-harm ideation disclosed.", createdAt: new Date(NOW - 3 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+    { id: "je-s4-4", studentId: "s4", eventType: "COUNSELLING_SESSION", title: "Initial Crisis Session", description: "First counselling session to assess immediate safety needs.", createdAt: new Date(NOW - 2.5 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+    { id: "je-s4-5", studentId: "s4", eventType: "RISK_ASSESSMENT", title: "Risk Assessment Completed", description: "Critical risk level identified. Risk score: 91.", createdAt: new Date(NOW - 2 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+    { id: "je-s4-6", studentId: "s4", eventType: "ESCALATION", title: "Escalated to Principal", description: "Case escalated due to critical risk level and self-harm disclosure.", createdAt: new Date(NOW - 3 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+    { id: "je-s4-7", studentId: "s4", eventType: "INTERVENTION_ADDED", title: "Intervention Planned", description: "Weekly counselling sessions and external referral initiated.", createdAt: new Date(NOW - 3 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+    { id: "je-s4-8", studentId: "s4", eventType: "PARENT_MEETING", title: "Parent Meeting", description: "Met with parents to discuss safety plan and home support.", createdAt: new Date(NOW - 1 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  ],
+  "s1": [
+    { id: "je-s1-1", studentId: "s1", eventType: "FLAG_RAISED", title: "Self-harm Concern Flag", description: "Teacher reported concerning statements in student journal.", createdAt: new Date(NOW - 7 * D).toISOString(), createdBy: { id: "u-teach", fullName: "Rajesh Kumar" } },
+    { id: "je-s1-2", studentId: "s1", eventType: "CASE_OPENED", title: "Case Opened", description: "Self-harm monitoring case opened.", createdAt: new Date(NOW - 5 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+    { id: "je-s1-3", studentId: "s1", eventType: "COUNSELLING_SESSION", title: "Safety Planning Session", description: "Developed safety plan with student.", createdAt: new Date(NOW - 4 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+    { id: "je-s1-4", studentId: "s1", eventType: "PARENT_MEETING", title: "Parent Support Training", description: "Trained parents on safety monitoring.", createdAt: new Date(NOW - 5 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+    { id: "je-s1-5", studentId: "s1", eventType: "INTERVENTION_ADDED", title: "Safety Plan Intervention", description: "Ongoing safety planning and daily check-ins.", createdAt: new Date(NOW - 4 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  ],
+  "s7": [
+    { id: "je-s7-1", studentId: "s7", eventType: "OBSERVATION_ADDED", title: "Physical Altercation", description: "Student involved in fight during recess.", createdAt: new Date(NOW - 12 * H).toISOString(), createdBy: { id: "u-teach", fullName: "Lakshmi Iyer" } },
+    { id: "je-s7-2", studentId: "s7", eventType: "FLAG_RAISED", title: "Behavioral Concern Flag", description: "Aggressive behavior flagged.", createdAt: new Date(NOW - 12 * H).toISOString(), createdBy: { id: "u-teach", fullName: "Lakshmi Iyer" } },
+    { id: "je-s7-3", studentId: "s7", eventType: "CASE_OPENED", title: "Case Opened", description: "Behavioural support case opened.", createdAt: new Date(NOW - 4 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+    { id: "je-s7-4", studentId: "s7", eventType: "PARENT_MEETING", title: "Parent Meeting", description: "Discussed incident with parents. Agreed to family counselling.", createdAt: new Date(NOW - 3 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+    { id: "je-s7-5", studentId: "s7", eventType: "INTERVENTION_ADDED", title: "Peer Mentoring", description: "Student paired with peer mentor for positive engagement.", createdAt: new Date(NOW - 3 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  ],
+  "s13": [
+    { id: "je-s13-1", studentId: "s13", eventType: "OBSERVATION_ADDED", title: "Outburst During Activity", description: "Outburst during group activity - pushed a chair.", createdAt: new Date(NOW - 3 * H).toISOString(), createdBy: { id: "u-teach", fullName: "Rajesh Kumar" } },
+    { id: "je-s13-2", studentId: "s13", eventType: "FLAG_RAISED", title: "Emotional Distress Flag", description: "Aggressive behaviour flagged as Emotional Distress.", createdAt: new Date(NOW - 2 * H).toISOString(), createdBy: { id: "u-teach", fullName: "Rajesh Kumar" } },
+    { id: "je-s13-3", studentId: "s13", eventType: "CASE_OPENED", title: "Case Opened", description: "Emotional regulation case opened.", createdAt: new Date(NOW - 10 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Dr. Anil Kumar" } },
+    { id: "je-s13-4", studentId: "s13", eventType: "INTERVENTION_ADDED", title: "Classroom Accommodations", description: "Behavioral support strategies being implemented in class.", createdAt: new Date(NOW - 8 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Dr. Anil Kumar" } },
+  ],
+};
+
+// High Risk Cases
+const HIGH_RISK_CASES = [
+  { id: "c1", title: "Crisis intervention - Ananya Reddy", student: { id: "s4", firstName: "Ananya", lastName: "Reddy", grade: "9", classroom: "9C" }, riskLevel: "CRITICAL_RISK", priority: "CRITICAL", status: "INTERVENTION_ACTIVE", assignedCounsellor: { fullName: "Priya Sharma" }, lastUpdated: new Date(NOW - 1 * D).toISOString(), overdueFollowUps: 0, daysOpen: 3 },
+  { id: "c2", title: "Self-harm monitoring - Arjun Patel", student: { id: "s1", firstName: "Arjun", lastName: "Patel", grade: "8", classroom: "8A" }, riskLevel: "HIGH_RISK", priority: "HIGH", status: "INTERVENTION_ACTIVE", assignedCounsellor: { fullName: "Priya Sharma" }, lastUpdated: new Date(NOW - 1 * D).toISOString(), overdueFollowUps: 1, daysOpen: 5 },
+  { id: "c4", title: "Behavioural support - Aryan Joshi", student: { id: "s7", firstName: "Aryan", lastName: "Joshi", grade: "8", classroom: "8B" }, riskLevel: "HIGH_RISK", priority: "HIGH", status: "ASSESSMENT_IN_PROGRESS", assignedCounsellor: { fullName: "Priya Sharma" }, lastUpdated: new Date(NOW - 2 * D).toISOString(), overdueFollowUps: 0, daysOpen: 4 },
+  { id: "c7", title: "Emotional regulation - Karan Mehta", student: { id: "s13", firstName: "Karan", lastName: "Mehta", grade: "8", classroom: "8A" }, riskLevel: "HIGH_RISK", priority: "HIGH", status: "INTERVENTION_ACTIVE", assignedCounsellor: { fullName: "Dr. Anil Kumar" }, lastUpdated: new Date(NOW - 1 * D).toISOString(), overdueFollowUps: 0, daysOpen: 10 },
+];
+
+// Case Analytics
+const CASE_ANALYTICS = {
+  casesByCategory: [
+    { name: "Emotional Wellbeing", value: 18 },
+    { name: "Academic Stress", value: 15 },
+    { name: "Bullying", value: 10 },
+    { name: "Attendance Issues", value: 8 },
+    { name: "Family Concerns", value: 7 },
+    { name: "Behavioral Challenges", value: 8 },
+    { name: "Social Isolation", value: 4 },
+  ],
+  casesByGrade: [
+    { grade: "5", count: 8 },
+    { grade: "6", count: 12 },
+    { grade: "7", count: 15 },
+    { grade: "8", count: 18 },
+    { grade: "9", count: 10 },
+    { grade: "10", count: 7 },
+  ],
+  casesByPriority: [
+    { name: "Low", value: 12 },
+    { name: "Medium", value: 28 },
+    { name: "High", value: 18 },
+    { name: "Critical", value: 12 },
+  ],
+  resolutionRate: 72,
+  averageClosureDays: 24,
+  escalationRate: 15,
+  monthlyTrends: [
+    { month: "Jan", cases: 12 },
+    { month: "Feb", cases: 15 },
+    { month: "Mar", cases: 18 },
+    { month: "Apr", cases: 14 },
+    { month: "May", cases: 16 },
+    { month: "Jun", cases: 10 },
+  ],
+  interventionSuccessRates: [
+    { type: "Counselling Sessions", successRate: 78 },
+    { type: "Peer Support", successRate: 65 },
+    { type: "Academic Assistance", successRate: 72 },
+    { type: "Parent Engagement", successRate: 82 },
+    { type: "Teacher Support", successRate: 70 },
+  ],
+};
+
+// Outcome Measurements
+const OUTCOME_MEASUREMENTS: Record<string, { caseId: string; academicImprovement: number; attendanceImprovement: number; behavioralImprovement: number; emotionalWellbeingImprovement: number; overallProgressScore: number; trend: "improving" | "stable" | "declining"; lastUpdated: string }> = {
+  "c5": { caseId: "c5", academicImprovement: 20, attendanceImprovement: 15, behavioralImprovement: 30, emotionalWellbeingImprovement: 25, overallProgressScore: 68, trend: "improving", lastUpdated: new Date(NOW - 1 * D).toISOString() },
+  "c7": { caseId: "c7", academicImprovement: 10, attendanceImprovement: 25, behavioralImprovement: 40, emotionalWellbeingImprovement: 35, overallProgressScore: 72, trend: "improving", lastUpdated: new Date(NOW - 1 * D).toISOString() },
+};
+
 // ======================== SESSIONS ========================
 const SESSIONS = [
   { id:"ses-1", title:"Crisis check-in - Ananya Reddy", status:"SCHEDULED", scheduledAt:new Date(NOW).toISOString(), notes:"Follow-up on crisis intervention progress", student:{firstName:"Ananya",lastName:"Reddy",grade:"9",classroom:"9C"}, counsellor:{fullName:"Priya Sharma"} },
@@ -787,19 +988,70 @@ export async function mockRequest<T>(url: string, _init?: RequestInit, user?: Au
       const start = (page-1)*pageSize;
       return { data: filtered.slice(start, start+pageSize), pagination: { page, pageSize, total: filtered.length, totalPages: Math.ceil(filtered.length/pageSize) } } as T;
     }
+
+    // Case Dashboard Stats
+    if (basePath === "/cases/dashboard/stats") {
+      return CASE_DASHBOARD_STATS as T;
+    }
+
+    // High Risk Cases
+    if (basePath === "/cases/high-risk") {
+      return { data: HIGH_RISK_CASES } as T;
+    }
+
+    // Case Analytics
+    if (basePath === "/cases/analytics") {
+      return CASE_ANALYTICS as T;
+    }
+
+    // Student Journey Timeline
+    if (basePath.startsWith("/cases/journey/")) {
+      const studentId = basePath.replace("/cases/journey/", "");
+      const events = STUDENT_JOURNEY_EVENTS[studentId] || [];
+      return { data: events } as T;
+    }
+
+    // Enhanced case detail with all Module 5 data
     const cid = basePath.replace("/cases/", "");
     const c = CASES.find(x => x.id === cid);
-    if (c) return {
-      ...c,
-      summary: "Case being actively managed with counselling sessions and risk monitoring",
-      timelineEvents: [
-        { id:"te-1", eventType:"case_opened", title:"Case Opened", description:"Case initiated after screening", createdAt:new Date(NOW-3*D).toISOString(), createdBy:{fullName:"Priya Sharma",role:"COUNSELLOR"} },
-        { id:"te-2", eventType:"assessment", title:"Assessment", description:"Risk assessment completed", createdAt:new Date(NOW-2*D).toISOString(), createdBy:{fullName:"Priya Sharma",role:"COUNSELLOR"} },
-        { id:"te-3", eventType:"session", title:"First session", description:"Counselling session completed", createdAt:new Date(NOW-D).toISOString(), createdBy:{fullName:"Priya Sharma",role:"COUNSELLOR"} },
-      ],
-      sessions: SESSIONS.filter(x => c.student.firstName.includes(x.student.firstName.split(" ")[0])).slice(0,3),
-      incidents: INCIDENTS.filter(x => x.student?.firstName === c.student.firstName)
-    } as T;
+    if (c) {
+      const interventions = CASE_INTERVENTIONS.filter(i => i.caseId === cid);
+      const followUps = CASE_FOLLOW_UPS.filter(f => f.caseId === cid);
+      const notes = CASE_NOTES.filter(n => n.caseId === cid);
+      const parentInteractions = PARENT_INTERACTIONS.filter(p => p.caseId === cid);
+      const riskAssessment = RISK_ASSESSMENTS.find(r => r.caseId === cid) || null;
+      const escalationEvents = ESCALATION_EVENTS.filter(e => e.caseId === cid);
+      const outcomeMeasurement = OUTCOME_MEASUREMENTS[cid] || null;
+      return {
+        ...c,
+        summary: "Case being actively managed with counselling sessions and risk monitoring",
+        description: `Comprehensive case for ${c.student.firstName} ${c.student.lastName} - ${c.type.toLowerCase()} support`,
+        concernCategory: c.type === "CRISIS" ? "EMOTIONAL_WELLBEING" : c.type === "SEL" ? "SOCIAL_ISOLATION" : "EMOTIONAL_WELLBEING",
+        priority: c.riskLevel === "CRITICAL" ? "CRITICAL" : c.riskLevel === "HIGH" ? "HIGH" : c.riskLevel === "MEDIUM" ? "MEDIUM" : "LOW",
+        riskLevel: c.riskLevel === "CRITICAL" ? "CRITICAL_RISK" : c.riskLevel === "HIGH" ? "HIGH_RISK" : c.riskLevel === "MEDIUM" ? "MODERATE_RISK" : "LOW_RISK",
+        assignedCounsellor: { id: "u-couns", fullName: "Priya Sharma", email: "priya@firefly.local" },
+        student: {
+          ...c.student,
+          tier: c.tier,
+          riskScore: c.student.id === "s4" ? 91 : c.student.id === "s1" ? 78 : c.student.id === "s7" ? 72 : 55,
+        },
+        timelineEvents: [
+          { id:"te-1", eventType:"case_opened", title:"Case Opened", description:"Case initiated after screening", createdAt:new Date(NOW-3*D).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"COUNSELLOR"} },
+          { id:"te-2", eventType:"assessment", title:"Assessment", description:"Risk assessment completed", createdAt:new Date(NOW-2*D).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"COUNSELLOR"} },
+          { id:"te-3", eventType:"session", title:"First session", description:"Counselling session completed", createdAt:new Date(NOW-D).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"COUNSELLOR"} },
+          ...(notes.slice(0, 3).map((n, i) => ({ id: `te-${i + 4}`, eventType: "note_added", title: n.title, description: n.content, createdAt: n.createdAt, createdBy: n.createdBy })))
+        ],
+        sessions: SESSIONS.filter(x => c.student.firstName.includes(x.student.firstName.split(" ")[0])).slice(0, 3).map(s => ({ ...s, durationMins: 45, counsellor: { fullName: s.counsellor.fullName } })),
+        incidents: INCIDENTS.filter(x => x.student?.firstName === c.student.firstName),
+        interventions,
+        followUps,
+        notes,
+        parentInteractions,
+        riskAssessment,
+        escalationEvents,
+        outcomeMeasurement,
+      } as T;
+    }
     throw new Error("Case not found");
   }
 

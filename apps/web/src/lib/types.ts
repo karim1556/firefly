@@ -341,7 +341,7 @@ export type ReferralStatus = "DRAFT" | "PENDING_APPROVAL" | "APPROVED" | "REJECT
 export type Priority = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
 export type ApprovalStatus = "PENDING" | "APPROVED" | "REJECTED";
 export type MilestoneStatus = "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED";
-export type FollowUpStatus = "SCHEDULED" | "COMPLETED" | "MISSED" | "CANCELLED";
+export type FollowUpStatus = "SCHEDULED" | "COMPLETED" | "MISSED" | "RESCHEDULED" | "CANCELLED";
 
 export const CONCERN_CATEGORIES = [
   "Anxiety",
@@ -798,4 +798,243 @@ export interface ClassAnalytics {
   selCompletionRate: number;
   observationCount: number;
   trend: ClassAnalyticsTrendPoint[];
+}
+
+// =============== Module 5: Case Management & Student Journey ===============
+
+export type CaseStatus = "OPEN" | "ASSESSMENT_IN_PROGRESS" | "INTERVENTION_ACTIVE" | "MONITORING" | "ESCALATED" | "RESOLVED" | "CLOSED";
+export type CaseType = "EMOTIONAL_WELLBEING" | "ACADEMIC_STRESS" | "BULLYING" | "ATTENDANCE_ISSUES" | "FAMILY_CONCERNS" | "BEHAVIORAL_CHALLENGES" | "SOCIAL_ISOLATION" | "SEL" | "COUNSELLING" | "CRISIS" | "CAREER" | "NEURO_DEVELOPMENTAL";
+export type CasePriority = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+export type RiskLevel = "LOW_RISK" | "MODERATE_RISK" | "HIGH_RISK" | "CRITICAL_RISK";
+export type NoteType = "COUNSELLOR_NOTE" | "TEACHER_NOTE" | "PARENT_NOTE" | "ADMINISTRATIVE_NOTE";
+export type InterventionType = "COUNSELLING_SESSION" | "PARENT_MEETING" | "TEACHER_SUPPORT" | "PEER_SUPPORT" | "ACADEMIC_ASSISTANCE" | "EXTERNAL_REFERRAL";
+export type EscalationLevel = "COUNSELLOR" | "COORDINATOR" | "PRINCIPAL" | "EXTERNAL_SUPPORT";
+export type OutcomeIndicator = "ACADEMIC_IMPROVEMENT" | "ATTENDANCE_IMPROVEMENT" | "BEHAVIORAL_IMPROVEMENT" | "EMOTIONAL_WELLBEING_IMPROVEMENT";
+export type ParentInteractionType = "PARENT_MEETING" | "PHONE_CALL" | "EMAIL" | "CONSENT_REQUEST";
+
+export const CASE_STATUSES: CaseStatus[] = [
+  "OPEN", "ASSESSMENT_IN_PROGRESS", "INTERVENTION_ACTIVE", "MONITORING", "ESCALATED", "RESOLVED", "CLOSED"
+];
+
+export const CASE_TYPES: CaseType[] = [
+  "EMOTIONAL_WELLBEING", "ACADEMIC_STRESS", "BULLYING", "ATTENDANCE_ISSUES",
+  "FAMILY_CONCERNS", "BEHAVIORAL_CHALLENGES", "SOCIAL_ISOLATION"
+];
+
+export const CASE_PRIORITIES: CasePriority[] = ["LOW", "MEDIUM", "HIGH", "CRITICAL"];
+
+export interface CaseDashboardStats {
+  totalCases: number;
+  activeCases: number;
+  closedCases: number;
+  highRiskCases: number;
+  casesAwaitingAction: number;
+  upcomingFollowUps: number;
+  casesByStatus: Array<{ status: string; count: number }>;
+  casesByPriority: Array<{ priority: string; count: number }>;
+  casesByCategory: Array<{ category: string; count: number }>;
+  monthlyTrends: Array<{ month: string; opened: number; closed: number }>;
+}
+
+export interface CaseNote {
+  id: string;
+  caseId: string;
+  noteType: NoteType;
+  title: string;
+  content: string;
+  createdAt: string;
+  createdBy: {
+    id: string;
+    fullName: string;
+    role: string;
+  };
+}
+
+export interface CaseFollowUp {
+  id: string;
+  caseId: string;
+  scheduledAt: string;
+  status: FollowUpStatus;
+  notes?: string | null;
+  completedAt?: string | null;
+  createdAt: string;
+  createdBy: {
+    id: string;
+    fullName: string;
+  };
+}
+
+export interface CaseIntervention {
+  id: string;
+  caseId: string;
+  interventionType: InterventionType;
+  name: string;
+  objective: string;
+  owner: {
+    id: string;
+    fullName: string;
+  };
+  dueDate: string;
+  successCriteria: string;
+  status: "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED" | "ON_HOLD";
+  createdAt: string;
+}
+
+export interface ParentInteraction {
+  id: string;
+  caseId: string;
+  interactionType: ParentInteractionType;
+  date: string;
+  outcome: string;
+  nextActions?: string | null;
+  createdBy: {
+    id: string;
+    fullName: string;
+  };
+  createdAt: string;
+}
+
+export interface RiskFactor {
+  factor: string;
+  currentValue: string;
+  previousValue: string;
+  trend: "improving" | "stable" | "declining";
+}
+
+export interface RiskAssessment {
+  id: string;
+  caseId: string;
+  riskLevel: RiskLevel;
+  riskScore: number;
+  riskFactors: RiskFactor[];
+  assessedAt: string;
+  assessedBy: {
+    id: string;
+    fullName: string;
+  };
+}
+
+export interface EscalationEvent {
+  id: string;
+  caseId: string;
+  escalatedTo: EscalationLevel;
+  reason: string;
+  escalatedAt: string;
+  escalatedBy: {
+    id: string;
+    fullName: string;
+  };
+  status: "PENDING" | "ACKNOWLEDGED" | "RESOLVED";
+}
+
+export interface StudentJourneyEvent {
+  id: string;
+  studentId: string;
+  eventType: "OBSERVATION_ADDED" | "CONCERN_RAISED" | "CASE_OPENED" | "COUNSELLING_SESSION" | "INTERVENTION_ADDED" | "PARENT_MEETING" | "REFERRAL_CREATED" | "CASE_CLOSED" | "FLAG_RAISED" | "FLAG_RESOLVED" | "RISK_ASSESSMENT" | "ESCALATION";
+  title: string;
+  description: string;
+  metadata?: Record<string, unknown>;
+  createdAt: string;
+  createdBy?: {
+    id: string;
+    fullName: string;
+  };
+}
+
+export interface CaseAnalytics {
+  casesByCategory: Array<{ name: string; value: number }>;
+  casesByGrade: Array<{ grade: string; count: number }>;
+  casesByPriority: Array<{ name: string; value: number }>;
+  resolutionRate: number;
+  averageClosureDays: number;
+  escalationRate: number;
+  monthlyTrends: Array<{ month: string; cases: number }>;
+  interventionSuccessRates: Array<{ type: string; successRate: number }>;
+}
+
+export interface OutcomeMeasurement {
+  caseId: string;
+  academicImprovement: number;
+  attendanceImprovement: number;
+  behavioralImprovement: number;
+  emotionalWellbeingImprovement: number;
+  overallProgressScore: number;
+  trend: "improving" | "stable" | "declining";
+  lastUpdated: string;
+}
+
+export interface CaseDetailEnhanced extends Omit<CaseSummary, "riskLevel" | "status" | "type" | "tier"> {
+  summary: string;
+  description: string;
+  concernCategory: CaseType;
+  priority: CasePriority;
+  riskLevel: RiskLevel;
+  status: CaseStatus;
+  type: CaseType;
+  tier: string;
+  assignedCounsellor: {
+    id: string;
+    fullName: string;
+    email: string;
+  };
+  student: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    grade: string;
+    classroom: string;
+    tier: string;
+    riskScore: number;
+  };
+  timelineEvents: Array<{
+    id: string;
+    eventType: string;
+    title: string;
+    description: string;
+    createdAt: string;
+    createdBy: {
+      id: string;
+      fullName: string;
+      role: string;
+    };
+  }>;
+  sessions: Array<{
+    id: string;
+    title: string;
+    status: string;
+    scheduledAt: string;
+    durationMins: number;
+    notes: string | null;
+    counsellor: {
+      fullName: string;
+    };
+  }>;
+  interventions: CaseIntervention[];
+  followUps: CaseFollowUp[];
+  notes: CaseNote[];
+  parentInteractions: ParentInteraction[];
+  riskAssessment: RiskAssessment | null;
+  escalationEvents: EscalationEvent[];
+  outcomeMeasurement: OutcomeMeasurement | null;
+}
+
+export interface HighRiskCase {
+  id: string;
+  title: string;
+  student: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    grade: string;
+    classroom: string;
+  };
+  riskLevel: RiskLevel;
+  priority: CasePriority;
+  status: CaseStatus;
+  assignedCounsellor: {
+    fullName: string;
+  };
+  lastUpdated: string;
+  overdueFollowUps: number;
+  daysOpen: number;
 }
