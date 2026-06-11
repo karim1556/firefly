@@ -335,15 +335,165 @@ export interface AppointmentItem {
   status: "confirmed" | "pending" | "completed" | "cancelled";
 }
 
-export interface ReferralItem {
+// =============== Module 7: Referral Network & Care Coordination ===============
+
+export type ReferralStatus = "DRAFT" | "PENDING_APPROVAL" | "APPROVED" | "REJECTED" | "ACTIVE" | "COMPLETED" | "CANCELLED";
+export type Priority = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+export type ApprovalStatus = "PENDING" | "APPROVED" | "REJECTED";
+export type MilestoneStatus = "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED";
+export type FollowUpStatus = "SCHEDULED" | "COMPLETED" | "MISSED" | "CANCELLED";
+
+export const CONCERN_CATEGORIES = [
+  "Anxiety",
+  "Behavioral Concerns",
+  "Academic Stress",
+  "Emotional Regulation",
+  "Social Challenges",
+  "Family Issues"
+] as const;
+
+export const SPECIALTIES = [
+  "Child Psychology",
+  "Clinical Psychology",
+  "Psychiatry",
+  "Family Therapy",
+  "Behavioral Therapy",
+  "Learning Disabilities",
+  "ADHD Support",
+  "Anxiety & Stress Support"
+] as const;
+
+export const CONSULTATION_MODES = ["In-Person", "Online", "Hybrid"] as const;
+
+export interface Practitioner {
   id: string;
-  studentName: string;
-  referredBy: string;
-  referredTo: string;
-  reason: string;
-  status: "pending" | "accepted" | "completed" | "declined";
+  fullName: string;
+  email: string;
+  phone?: string | null;
+  clinicAddress?: string | null;
+  city: string;
+  qualifications: string[];
+  specializations: string[];
+  languages: string[];
+  consultationModes: string[];
+  yearsOfExperience: number;
+  rating?: number | null;
+  bio?: string | null;
+  isAvailable: boolean;
+  feeRange?: string | null;
+  contactUnlocked: boolean;
+}
+
+export interface PractitionerReview {
+  id: string;
+  practitionerId: string;
+  studentName?: string | null;
+  rating: number;
+  comment?: string | null;
   createdAt: string;
-  priority: "low" | "medium" | "high" | "urgent";
+}
+
+export interface ReferralSummary {
+  id: string;
+  student: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    grade: string;
+    classroom: string;
+  };
+  practitioner: {
+    id: string;
+    fullName: string;
+    city: string;
+    specializations: string[];
+  };
+  referredBy: {
+    id: string;
+    fullName: string;
+    role: string;
+  };
+  status: ReferralStatus;
+  priority: Priority;
+  concernCategory: string;
+  reason: string;
+  parentApprovalStatus: ApprovalStatus;
+  createdAt: string;
+  _count: {
+    timelineEvents: number;
+    milestones: number;
+    communicationLogs: number;
+  };
+}
+
+export interface ReferralTimelineEvent {
+  id: string;
+  eventType: string;
+  title: string;
+  description: string;
+  metadata?: Record<string, unknown> | null;
+  createdAt: string;
+  createdBy: {
+    id: string;
+    fullName: string;
+    role: string;
+  };
+}
+
+export interface ReferralMilestone {
+  id: string;
+  milestoneType: string;
+  status: MilestoneStatus;
+  dueDate?: string | null;
+  completedAt?: string | null;
+  notes?: string | null;
+  createdAt: string;
+}
+
+export interface CommunicationLogEntry {
+  id: string;
+  authorName: string;
+  authorRole: string;
+  message: string;
+  attachmentUrl?: string | null;
+  createdAt: string;
+}
+
+export interface FollowUpEntry {
+  id: string;
+  scheduledAt: string;
+  status: FollowUpStatus;
+  notes?: string | null;
+  completedAt?: string | null;
+  createdAt: string;
+}
+
+export interface ReferralDetail extends ReferralSummary {
+  notes?: string | null;
+  parentApprovedAt?: string | null;
+  student: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    grade: string;
+    classroom: string;
+    tier: string;
+    riskScore: number;
+  };
+  practitioner: Practitioner;
+  timelineEvents: ReferralTimelineEvent[];
+  milestones: ReferralMilestone[];
+  communicationLogs: CommunicationLogEntry[];
+  followUps: FollowUpEntry[];
+}
+
+export interface ReferralDashboardStats {
+  totalReferrals: number;
+  activeReferrals: number;
+  completedReferrals: number;
+  pendingApproval: number;
+  highPriorityCases: number;
+  averageResolutionDays: number;
 }
 
 export interface CrisisIncident {

@@ -80,6 +80,42 @@ enum WorkshopStatus {
   CANCELLED
 }
 
+enum ReferralStatus {
+  DRAFT
+  PENDING_APPROVAL
+  APPROVED
+  REJECTED
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum MilestoneStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum FollowUpStatus {
+  SCHEDULED
+  COMPLETED
+  MISSED
+  CANCELLED
+}
+
 enum SelCategory {
   SELF_AWARENESS
   EMOTIONAL_REGULATION
@@ -527,4 +563,126 @@ model WorkshopFeedback {
   submittedAt     DateTime @default(now())
 
   workshop Workshop @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+}
+
+model Practitioner {
+  id                String   @id @default(uuid()) @db.Uuid
+  fullName          String
+  email             String   @unique
+  phone             String?
+  clinicAddress     String?
+  city              String
+  qualifications    String[]
+  specializations   String[]
+  languages         String[]
+  consultationModes String[]
+  yearsOfExperience Int
+  rating            Float?
+  bio               String?
+  isAvailable       Boolean  @default(true)
+  feeRange          String?
+  contactUnlocked   Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  referrals         Referral[]
+  reviews           PractitionerReview[]
+}
+
+model PractitionerReview {
+  id             String   @id @default(uuid()) @db.Uuid
+  practitionerId String   @db.Uuid
+  studentName    String?
+  rating         Int
+  comment        String?
+  createdAt      DateTime @default(now())
+
+  practitioner   Practitioner @relation(fields: [practitionerId], references: [id], onDelete: Cascade)
+}
+
+model Referral {
+  id                   String           @id @default(uuid()) @db.Uuid
+  studentId            String           @db.Uuid
+  practitionerId       String           @db.Uuid
+  referredById         String           @db.Uuid
+  status               ReferralStatus   @default(DRAFT)
+  priority             Priority         @default(MEDIUM)
+  concernCategory      String
+  reason               String
+  notes                String?
+  parentApprovalStatus ApprovalStatus   @default(PENDING)
+  parentApprovedAt     DateTime?
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+
+  student              Student          @relation(fields: [studentId], references: [id])
+  practitioner         Practitioner     @relation(fields: [practitionerId], references: [id])
+  referredBy           User             @relation(fields: [referredById], references: [id])
+  timelineEvents       ReferralTimelineEvent[]
+  milestones           ReferralMilestone[]
+  communicationLogs    CommunicationLog[]
+  followUps            FollowUp[]
+
+  @@index([status, priority])
+  @@index([studentId])
+}
+
+model ReferralTimelineEvent {
+  id          String   @id @default(uuid()) @db.Uuid
+  referralId  String   @db.Uuid
+  createdById String   @db.Uuid
+  eventType   String
+  title       String
+  description String
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  referral    Referral @relation(fields: [referralId], references: [id], onDelete: Cascade)
+  createdBy   User     @relation(fields: [createdById], references: [id])
+
+  @@index([referralId, createdAt])
+}
+
+model ReferralMilestone {
+  id            String         @id @default(uuid()) @db.Uuid
+  referralId    String         @db.Uuid
+  milestoneType String
+  status        MilestoneStatus @default(NOT_STARTED)
+  dueDate       DateTime?
+  completedAt   DateTime?
+  notes         String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  referral      Referral       @relation(fields: [referralId], references: [id], onDelete: Cascade)
+
+  @@index([referralId])
+}
+
+model CommunicationLog {
+  id            String   @id @default(uuid()) @db.Uuid
+  referralId    String   @db.Uuid
+  authorName    String
+  authorRole    String
+  message       String
+  attachmentUrl String?
+  createdAt     DateTime @default(now())
+
+  referral      Referral @relation(fields: [referralId], references: [id], onDelete: Cascade)
+
+  @@index([referralId, createdAt])
+}
+
+model FollowUp {
+  id          String         @id @default(uuid()) @db.Uuid
+  referralId  String         @db.Uuid
+  scheduledAt DateTime
+  status      FollowUpStatus @default(SCHEDULED)
+  notes       String?
+  completedAt DateTime?
+  createdAt   DateTime       @default(now())
+
+  referral    Referral       @relation(fields: [referralId], references: [id], onDelete: Cascade)
+
+  @@index([scheduledAt, status])
 }
