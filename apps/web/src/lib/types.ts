@@ -1415,3 +1415,176 @@ export interface HighRiskStudent {
   lastIncident: string;
   monitoringStatus: "ACTIVE" | "PENDING_REVIEW" | "STABLE";
 }
+
+// =============== Module 10: Policy & Documentation Hub ===============
+
+export type PolicyStatus = "DRAFT" | "UNDER_REVIEW" | "APPROVED" | "PUBLISHED" | "ARCHIVED" | "EXPIRED";
+export type PolicyCategory = "STUDENT_WELLBEING" | "SAFEGUARDING" | "CRISIS_MANAGEMENT" | "REFERRAL_GUIDELINES" | "PARENT_COMMUNICATION" | "SEL_FRAMEWORKS" | "SCHOOL_PROCEDURES" | "STAFF_HANDBOOK";
+export type AccessLevel = "PUBLIC" | "STAFF_ONLY" | "COUNSELLORS_ONLY" | "LEADERSHIP_ONLY" | "RESTRICTED";
+export type AcknowledgementStatus = "NOT_VIEWED" | "VIEWED" | "ACKNOWLEDGED" | "OVERDUE";
+export type DocumentType = "POLICY" | "SOP" | "GUIDELINE" | "TEMPLATE" | "FORM" | "TRAINING_MATERIAL" | "RESEARCH_ARTICLE";
+export type SopCategory = "CRISIS_RESPONSE" | "REFERRAL_MANAGEMENT" | "STUDENT_ESCALATION" | "PARENT_COMMUNICATION" | "COUNSELLING_PROCEDURES" | "SAFEGUARDING_PROCEDURES";
+export type KnowledgeCategory = "MENTAL_HEALTH_RESOURCES" | "SEL_RESOURCES" | "PARENT_ENGAGEMENT_GUIDES" | "TEACHER_SUPPORT" | "RESEARCH_ARTICLES" | "TRAINING_MATERIALS";
+export type AuditAction = "POLICY_CREATED" | "POLICY_EDITED" | "POLICY_APPROVED" | "POLICY_PUBLISHED" | "POLICY_ACKNOWLEDGED" | "DOCUMENT_ACCESSED" | "SOP_VIEWED" | "TRAINING_COMPLETED";
+export type TrainingStatus = "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED" | "CERTIFIED" | "EXPIRED";
+
+export const POLICY_STATUSES: PolicyStatus[] = ["DRAFT", "UNDER_REVIEW", "APPROVED", "PUBLISHED", "ARCHIVED", "EXPIRED"];
+export const POLICY_CATEGORIES: PolicyCategory[] = ["STUDENT_WELLBEING", "SAFEGUARDING", "CRISIS_MANAGEMENT", "REFERRAL_GUIDELINES", "PARENT_COMMUNICATION", "SEL_FRAMEWORKS", "SCHOOL_PROCEDURES", "STAFF_HANDBOOK"];
+export const SOP_CATEGORIES: SopCategory[] = ["CRISIS_RESPONSE", "REFERRAL_MANAGEMENT", "STUDENT_ESCALATION", "PARENT_COMMUNICATION", "COUNSELLING_PROCEDURES", "SAFEGUARDING_PROCEDURES"];
+export const KNOWLEDGE_CATEGORIES: KnowledgeCategory[] = ["MENTAL_HEALTH_RESOURCES", "SEL_RESOURCES", "PARENT_ENGAGEMENT_GUIDES", "TEACHER_SUPPORT", "RESEARCH_ARTICLES", "TRAINING_MATERIALS"];
+
+export interface PolicyVersion {
+  version: string;
+  publishedAt: string;
+  publishedBy: { id: string; fullName: string };
+  changes: string;
+  isCurrent: boolean;
+}
+
+export interface Policy {
+  id: string;
+  policyId: string;
+  title: string;
+  description: string;
+  category: PolicyCategory;
+  status: PolicyStatus;
+  version: string;
+  accessLevel: AccessLevel;
+  effectiveDate: string;
+  reviewDate: string;
+  author: { id: string; fullName: string; role: string };
+  approvedBy?: { id: string; fullName: string; role: string };
+  approvedAt?: string;
+  publishedAt?: string;
+  fileUrl?: string;
+  _count: {
+    acknowledgements: number;
+    versions: number;
+    views: number;
+  };
+}
+
+export interface PolicyDetail extends Policy {
+  content: string;
+  attachments: Array<{ id: string; name: string; url: string; size: string; uploadedAt: string }>;
+  versions: PolicyVersion[];
+  acknowledgements: AcknowledgementRecord[];
+}
+
+export interface AcknowledgementRecord {
+  id: string;
+  policyId: string;
+  userId: string;
+  userName: string;
+  userRole: string;
+  status: AcknowledgementStatus;
+  acknowledgedAt?: string;
+  dueDate: string;
+  createdAt: string;
+}
+
+export interface Sop {
+  id: string;
+  sopId: string;
+  title: string;
+  description: string;
+  category: SopCategory;
+  steps: Array<{ step: number; title: string; description: string; duration?: string }>;
+  responsibleRole: string;
+  version: string;
+  lastUpdated: string;
+  isActive: boolean;
+  _count: {
+    views: number;
+    downloads: number;
+  };
+}
+
+export interface KnowledgeBaseArticle {
+  id: string;
+  articleId: string;
+  title: string;
+  summary: string;
+  content: string;
+  category: KnowledgeCategory;
+  tags: string[];
+  author: { id: string; fullName: string };
+  isPublished: boolean;
+  createdAt: string;
+  updatedAt: string;
+  _count: {
+    views: number;
+    bookmarks: number;
+  };
+}
+
+export interface ComplianceRecord {
+  id: string;
+  guideline: string;
+  status: "compliant" | "partial" | "non_compliant" | "not_applicable";
+  lastReviewDate: string;
+  nextReviewDate: string;
+  notes: string;
+}
+
+export interface AuditEvent {
+  id: string;
+  action: AuditAction;
+  userId: string;
+  userName: string;
+  userRole: string;
+  resourceType: "POLICY" | "SOP" | "KNOWLEDGE_BASE" | "COMPLIANCE";
+  resourceId: string;
+  resourceName: string;
+  details?: string;
+  timestamp: string;
+}
+
+export interface TrainingRecord {
+  id: string;
+  userId: string;
+  userName: string;
+  userRole: string;
+  trainingName: string;
+  status: TrainingStatus;
+  progressPercent: number;
+  completedAt?: string;
+  expiresAt?: string;
+  score?: number;
+  certificateUrl?: string;
+}
+
+export interface PolicyDashboardStats {
+  totalPolicies: number;
+  activePolicies: number;
+  underReview: number;
+  expiringPolicies: number;
+  complianceRate: number;
+  pendingAcknowledgements: number;
+  totalAcknowledged: number;
+  totalOverdue: number;
+  policiesByStatus: Array<{ status: string; count: number }>;
+  policiesByCategory: Array<{ category: string; count: number }>;
+  recentPolicies: Policy[];
+  upcomingReviews: Array<{ id: string; title: string; reviewDate: string }>;
+}
+
+export interface ComplianceStats {
+  overallCompliance: number;
+  policyAdoptionRate: number;
+  staffAcknowledgementRate: number;
+  overdueReviews: number;
+  totalDocuments: number;
+  activePolicies: number;
+  departmentCompliance: Array<{ department: string; complianceRate: number }>;
+  monthlyTrends: Array<{ month: string; complianceScore: number }>;
+  policyEngagement: Array<{ month: string; views: number; downloads: number }>;
+}
+
+export interface GovernanceAnalytics {
+  policyUsage: Array<{ policyTitle: string; views: number; acknowledgements: number }>;
+  mostAccessedDocuments: Array<{ title: string; type: string; accessCount: number }>;
+  complianceTrends: Array<{ month: string; score: number }>;
+  reviewPerformance: Array<{ month: string; reviewsCompleted: number; overdueCount: number }>;
+  trainingAdoption: Array<{ trainingName: string; completionRate: number }>;
+}

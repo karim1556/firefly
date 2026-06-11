@@ -1243,6 +1243,120 @@ const HIGH_RISK_STUDENTS: Array<{ studentId: string; studentName: string; studen
   { studentId:"s-hr-5", studentName:"Saanvi Patel", studentGrade:"7", riskScore:78, openIncidents:1, lastIncident:new Date(NOW-4*H).toISOString(), monitoringStatus:"STABLE" },
 ];
 
+// =============== MODULE 10: POLICY & DOCUMENTATION HUB ===============
+
+const POLICIES: Array<{
+  id: string; policyId: string; title: string; description: string; category: string; status: string;
+  version: string; accessLevel: string; effectiveDate: string; reviewDate: string;
+  author: { id: string; fullName: string; role: string }; approvedBy?: { id: string; fullName: string; role: string };
+  approvedAt?: string; publishedAt?: string; fileUrl?: string;
+  _count: { acknowledgements: number; versions: number; views: number };
+}> = [
+  { id:"pol-1", policyId:"POL-001", title:"Student Wellbeing Policy 2024", description:"Comprehensive policy outlining student wellbeing frameworks, support systems, and monitoring mechanisms.", category:"STUDENT_WELLBEING", status:"PUBLISHED", version:"2.1", accessLevel:"PUBLIC", effectiveDate:new Date(NOW-180*D).toISOString(), reviewDate:new Date(NOW+60*D).toISOString(), author:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"}, approvedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar",role:"Principal"}, approvedAt:new Date(NOW-185*D).toISOString(), publishedAt:new Date(NOW-180*D).toISOString(), _count:{acknowledgements:42,versions:3,views:156} },
+  { id:"pol-2", policyId:"POL-002", title:"Child Safeguarding Policy", description:"Policy defining safeguarding procedures, reporting mechanisms, and protective measures for students.", category:"SAFEGUARDING", status:"PUBLISHED", version:"3.0", accessLevel:"PUBLIC", effectiveDate:new Date(NOW-365*D).toISOString(), reviewDate:new Date(NOW+30*D).toISOString(), author:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, approvedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar",role:"Principal"}, approvedAt:new Date(NOW-370*D).toISOString(), publishedAt:new Date(NOW-365*D).toISOString(), _count:{acknowledgements:58,versions:4,views:234} },
+  { id:"pol-3", policyId:"POL-003", title:"Crisis Management SOP", description:"Standard operating procedures for managing crisis situations including self-harm, abuse, and emergencies.", category:"CRISIS_MANAGEMENT", status:"PUBLISHED", version:"1.5", accessLevel:"STAFF_ONLY", effectiveDate:new Date(NOW-90*D).toISOString(), reviewDate:new Date(NOW+90*D).toISOString(), author:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, approvedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar",role:"Principal"}, approvedAt:new Date(NOW-95*D).toISOString(), publishedAt:new Date(NOW-90*D).toISOString(), _count:{acknowledgements:38,versions:2,views:89} },
+  { id:"pol-4", policyId:"POL-004", title:"Referral Management Guidelines", description:"Guidelines for internal and external referrals, including assessment criteria and跟踪 mechanisms.", category:"REFERRAL_GUIDELINES", status:"PUBLISHED", version:"1.2", accessLevel:"STAFF_ONLY", effectiveDate:new Date(NOW-120*D).toISOString(), reviewDate:new Date(NOW+60*D).toISOString(), author:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"}, approvedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar",role:"Principal"}, approvedAt:new Date(NOW-125*D).toISOString(), publishedAt:new Date(NOW-120*D).toISOString(), _count:{acknowledgements:35,versions:2,views:67} },
+  { id:"pol-5", policyId:"POL-005", title:"Parent Communication Protocol", description:"Standardized approach for communicating with parents about student wellbeing concerns.", category:"PARENT_COMMUNICATION", status:"PUBLISHED", version:"1.0", accessLevel:"PUBLIC", effectiveDate:new Date(NOW-60*D).toISOString(), reviewDate:new Date(NOW+120*D).toISOString(), author:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, approvedBy:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"}, approvedAt:new Date(NOW-65*D).toISOString(), publishedAt:new Date(NOW-60*D).toISOString(), _count:{acknowledgements:45,versions:1,views:98} },
+  { id:"pol-6", policyId:"POL-006", title:"SEL Curriculum Framework", description:"Structured approach to social-emotional learning across all grades.", category:"SEL_FRAMEWORKS", status:"PUBLISHED", version:"2.0", accessLevel:"PUBLIC", effectiveDate:new Date(NOW-200*D).toISOString(), reviewDate:new Date(NOW+30*D).toISOString(), author:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, approvedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar",role:"Principal"}, approvedAt:new Date(NOW-205*D).toISOString(), publishedAt:new Date(NOW-200*D).toISOString(), _count:{acknowledgements:50,versions:2,views:178} },
+  { id:"pol-7", policyId:"POL-007", title:"Attendance Monitoring Policy", description:"Procedures for monitoring and responding to attendance patterns indicating student wellbeing concerns.", category:"STUDENT_WELLBEING", status:"UNDER_REVIEW", version:"1.0", accessLevel:"STAFF_ONLY", effectiveDate:new Date(NOW+30*D).toISOString(), reviewDate:new Date(NOW+120*D).toISOString(), author:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"}, _count:{acknowledgements:0,versions:1,views:12} },
+  { id:"pol-8", policyId:"POL-008", title:"Anti-Bullying Policy", description:"Comprehensive policy addressing bullying prevention, reporting, and intervention.", category:"SAFEGUARDING", status:"PUBLISHED", version:"2.2", accessLevel:"PUBLIC", effectiveDate:new Date(NOW-150*D).toISOString(), reviewDate:new Date(NOW-15*D).toISOString(), author:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, approvedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar",role:"Principal"}, approvedAt:new Date(NOW-155*D).toISOString(), publishedAt:new Date(NOW-150*D).toISOString(), _count:{acknowledgements:55,versions:3,views:201} },
+  { id:"pol-9", policyId:"POL-009", title:"Staff Handbook - Wellbeing", description:"Staff guidelines for identifying and responding to student wellbeing concerns.", category:"STAFF_HANDBOOK", status:"PUBLISHED", version:"1.3", accessLevel:"STAFF_ONLY", effectiveDate:new Date(NOW-100*D).toISOString(), reviewDate:new Date(NOW+90*D).toISOString(), author:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"}, approvedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar",role:"Principal"}, approvedAt:new Date(NOW-105*D).toISOString(), publishedAt:new Date(NOW-100*D).toISOString(), _count:{acknowledgements:65,versions:2,views:145} },
+  { id:"pol-10", policyId:"POL-010", title:"Counselling Sessions Protocol", description:"Procedures for scheduling, conducting, and documenting counselling sessions.", category:"SCHOOL_PROCEDURES", status:"DRAFT", version:"0.1", accessLevel:"COUNSELLORS_ONLY", effectiveDate:new Date(NOW+60*D).toISOString(), reviewDate:new Date(NOW+180*D).toISOString(), author:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, _count:{acknowledgements:0,versions:1,views:5} },
+  { id:"pol-11", policyId:"POL-011", title:"Mental Health Emergency Response", description:"Immediate response protocols for mental health emergencies including self-harm and suicidal ideation.", category:"CRISIS_MANAGEMENT", status:"PUBLISHED", version:"2.0", accessLevel:"STAFF_ONLY", effectiveDate:new Date(NOW-45*D).toISOString(), reviewDate:new Date(NOW+45*D).toISOString(), author:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, approvedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar",role:"Principal"}, approvedAt:new Date(NOW-50*D).toISOString(), publishedAt:new Date(NOW-45*D).toISOString(), _count:{acknowledgements:40,versions:2,views:112} },
+  { id:"pol-12", policyId:"POL-012", title:"Data Privacy & Confidentiality", description:"Guidelines for handling sensitive student wellbeing data and maintaining confidentiality.", category:"SAFEGUARDING", status:"ARCHIVED", version:"1.0", accessLevel:"LEADERSHIP_ONLY", effectiveDate:new Date(NOW-400*D).toISOString(), reviewDate:new Date(NOW-200*D).toISOString(), author:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"}, approvedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar",role:"Principal"}, approvedAt:new Date(NOW-405*D).toISOString(), publishedAt:new Date(NOW-400*D).toISOString(), _count:{acknowledgements:20,versions:1,views:45} },
+  { id:"pol-13", policyId:"POL-013", title:"Student Risk Assessment Framework", description:"Structured approach to identifying and assessing student wellbeing risks.", category:"STUDENT_WELLBEING", status:"UNDER_REVIEW", version:"1.0", accessLevel:"COUNSELLORS_ONLY", effectiveDate:new Date(NOW+45*D).toISOString(), reviewDate:new Date(NOW+135*D).toISOString(), author:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, _count:{acknowledgements:0,versions:1,views:8} },
+  { id:"pol-14", policyId:"POL-014", title:"External Support Services Referral", description:"Procedures for referring students to external mental health professionals.", category:"REFERRAL_GUIDELINES", status:"PUBLISHED", version:"1.1", accessLevel:"STAFF_ONLY", effectiveDate:new Date(NOW-80*D).toISOString(), reviewDate:new Date(NOW+100*D).toISOString(), author:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, approvedBy:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"}, approvedAt:new Date(NOW-85*D).toISOString(), publishedAt:new Date(NOW-80*D).toISOString(), _count:{acknowledgements:30,versions:2,views:72} },
+  { id:"pol-15", policyId:"POL-015", title:"Incident Reporting & Documentation", description:"Standards for documenting and reporting student wellbeing incidents.", category:"SCHOOL_PROCEDURES", status:"PUBLISHED", version:"1.4", accessLevel:"STAFF_ONLY", effectiveDate:new Date(NOW-110*D).toISOString(), reviewDate:new Date(NOW+80*D).toISOString(), author:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"}, approvedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar",role:"Principal"}, approvedAt:new Date(NOW-115*D).toISOString(), publishedAt:new Date(NOW-110*D).toISOString(), _count:{acknowledgements:48,versions:2,views:134} },
+];
+
+const SOPS: Array<{
+  id: string; sopId: string; title: string; description: string; category: string;
+  steps: Array<{ step: number; title: string; description: string; duration?: string }>;
+  responsibleRole: string; version: string; lastUpdated: string; isActive: boolean;
+  _count: { views: number; downloads: number };
+}> = [
+  { id:"sop-1", sopId:"SOP-001", title:"Crisis Response Protocol", description:"Immediate response steps for crisis situations including self-harm or suicidal ideation.", category:"CRISIS_RESPONSE", steps:[{step:1,title:"Ensure Immediate Safety",description:"Ensure the immediate safety of the student and others. Remove any harmful objects from the area.",duration:"5 min"},{step:2,title:"Notify Counsellor",description:"Immediately contact the school counsellor or designated wellbeing staff.",duration:"2 min"},{step:3,title:"Contact Parents",description:"Notify parents/guardians about the situation.",duration:"10 min"},{step:4,title:"Document Incident",description:"Record all details of the incident in the official log.",duration:"15 min"},{step:5,title:"Follow-up Assessment",description:"Schedule a follow-up assessment within 24 hours.",duration:"30 min"}], responsibleRole:"School Counsellor", version:"2.0", lastUpdated:new Date(NOW-30*D).toISOString(), isActive:true, _count:{views:89,downloads:34} },
+  { id:"sop-2", sopId:"SOP-002", title:"Bullying Incident Response", description:"Step-by-step process for handling reported bullying incidents.", category:"CRISIS_RESPONSE", steps:[{step:1,title:"Receive Report",description:"Listen carefully to the student reporting bullying without judgment.",duration:"15 min"},{step:2,title:"Document Details",description:"Record specific details including dates, witnesses, and nature of bullying.",duration:"10 min"},{step:3,title:"Interview Parties",description:"Separately interview the victim, perpetrator, and witnesses.",duration:"30 min each"},{step:4,title:"Notify Parents",description:"Inform parents of all involved parties about the incident.",duration:"20 min"},{step:5,title:"Implement Action Plan",description:"Apply appropriate disciplinary measures and support.",duration:"Ongoing"},{step:6,title:"Monitor & Follow-up",description:"Schedule follow-up meetings to ensure no recurrence.",duration:"Weekly"}], responsibleRole:"School Counsellor", version:"1.5", lastUpdated:new Date(NOW-60*D).toISOString(), isActive:true, _count:{views:67,downloads:28} },
+  { id:"sop-3", sopId:"SOP-003", title:"Referral to External Services", description:"Procedures for referring students to external mental health professionals.", category:"REFERRAL_MANAGEMENT", steps:[{step:1,title:"Assessment Completion",description:"Complete internal assessment to determine if external referral is needed.",duration:"45 min"},{step:2,title:"Parent Consultation",description:"Discuss referral recommendation with parents/guardians.",duration:"30 min"},{step:3,title:"Prepare Documentation",description:"Compile relevant case notes and assessment reports.",duration:"20 min"},{step:4,title:"Submit Referral",description:"Send referral to selected external service provider.",duration:"15 min"},{step:5,title:"Coordinate Care",description:"Maintain communication between school and external provider.",duration:"Ongoing"}], responsibleRole:"School Counsellor", version:"1.2", lastUpdated:new Date(NOW-45*D).toISOString(), isActive:true, _count:{views:45,downloads:19} },
+  { id:"sop-4", sopId:"SOP-004", title:"Student Escalation Process", description:"Guidelines for escalating student concerns through the care tier system.", category:"STUDENT_ESCALATION", steps:[{step:1,title:"Identify Concern",description:"Teacher or staff identifies potential wellbeing concern.",duration:"Ongoing"},{step:2,title:"Initial Screening",description:"Conduct initial screening using approved tools.",duration:"20 min"},{step:3,title:"Tier Determination",description:"Determine appropriate tier based on assessment.",duration:"15 min"},{step:4,title:"Case Assignment",description:"Assign case to appropriate wellbeing staff.",duration:"10 min"},{step:5,title:"Intervention Planning",description:"Develop and implement intervention plan.",duration:"30 min"}], responsibleRole:"Class Teacher", version:"2.1", lastUpdated:new Date(NOW-20*D).toISOString(), isActive:true, _count:{views:78,downloads:32} },
+  { id:"sop-5", sopId:"SOP-005", title:"Parent Communication Guidelines", description:"Standards for communicating wellbeing concerns to parents.", category:"PARENT_COMMUNICATION", steps:[{step:1,title:"Prepare Discussion Points",description:"Outline key points to discuss and supporting evidence.",duration:"15 min"},{step:2,title:"Schedule Meeting",description:"Arrange appropriate time for private discussion.",duration:"5 min"},{step:3,title:"Conduct Meeting",description:"Discuss concerns professionally while maintaining confidentiality.",duration:"30 min"},{step:4,title:"Document Conversation",description:"Record key points discussed and agreed actions.",duration:"10 min"},{step:5,title:"Follow-up Plan",description:"Establish follow-up schedule and contact plan.",duration:"10 min"}], responsibleRole:"School Counsellor", version:"1.0", lastUpdated:new Date(NOW-90*D).toISOString(), isActive:true, _count:{views:56,downloads:22} },
+  { id:"sop-6", sopId:"SOP-006", title:"Counselling Session Procedures", description:"Standard procedures for conducting and documenting counselling sessions.", category:"COUNSELLING_PROCEDURES", steps:[{step:1,title:"Session Preparation",description:"Review case notes and prepare session plan.",duration:"10 min"},{step:2,title:"Confidentiality Reminder",description:"Remind student of confidentiality boundaries.",duration:"2 min"},{step:3,title:"Session Conduct",description:"Engage in therapeutic conversation using approved methods.",duration:"45 min"},{step:4,title:"Session Documentation",description:"Record session notes within 24 hours.",duration:"15 min"},{step:5,title:"Follow-up Scheduling",description:"Schedule next session and any required actions.",duration:"5 min"}], responsibleRole:"School Counsellor", version:"1.3", lastUpdated:new Date(NOW-15*D).toISOString(), isActive:true, _count:{views:92,downloads:41} },
+  { id:"sop-7", sopId:"SOP-007", title:"Safeguarding Disclosure Response", description:"Response procedures when a student discloses abuse or safeguarding concerns.", category:"SAFEGUARDING_PROCEDURES", steps:[{step:1,title:"Listen & Reassure",description:"Listen without pressing for details. Reassure the student they did the right thing.",duration:"As needed"},{step:2,title:"Don't Promise Secrecy",description:"Explain you need to help them but cannot keep it secret.",duration:"2 min"},{step:3,title:"Record Immediately",description:"Write down exactly what the student said as soon as possible.",duration:"15 min"},{step:4,title:"Report to Designated Safeguarding Lead",description:"Immediately inform the designated safeguarding lead.",duration:"5 min"},{step:5,title:"Support Student",description:"Continue to support the student throughout the process.",duration:"Ongoing"}], responsibleRole:"Designated Safeguarding Lead", version:"3.0", lastUpdated:new Date(NOW-10*D).toISOString(), isActive:true, _count:{views:134,downloads:56} },
+  { id:"sop-8", sopId:"SOP-008", title:"Mental Health Screening", description:"Procedures for conducting mental health screening assessments.", category:"COUNSELLING_PROCEDURES", steps:[{step:1,title:"Obtain Consent",description:"Ensure appropriate consent is obtained from parent/guardian.",duration:"10 min"},{step:2,title:"Create Safe Environment",description:"Ensure private, comfortable setting for screening.",duration:"5 min"},{step:3,title:"Administer Screening",description:"Use approved screening tools to assess student.",duration:"30 min"},{step:4,title:"Score & Interpret",description:"Score results and interpret in context.",duration:"15 min"},{step:5,title:"Develop Action Plan",description:"Create appropriate action plan based on results.",duration:"20 min"}], responsibleRole:"School Counsellor", version:"1.1", lastUpdated:new Date(NOW-40*D).toISOString(), isActive:true, _count:{views:43,downloads:18} },
+];
+
+const KNOWLEDGE_ARTICLES: Array<{
+  id: string; articleId: string; title: string; summary: string; content: string; category: string;
+  tags: string[]; author: { id: string; fullName: string }; isPublished: boolean;
+  createdAt: string; updatedAt: string; _count: { views: number; bookmarks: number };
+}> = [
+  { id:"kb-1", articleId:"KB-001", title:"Understanding Anxiety in Students", summary:"A comprehensive guide to recognizing and supporting students experiencing anxiety.", content:"Anxiety disorders are among the most common mental health concerns in children and adolescents...", category:"MENTAL_HEALTH_RESOURCES", tags:["anxiety","students","mental health","signs"], author:{id:"u-couns",fullName:"Priya Sharma"}, isPublished:true, createdAt:new Date(NOW-180*D).toISOString(), updatedAt:new Date(NOW-30*D).toISOString(), _count:{views:234,bookmarks:45} },
+  { id:"kb-2", articleId:"KB-002", title:"Social-Emotional Learning Fundamentals", summary:"Introduction to SEL frameworks and their implementation in schools.", content:"Social-emotional learning (SEL) is the process through which children and adults...", category:"SEL_RESOURCES", tags:["SEL","social-emotional","learning","framework"], author:{id:"u-couns",fullName:"Priya Sharma"}, isPublished:true, createdAt:new Date(NOW-200*D).toISOString(), updatedAt:new Date(NOW-60*D).toISOString(), _count:{views:189,bookmarks:38} },
+  { id:"kb-3", articleId:"KB-003", title:"Effective Parent Communication Strategies", summary:"Best practices for communicating with parents about sensitive wellbeing topics.", content:"Effective communication with parents is crucial for student wellbeing...", category:"PARENT_ENGAGEMENT_GUIDES", tags:["parents","communication","engagement","wellbeing"], author:{id:"u-admin",fullName:"Neha Kapoor"}, isPublished:true, createdAt:new Date(NOW-150*D).toISOString(), updatedAt:new Date(NOW-45*D).toISOString(), _count:{views:156,bookmarks:29} },
+  { id:"kb-4", articleId:"KB-004", title:"Recognizing Signs of Bullying", summary:"Guide to identifying bullying behavior and its effects on students.", content:"Bullying can take many forms and recognizing it early is essential...", category:"SAFEGUARDING_PROCEDURES", tags:["bullying","signs","students","prevention"], author:{id:"u-couns",fullName:"Priya Sharma"}, isPublished:true, createdAt:new Date(NOW-120*D).toISOString(), updatedAt:new Date(NOW-20*D).toISOString(), _count:{views:178,bookmarks:34} },
+  { id:"kb-5", articleId:"KB-005", title:"Supporting Students Through Loss", summary:"Guidelines for helping students cope with grief and loss.", content:"Students experience loss in many forms and need compassionate support...", category:"MENTAL_HEALTH_RESOURCES", tags:["grief","loss","students","support"], author:{id:"u-couns",fullName:"Priya Sharma"}, isPublished:true, createdAt:new Date(NOW-90*D).toISOString(), updatedAt:new Date(NOW-15*D).toISOString(), _count:{views:145,bookmarks:41} },
+  { id:"kb-6", articleId:"KB-006", title:"Trauma-Informed Teaching Practices", summary:"How to create trauma-sensitive learning environments.", content:"Trauma-informed teaching recognizes the impact of trauma on student learning...", category:"TEACHER_SUPPORT", tags:["trauma","teaching","students","practices"], author:{id:"u-admin",fullName:"Neha Kapoor"}, isPublished:true, createdAt:new Date(NOW-100*D).toISOString(), updatedAt:new Date(NOW-25*D).toISOString(), _count:{views:201,bookmarks:52} },
+  { id:"kb-7", articleId:"KB-007", title:"Implementing SEL in Classroom", summary:"Practical strategies for integrating SEL into daily classroom activities.", content:"Social-emotional skills can be developed through deliberate practice...", category:"SEL_RESOURCES", tags:["SEL","classroom","implementation","strategies"], author:{id:"u-couns",fullName:"Priya Sharma"}, isPublished:true, createdAt:new Date(NOW-80*D).toISOString(), updatedAt:new Date(NOW-10*D).toISOString(), _count:{views:167,bookmarks:43} },
+  { id:"kb-8", articleId:"KB-008", title:"Research: Impact of Parental Engagement", summary:"Evidence-based findings on parental involvement in student wellbeing.", content:"Research consistently shows that parental engagement positively impacts...", category:"RESEARCH_ARTICLES", tags:["research","parents","engagement","wellbeing"], author:{id:"u-couns",fullName:"Priya Sharma"}, isPublished:true, createdAt:new Date(NOW-60*D).toISOString(), updatedAt:new Date(NOW-5*D).toISOString(), _count:{views:98,bookmarks:21} },
+  { id:"kb-9", articleId:"KB-009", title:"Self-Harm: Identification & Response", summary:"Critical guide for identifying self-harm and appropriate intervention.", content:"Self-harm can be a sign of underlying distress and requires sensitive response...", category:"MENTAL_HEALTH_RESOURCES", tags:["self-harm","identification","response","crisis"], author:{id:"u-couns",fullName:"Priya Sharma"}, isPublished:true, createdAt:new Date(NOW-30*D).toISOString(), updatedAt:new Date(NOW-2*D).toISOString(), _count:{views:312,bookmarks:78} },
+  { id:"kb-10", articleId:"KB-010", title:"Creating Supportive Classroom Environments", summary:"Strategies for building emotionally safe learning spaces.", content:"The classroom environment significantly impacts student wellbeing and learning...", category:"TEACHER_SUPPORT", tags:["classroom","environment","support","teachers"], author:{id:"u-admin",fullName:"Neha Kapoor"}, isPublished:true, createdAt:new Date(NOW-70*D).toISOString(), updatedAt:new Date(NOW-8*D).toISOString(), _count:{views:143,bookmarks:36} },
+];
+
+const POLICY_DASHBOARD_STATS = {
+  totalPolicies: 45, activePolicies: 12, underReview: 3, expiringPolicies: 2,
+  complianceRate: 87, pendingAcknowledgements: 28, totalAcknowledged: 156, totalOverdue: 5,
+  policiesByStatus: [
+    { status:"PUBLISHED", count:12 },{ status:"UNDER_REVIEW", count:3 },{ status:"DRAFT", count:8 },
+    { status:"ARCHIVED", count:5 },{ status:"EXPIRED", count:2 }
+  ],
+  policiesByCategory: [
+    { category:"STUDENT_WELLBEING", count:12 },{ category:"SAFEGUARDING", count:8 },{ category:"CRISIS_MANAGEMENT", count:6 },
+    { category:"SCHOOL_PROCEDURES", count:7 },{ category:"SEL_FRAMEWORKS", count:4 },{ category:"REFERRAL_GUIDELINES", count:5 },
+    { category:"PARENT_COMMUNICATION", count:2 },{ category:"STAFF_HANDBOOK", count:1 }
+  ],
+  recentPolicies: [
+    { id:"pol-1", title:"Student Wellbeing Policy 2024", reviewDate:new Date(NOW+60*D).toISOString() },
+    { id:"pol-2", title:"Child Safeguarding Policy", reviewDate:new Date(NOW+30*D).toISOString() },
+    { id:"pol-6", title:"SEL Curriculum Framework", reviewDate:new Date(NOW+30*D).toISOString() },
+  ],
+  upcomingReviews: [
+    { id:"pol-2", title:"Child Safeguarding Policy", reviewDate:new Date(NOW+30*D).toISOString() },
+    { id:"pol-8", title:"Anti-Bullying Policy", reviewDate:new Date(NOW-15*D).toISOString() },
+    { id:"pol-1", title:"Student Wellbeing Policy 2024", reviewDate:new Date(NOW+60*D).toISOString() },
+    { id:"pol-6", title:"SEL Curriculum Framework", reviewDate:new Date(NOW+30*D).toISOString() },
+  ],
+};
+
+const COMPLIANCE_STATS = {
+  overallCompliance: 87, policyAdoptionRate: 92, staffAcknowledgementRate: 78,
+  overdueReviews: 5, totalDocuments: 156, activePolicies: 12,
+  departmentCompliance: [
+    { department:"Teaching Staff", complianceRate:92 },{ department:"Administration", complianceRate:95 },
+    { department:"Counselling", complianceRate:98 },{ department:"Support Staff", complianceRate:85 }
+  ],
+  monthlyTrends: [
+    { month:"Jan", complianceScore:78 },{ month:"Feb", complianceScore:81 },{ month:"Mar", complianceScore:83 },
+    { month:"Apr", complianceScore:85 },{ month:"May", complianceScore:87 },{ month:"Jun", complianceScore:89 }
+  ],
+  policyEngagement: [
+    { month:"Jan", views:450,downloads:120 },{ month:"Feb", views:520,downloads:145 },
+    { month:"Mar", views:580,downloads:168 },{ month:"Apr", views:620,downloads:178 },
+    { month:"May", views:710,downloads:195 },{ month:"Jun", views:780,downloads:220 }
+  ],
+};
+
+const AUDIT_EVENTS: Array<{
+  id: string; action: string; userId: string; userName: string; userRole: string;
+  resourceType: string; resourceId: string; resourceName: string; details?: string; timestamp: string;
+}> = [
+  { id:"ae-1", action:"POLICY_PUBLISHED", userId:"u-principal", userName:"Dr. Suresh Iyengar", userRole:"Principal", resourceType:"POLICY", resourceId:"pol-1", resourceName:"Student Wellbeing Policy 2024", details:"Version 2.1 published", timestamp:new Date(NOW-180*D).toISOString() },
+  { id:"ae-2", action:"POLICY_ACKNOWLEDGED", userId:"u-teacher", userName:"Rajesh Kumar", userRole:"Class Teacher", resourceType:"POLICY", resourceId:"pol-2", resourceName:"Child Safeguarding Policy", details:"Policy acknowledged by teacher", timestamp:new Date(NOW-175*D).toISOString() },
+  { id:"ae-3", action:"POLICY_EDITED", userId:"u-couns", userName:"Priya Sharma", userRole:"School Counsellor", resourceType:"POLICY", resourceId:"pol-3", resourceName:"Crisis Management SOP", details:"Updated escalation procedures", timestamp:new Date(NOW-50*D).toISOString() },
+  { id:"ae-4", action:"SOP_VIEWED", userId:"u-teacher", userName:"Lakshmi Iyer", userRole:"Class Teacher", resourceType:"SOP", resourceId:"sop-1", resourceName:"Crisis Response Protocol", timestamp:new Date(NOW-2*H).toISOString() },
+  { id:"ae-5", action:"TRAINING_COMPLETED", userId:"u-admin", userName:"Neha Kapoor", userRole:"School Administrator", resourceType:"KNOWLEDGE_BASE", resourceId:"kb-6", resourceName:"Trauma-Informed Teaching Practices", details:"Training module completed", timestamp:new Date(NOW-D).toISOString() },
+  { id:"ae-6", action:"POLICY_APPROVED", userId:"u-principal", userName:"Dr. Suresh Iyengar", userRole:"Principal", resourceType:"POLICY", resourceId:"pol-11", resourceName:"Mental Health Emergency Response", timestamp:new Date(NOW-50*D).toISOString() },
+];
+
 // ======================== MAIN HANDLER ========================
 function parseBody(init: RequestInit | undefined): Record<string, unknown> {
   if (!init?.body) return {};
@@ -2343,6 +2457,125 @@ export async function mockRequest<T>(url: string, _init?: RequestInit, user?: Au
       createdBy: { id: user?.id || "unknown", fullName: newInc.reportedBy, role: "Staff" },
     });
     return newInc as T;
+  }
+
+  // =========== MODULE 10: POLICY & DOCUMENTATION ===========
+  // Policy Dashboard Stats
+  if (basePath === "/compliance/dashboard/stats") {
+    return POLICY_DASHBOARD_STATS as T;
+  }
+
+  // Compliance Stats
+  if (basePath === "/compliance/stats") {
+    return COMPLIANCE_STATS as T;
+  }
+
+  // Policies list
+  if (basePath === "/compliance/policies") {
+    const search = params.get("search")?.toLowerCase() || "";
+    const status = params.get("status") || "";
+    const category = params.get("category") || "";
+    const page = parseInt(params.get("page") || "1");
+    const pageSize = parseInt(params.get("pageSize") || "10");
+    let filtered = [...POLICIES];
+    if (search) filtered = filtered.filter(p => p.title.toLowerCase().includes(search) || p.description.toLowerCase().includes(search));
+    if (status) filtered = filtered.filter(p => p.status === status);
+    if (category) filtered = filtered.filter(p => p.category === category);
+    const start = (page-1)*pageSize;
+    return { data: filtered.slice(start, start+pageSize), pagination: { page, pageSize, total: filtered.length, totalPages: Math.ceil(filtered.length/pageSize) } } as T;
+  }
+
+  // Policy detail
+  if (basePath.startsWith("/compliance/policies/") && !basePath.includes("/acknowledge")) {
+    const id = basePath.replace("/compliance/policies/", "");
+    const policy = POLICIES.find(p => p.id === id);
+    if (!policy) throw new Error("Policy not found");
+    return {
+      ...policy,
+      content: policy.description + " This is the full policy content that would include all sections, subsections, and detailed guidelines...",
+      attachments: [
+        { id:"att-1", name:"Policy_Document_v2.1.pdf", url:"#", size:"2.4 MB", uploadedAt:policy.publishedAt || policy.effectiveDate },
+        { id:"att-2", name:"Appendix_A.pdf", url:"#", size:"456 KB", uploadedAt:policy.publishedAt || policy.effectiveDate },
+      ],
+      versions: [
+        { version:"2.1", publishedAt:new Date(NOW-30*D).toISOString(), publishedBy:{id:"u-couns",fullName:"Priya Sharma"}, changes:"Updated review timeline and added new appendix", isCurrent:true },
+        { version:"2.0", publishedAt:new Date(NOW-180*D).toISOString(), publishedBy:{id:"u-admin",fullName:"Neha Kapoor"}, changes:"Major revision aligned with new SC guidelines", isCurrent:false },
+        { version:"1.0", publishedAt:new Date(NOW-365*D).toISOString(), publishedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar"}, changes:"Initial publication", isCurrent:false },
+      ],
+      acknowledgements: [],
+    } as T;
+  }
+
+  // SOPs list
+  if (basePath === "/compliance/sops") {
+    const category = params.get("category") || "";
+    const search = params.get("search")?.toLowerCase() || "";
+    let filtered = [...SOPS];
+    if (category) filtered = filtered.filter(s => s.category === category);
+    if (search) filtered = filtered.filter(s => s.title.toLowerCase().includes(search) || s.description.toLowerCase().includes(search));
+    return { data: filtered } as T;
+  }
+
+  // SOP detail
+  if (basePath.startsWith("/compliance/sops/")) {
+    const id = basePath.replace("/compliance/sops/", "");
+    const sop = SOPS.find(s => s.id === id);
+    if (!sop) throw new Error("SOP not found");
+    return sop as T;
+  }
+
+  // Knowledge Base articles
+  if (basePath === "/compliance/knowledge-base") {
+    const category = params.get("category") || "";
+    const search = params.get("search")?.toLowerCase() || "";
+    let filtered = KNOWLEDGE_ARTICLES.filter(a => a.isPublished);
+    if (category) filtered = filtered.filter(a => a.category === category);
+    if (search) filtered = filtered.filter(a => a.title.toLowerCase().includes(search) || a.summary.toLowerCase().includes(search) || a.tags.some(t => t.toLowerCase().includes(search)));
+    return { data: filtered } as T;
+  }
+
+  // Knowledge Base article detail
+  if (basePath.startsWith("/compliance/knowledge-base/")) {
+    const id = basePath.replace("/compliance/knowledge-base/", "");
+    const article = KNOWLEDGE_ARTICLES.find(a => a.id === id);
+    if (!article) throw new Error("Article not found");
+    return article as T;
+  }
+
+  // Audit events
+  if (basePath === "/compliance/audit") {
+    const page = parseInt(params.get("page") || "1");
+    const pageSize = parseInt(params.get("pageSize") || "20");
+    const start = (page-1)*pageSize;
+    return { data: AUDIT_EVENTS.slice(start, start+pageSize), pagination: { page, pageSize, total: AUDIT_EVENTS.length, totalPages: Math.ceil(AUDIT_EVENTS.length/pageSize) } } as T;
+  }
+
+  // Acknowledge policy
+  if (basePath.startsWith("/compliance/policies/") && basePath.includes("/acknowledge") && isPost(_init)) {
+    const policyId = basePath.replace("/compliance/policies/", "").replace("/acknowledge", "");
+    const body = parseBody(_init) as any;
+    return { id:`ack-${Date.now()}`, policyId, userId:user?.id || "unknown", userName:user?.fullName || "Unknown", userRole:body.userRole || "Staff", status:"ACKNOWLEDGED", acknowledgedAt:new Date().toISOString(), dueDate:new Date(NOW+30*D).toISOString(), createdAt:new Date().toISOString() } as T;
+  }
+
+  // Create policy
+  if (basePath === "/compliance/policies" && isPost(_init)) {
+    const body = parseBody(_init) as any;
+    const newPolicy = {
+      id:`pol-${Date.now()}`,
+      policyId:`POL-${String(POLICIES.length + 1).padStart(3,"0")}`,
+      title:body.title as string,
+      description:(body.description as string) || "",
+      category:body.category as string,
+      status:"DRAFT",
+      version:"0.1",
+      accessLevel:(body.accessLevel as string) || "STAFF_ONLY",
+      effectiveDate:new Date().toISOString(),
+      reviewDate:new Date(NOW+180*D).toISOString(),
+      author:{id:user?.id || "unknown",fullName:user?.fullName || "Unknown",role:body.userRole || "Staff"},
+      _count:{acknowledgements:0,versions:1,views:0},
+    };
+    POLICIES.unshift(newPolicy as any);
+    return newPolicy as T;
   }
 
   throw new Error(`No mock data for: ${url}`);
