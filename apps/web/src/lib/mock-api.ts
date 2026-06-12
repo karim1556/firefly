@@ -2,6 +2,7 @@ import type {
   AuthUser, Role, DashboardOverview, StudentSummary,
   Teacher, TimetableSlot, SELSessionDetailed, SessionFeedback, StudentDemographics,
   IEP, IEPFeedback, IEPFeedbackProgress, IEPGoalStatus, ObservationEntry, ObservationType, FlagEntry, FlagCategory, FlagPriority, ClassroomActivityItem,
+  Module1Overview, Module1Greeting, Module1HighRiskStudent, FollowUpItem, TeamMemberPerf, AIInsight, CalendarEvent, SelCategoryProgress, HeatmapRow, Module1Trends, TrendRange,
 } from "@/lib/types";
 
 export function isMockToken(token: string | null): boolean {
@@ -842,6 +843,231 @@ const CALENDAR_EVENTS = [
   {id:"ev-ps-2",title:"Grade 10 PTM - Board Prep",type:"PARENT_SESSION" as const,date:new Date(NOW+12*D).toISOString().slice(0,10),time:"16:00",venue:"Main Hall"},
 ];
 
+// ======================== MODULE 1: HOME DASHBOARD & COMMAND CENTER ========================
+const M1_HIGH_RISK_STUDENTS: Module1HighRiskStudent[] = [
+  { id: "m1-h1", name: "Ananya Reddy", grade: "9", classroom: "9C", riskLevel: "CRITICAL", openCases: 2, lastActivity: new Date(NOW - 1 * D).toISOString() },
+  { id: "m1-h2", name: "Arjun Patel", grade: "8", classroom: "8A", riskLevel: "HIGH", openCases: 1, lastActivity: new Date(NOW - 2 * D).toISOString() },
+  { id: "m1-h3", name: "Aryan Joshi", grade: "8", classroom: "8B", riskLevel: "HIGH", openCases: 1, lastActivity: new Date(NOW - 1 * D).toISOString() },
+  { id: "m1-h4", name: "Karan Mehta", grade: "8", classroom: "8A", riskLevel: "HIGH", openCases: 1, lastActivity: new Date(NOW - 3 * D).toISOString() },
+  { id: "m1-h5", name: "Rohan Verma", grade: "7", classroom: "7A", riskLevel: "MODERATE", openCases: 1, lastActivity: new Date(NOW - 4 * D).toISOString() },
+];
+
+const M1_FOLLOWUPS: { dueToday: FollowUpItem[]; dueThisWeek: FollowUpItem[]; overdue: FollowUpItem[] } = {
+  dueToday: [
+    { id: "fu-d1", studentName: "Ananya Reddy", caseId: "c1", scheduledAt: new Date(NOW + 4 * H).toISOString(), bucket: "DUE_TODAY", notes: "Crisis check-in" },
+    { id: "fu-d2", studentName: "Priya Sharma", caseId: "c3", scheduledAt: new Date(NOW + 6 * H).toISOString(), bucket: "DUE_TODAY", notes: "Anxiety follow-up" },
+    { id: "fu-d3", studentName: "Isha Kapoor", caseId: "c2", scheduledAt: new Date(NOW + 2 * H).toISOString(), bucket: "DUE_TODAY" },
+  ],
+  dueThisWeek: [
+    { id: "fu-w1", studentName: "Aryan Joshi", caseId: "c4", scheduledAt: new Date(NOW + 1 * D).toISOString(), bucket: "DUE_THIS_WEEK", notes: "Behavioural review" },
+    { id: "fu-w2", studentName: "Vikram Singh", caseId: "c6", scheduledAt: new Date(NOW + 2 * D).toISOString(), bucket: "DUE_THIS_WEEK" },
+    { id: "fu-w3", studentName: "Sanya Khanna", caseId: "c5", scheduledAt: new Date(NOW + 3 * D).toISOString(), bucket: "DUE_THIS_WEEK" },
+    { id: "fu-w4", studentName: "Neha Gupta", caseId: "c8", scheduledAt: new Date(NOW + 4 * D).toISOString(), bucket: "DUE_THIS_WEEK" },
+  ],
+  overdue: [
+    { id: "fu-o1", studentName: "Rohan Verma", caseId: "c2", scheduledAt: new Date(NOW - 1 * D).toISOString(), bucket: "OVERDUE", notes: "Student absent" },
+    { id: "fu-o2", studentName: "Aditya Mishra", caseId: "c8", scheduledAt: new Date(NOW - 2 * D).toISOString(), bucket: "OVERDUE" },
+  ],
+};
+
+const M1_TEAM_PERF: Module1Overview["teamPerformance"] = {
+  counsellors: [
+    { id: "tp-c1", name: "Priya Sharma", role: "COUNSELLOR", metric: "Cases managed", value: 38, target: 40 },
+    { id: "tp-c2", name: "Dr. Anil Kumar", role: "COUNSELLOR", metric: "Cases managed", value: 32, target: 40 },
+    { id: "tp-c3", name: "Sneha Reddy", role: "COUNSELLOR", metric: "Cases managed", value: 28, target: 40 },
+    { id: "tp-c4", name: "Dr. Sanjay Gupta", role: "COUNSELLOR", metric: "Cases managed", value: 26, target: 40 },
+  ],
+  coordinators: [
+    { id: "tp-co1", name: "Deepa Menon", role: "COORDINATOR", metric: "Programs led", value: 8, target: 10 },
+    { id: "tp-co2", name: "Anita Verma", role: "COORDINATOR", metric: "Follow-ups done", value: 92, target: 100 },
+  ],
+  leadership: [
+    { id: "tp-l1", name: "Aarav Mehta", role: "LEADERSHIP", metric: "Resolution rate", value: 78, target: 85 },
+    { id: "tp-l2", name: "Neha Kapoor", role: "LEADERSHIP", metric: "Compliance rate", value: 91, target: 95 },
+  ],
+};
+
+const M1_AI_INSIGHTS: AIInsight[] = [
+  {
+    id: "ai-1", severity: "ALERT", insight: "Grade 8 has increased stress indicators",
+    description: "Stress-related flags rose 32% in Grade 8 over the past 14 days, primarily clustered in classroom 8A.",
+    suggestedActions: ["Schedule SEL Workshop", "Assign Counsellor to 8A", "Review 3 Active Cases"]
+  },
+  {
+    id: "ai-2", severity: "WARNING", insight: "Attendance decline detected in Grade 6",
+    description: "Average attendance dropped from 94% to 86% across Grade 6 cohorts this month.",
+    suggestedActions: ["Open Attendance Review", "Notify Class Teacher", "Schedule Parent Outreach"]
+  },
+  {
+    id: "ai-3", severity: "INFO", insight: "Referral volume increased by 15%",
+    description: "External referrals are up across the term, driven by anxiety and academic-stress categories.",
+    suggestedActions: ["View Referrals", "Allocate Hub Expert"]
+  },
+  {
+    id: "ai-4", severity: "WARNING", insight: "Bullying reports trending upward",
+    description: "Three new bullying-related cases opened this week, up from one weekly average.",
+    suggestedActions: ["Open Bullying Cases", "Schedule Awareness Workshop"]
+  },
+];
+
+const M1_CALENDAR_NEXT: CalendarEvent[] = [
+  { id: "m1-ev-1", type: "SEL_SESSION", title: "Self-Awareness — Grade 7A", date: new Date(NOW + 1 * D).toISOString().slice(0, 10), time: "09:30", venue: "Room 204", facilitatorName: "Priya Sharma", grade: "7", classroom: "7A" },
+  { id: "m1-ev-2", type: "WORKSHOP", title: "Bullying Prevention", date: new Date(NOW + 2 * D).toISOString().slice(0, 10), time: "11:00", venue: "Auditorium", facilitatorName: "Sneha Reddy" },
+  { id: "m1-ev-3", type: "PARENT_SESSION", title: "Grade 7 PTM", date: new Date(NOW + 3 * D).toISOString().slice(0, 10), time: "15:00", venue: "Main Hall" },
+  { id: "m1-ev-4", type: "SEL_SESSION", title: "Emotional Regulation — Grade 9C", date: new Date(NOW + 4 * D).toISOString().slice(0, 10), time: "10:00", venue: "Room 105", facilitatorName: "Dr. Anil Kumar", grade: "9", classroom: "9C" },
+  { id: "m1-ev-5", type: "AWARENESS_CAMPAIGN", title: "Mental Health Awareness Week", date: new Date(NOW + 7 * D).toISOString().slice(0, 10), time: "All day", venue: "Campus" },
+  { id: "m1-ev-6", type: "WORKSHOP", title: "Stress Management — Grade 10", date: new Date(NOW + 5 * D).toISOString().slice(0, 10), time: "14:00", venue: "Room 110", facilitatorName: "Deepa Menon" },
+  { id: "m1-ev-7", type: "PARENT_SESSION", title: "Anxious Learners — Parent Talk", date: new Date(NOW + 6 * D).toISOString().slice(0, 10), time: "16:30", venue: "Room 201" },
+];
+
+const M1_TRENDS: Record<TrendRange, Module1Trends> = {
+  "7d": {
+    range: "7d",
+    flags: [{label:"Mon",value:8},{label:"Tue",value:12},{label:"Wed",value:15},{label:"Thu",value:9},{label:"Fri",value:18},{label:"Sat",value:4},{label:"Sun",value:3}],
+    cases: [{label:"Mon",value:3},{label:"Tue",value:5},{label:"Wed",value:7},{label:"Thu",value:4},{label:"Fri",value:6},{label:"Sat",value:1},{label:"Sun",value:0}],
+    referrals: [{label:"Mon",value:1},{label:"Tue",value:2},{label:"Wed",value:3},{label:"Thu",value:2},{label:"Fri",value:4},{label:"Sat",value:0},{label:"Sun",value:0}],
+    crisis: [{label:"Mon",value:0},{label:"Tue",value:1},{label:"Wed",value:0},{label:"Thu",value:1},{label:"Fri",value:2},{label:"Sat",value:0},{label:"Sun",value:0}],
+  },
+  "30d": {
+    range: "30d",
+    flags: Array.from({length: 30}, (_, i) => ({label: `D${i+1}`, value: 8 + Math.round(Math.sin(i / 3) * 4) + (i % 5)})),
+    cases: Array.from({length: 30}, (_, i) => ({label: `D${i+1}`, value: 3 + Math.round(Math.cos(i / 4) * 2) + (i % 3)})),
+    referrals: Array.from({length: 30}, (_, i) => ({label: `D${i+1}`, value: 1 + (i % 4)})),
+    crisis: Array.from({length: 30}, (_, i) => ({label: `D${i+1}`, value: i % 7 === 0 ? 1 : 0})),
+  },
+  "Q": {
+    range: "Q",
+    flags: [{label:"W1",value:42},{label:"W2",value:55},{label:"W3",value:48},{label:"W4",value:61},{label:"W5",value:58},{label:"W6",value:67},{label:"W7",value:72},{label:"W8",value:65},{label:"W9",value:78},{label:"W10",value:81},{label:"W11",value:74},{label:"W12",value:88}],
+    cases: [{label:"W1",value:18},{label:"W2",value:22},{label:"W3",value:19},{label:"W4",value:25},{label:"W5",value:24},{label:"W6",value:28},{label:"W7",value:30},{label:"W8",value:27},{label:"W9",value:31},{label:"W10",value:33},{label:"W11",value:29},{label:"W12",value:35}],
+    referrals: [{label:"W1",value:8},{label:"W2",value:10},{label:"W3",value:9},{label:"W4",value:12},{label:"W5",value:11},{label:"W6",value:14},{label:"W7",value:13},{label:"W8",value:12},{label:"W9",value:15},{label:"W10",value:17},{label:"W11",value:16},{label:"W12",value:18}],
+    crisis: [{label:"W1",value:1},{label:"W2",value:2},{label:"W3",value:1},{label:"W4",value:3},{label:"W5",value:2},{label:"W6",value:2},{label:"W7",value:3},{label:"W8",value:2},{label:"W9",value:4},{label:"W10",value:3},{label:"W11",value:2},{label:"W12",value:4}],
+  },
+  "Y": {
+    range: "Y",
+    flags: [{label:"Jan",value:120},{label:"Feb",value:135},{label:"Mar",value:148},{label:"Apr",value:132},{label:"May",value:155},{label:"Jun",value:142},{label:"Jul",value:118},{label:"Aug",value:128},{label:"Sep",value:168},{label:"Oct",value:172},{label:"Nov",value:165},{label:"Dec",value:158}],
+    cases: [{label:"Jan",value:48},{label:"Feb",value:55},{label:"Mar",value:62},{label:"Apr",value:54},{label:"May",value:65},{label:"Jun",value:58},{label:"Jul",value:42},{label:"Aug",value:46},{label:"Sep",value:71},{label:"Oct",value:74},{label:"Nov",value:68},{label:"Dec",value:62}],
+    referrals: [{label:"Jan",value:22},{label:"Feb",value:25},{label:"Mar",value:28},{label:"Apr",value:24},{label:"May",value:30},{label:"Jun",value:27},{label:"Jul",value:18},{label:"Aug",value:21},{label:"Sep",value:32},{label:"Oct",value:34},{label:"Nov",value:30},{label:"Dec",value:28}],
+    crisis: [{label:"Jan",value:4},{label:"Feb",value:5},{label:"Mar",value:6},{label:"Apr",value:5},{label:"May",value:7},{label:"Jun",value:6},{label:"Jul",value:3},{label:"Aug",value:4},{label:"Sep",value:8},{label:"Oct",value:7},{label:"Nov",value:6},{label:"Dec",value:5}],
+  },
+};
+
+const M1_HEATMAP: HeatmapRow[] = [
+  { grade: "5", low: 18, medium: 8, high: 4, critical: 1 },
+  { grade: "6", low: 22, medium: 12, high: 5, critical: 2 },
+  { grade: "7", low: 25, medium: 15, high: 7, critical: 3 },
+  { grade: "8", low: 19, medium: 18, high: 11, critical: 5 },
+  { grade: "9", low: 16, medium: 14, high: 9, critical: 4 },
+  { grade: "10", low: 14, medium: 10, high: 6, critical: 2 },
+];
+
+function buildModule1Overview(role: string): Module1Overview {
+  const isLeadership = role === "ADMIN" || role === "PRINCIPAL" || role === "SCHOOL_ADMIN" || role === "SUPER_ADMIN" || role === "FIREFLY_REPRESENTATIVE" || role === "VICE_PRINCIPAL";
+  const firstNameMap: Record<string, string> = {
+    ADMIN: "Aarav", COUNSELLOR: "Priya", TEACHER: "Rajesh", PARENT: "Anita", STUDENT: "Arjun",
+    SYSTEM_ADMIN: "Karan", SUPER_ADMIN: "Aarav", SCHOOL_ADMIN: "Neha", PRINCIPAL: "Suresh",
+    VICE_PRINCIPAL: "Lakshmi", CLASS_TEACHER: "Rajesh", SWT_TEAM: "Anita", SEL_TEAM: "Deepa",
+    CLINICAL_SPECIALIST: "Sanjay", CAREER_SPECIALIST: "Meera", EXTERNAL_PARTNER: "Ravi",
+    FIREFLY_REPRESENTATIVE: "Vikram", FIREFLY_SPECIALIST: "Sneha",
+  };
+
+  const greeting: Module1Greeting = {
+    firstName: firstNameMap[role] ?? "User",
+    schoolName: "Green Valley International School",
+    role,
+    date: new Date().toISOString(),
+    healthScoreCategory: "NEEDS_ATTENTION",
+  };
+
+  return {
+    greeting,
+    schoolHealthScore: { score: 74, category: "NEEDS_ATTENTION", delta: 3 },
+    kpis: {
+      students: { total: 847, active: 832, newEnrollments: 24 },
+      wellbeing: { activeCases: 124, openReferrals: 40, crisisIncidents: 10, studentsAtRisk: 53, pendingAssistance: 30, completedCases: 18 },
+      sel: { activePrograms: 20, completionRate: 78, sessionsConducted: 142, participationRate: 86 },
+      compliance: { policyCompliance: 91, staffAcknowledgementRate: 88, trainingCompletion: 73, reviewsDue: 4 },
+    },
+    trends: M1_TRENDS,
+    activeCases: [
+      { id: "m1-c1", studentName: "Ananya Reddy", studentGrade: "9", riskLevel: "CRITICAL", counsellor: "Priya Sharma", status: "IN_PROGRESS", openedAt: new Date(NOW - 3 * D).toISOString(), tier: "TIER_3" },
+      { id: "m1-c2", studentName: "Arjun Patel", studentGrade: "8", riskLevel: "HIGH", counsellor: "Priya Sharma", status: "IN_PROGRESS", openedAt: new Date(NOW - 5 * D).toISOString(), tier: "TIER_3" },
+      { id: "m1-c3", studentName: "Aryan Joshi", studentGrade: "8", riskLevel: "HIGH", counsellor: "Dr. Anil Kumar", status: "OPEN", openedAt: new Date(NOW - 4 * D).toISOString(), tier: "TIER_3" },
+      { id: "m1-c4", studentName: "Karan Mehta", studentGrade: "8", riskLevel: "HIGH", counsellor: "Dr. Anil Kumar", status: "IN_PROGRESS", openedAt: new Date(NOW - 10 * D).toISOString(), tier: "TIER_3" },
+      { id: "m1-c5", studentName: "Rohan Verma", studentGrade: "7", riskLevel: "MEDIUM", counsellor: "Sneha Reddy", status: "IN_PROGRESS", openedAt: new Date(NOW - 6 * D).toISOString(), tier: "TIER_2" },
+    ],
+    crisisAlerts: [
+      { id: "m1-a1", type: "SELF_HARM_RISK", severity: "CRITICAL", title: "Self-harm indicator detected", description: "Arjun Patel's check-in indicates self-harm ideation", studentName: "Arjun Patel", actionTaken: "Crisis team activated", createdAt: new Date(NOW - 30 * 60 * 1000).toISOString() },
+      { id: "m1-a2", type: "EMOTIONAL_DISTRESS", severity: "HIGH", title: "Suicidal ideation reported", description: "Ananya Reddy disclosed ideation during session", studentName: "Ananya Reddy", actionTaken: "Parents contacted, crisis protocol", createdAt: new Date(NOW - 2 * H).toISOString() },
+      { id: "m1-a3", type: "BULLYING", severity: "HIGH", title: "Peer conflict escalation", description: "Bullying reports involving Rohan Verma", studentName: "Rohan Verma", actionTaken: "Mediation scheduled", createdAt: new Date(NOW - 4 * H).toISOString() },
+      { id: "m1-a4", type: "VIOLENCE", severity: "HIGH", title: "Behavioural incident", description: "Aryan Joshi — physical altercation", studentName: "Aryan Joshi", actionTaken: "Referred to counselling", createdAt: new Date(NOW - 6 * H).toISOString() },
+      { id: "m1-a5", type: "EMOTIONAL_DISTRESS", severity: "MODERATE", title: "Missed session (3rd occurrence)", description: "Priya Sharma missed 3rd consecutive session", studentName: "Priya Sharma", actionTaken: "Guardian contacted", createdAt: new Date(NOW - 8 * H).toISOString() },
+    ],
+    sel: {
+      activePrograms: 20,
+      sessionsConducted: 142,
+      participationRate: 86,
+      completionRate: 78,
+      byCategory: [
+        { category: "Self-Awareness", completion: 84, target: 90 },
+        { category: "Emotional Reg.", completion: 72, target: 80 },
+        { category: "Empathy", completion: 88, target: 85 },
+        { category: "Communication", completion: 76, target: 80 },
+        { category: "Conflict Res.", completion: 68, target: 75 },
+        { category: "Resilience", completion: 81, target: 85 },
+      ],
+      donut: [
+        { label: "Completed", value: 78 },
+        { label: "In Progress", value: 14 },
+        { label: "Not Started", value: 8 },
+      ],
+    },
+    referrals: { active: 18, pending: 12, assistance: 30, resolved: 86 },
+    calendar: M1_CALENDAR_NEXT,
+    recentActivity: [
+      { id: "m1-af-1", createdAt: new Date(NOW - 15 * 60 * 1000).toISOString(), type: "OBSERVATION_ADDED", title: "Observation added", subtitle: "Class teacher noted withdrawal in 8A" },
+      { id: "m1-af-2", createdAt: new Date(NOW - 45 * 60 * 1000).toISOString(), type: "CASE_CREATED", title: "Case created", subtitle: "New Tier 3 case opened for Ananya Reddy" },
+      { id: "m1-af-3", createdAt: new Date(NOW - 2 * H).toISOString(), type: "REFERRAL_SUBMITTED", title: "Referral submitted", subtitle: "Aditya Mishra referred to child psychologist" },
+      { id: "m1-af-4", createdAt: new Date(NOW - 3 * H).toISOString(), type: "CRISIS_REPORTED", title: "Crisis reported", subtitle: "Self-harm indicator raised for Arjun Patel" },
+      { id: "m1-af-5", createdAt: new Date(NOW - 5 * H).toISOString(), type: "WORKSHOP_COMPLETED", title: "Workshop completed", subtitle: "Bullying Prevention — Grade 8 cohort" },
+      { id: "m1-af-6", createdAt: new Date(NOW - 8 * H).toISOString(), type: "POLICY_PUBLISHED", title: "Policy published", subtitle: "Updated safeguarding policy v2.1" },
+    ],
+    highRiskStudents: M1_HIGH_RISK_STUDENTS,
+    followUps: M1_FOLLOWUPS,
+    teamPerformance: M1_TEAM_PERF,
+    compliance: {
+      policyCompliance: 91,
+      trainingCompletion: 73,
+      acknowledgementsPending: 14,
+      reviewsDue: 4,
+      byCategory: [
+        { category: "Safeguarding", rate: 96 },
+        { category: "Crisis Mgmt", rate: 88 },
+        { category: "SEL Frameworks", rate: 84 },
+        { category: "Parent Comm.", rate: 79 },
+      ],
+    },
+    heatmap: M1_HEATMAP,
+    aiInsights: M1_AI_INSIGHTS,
+    executiveAnalytics: {
+      resolutionRate: 78,
+      referralOutcomes: 72,
+      crisisResponseTime: "12 min",
+      selEffectiveness: 84,
+      trendPoints: [
+        { label: "Jan", value: 68 },
+        { label: "Feb", value: 71 },
+        { label: "Mar", value: 73 },
+        { label: "Apr", value: 70 },
+        { label: "May", value: 75 },
+        { label: "Jun", value: 74 },
+      ],
+    },
+    // expose isLeadership via parent route filter, not payload
+  };
+  // suppress unused-var
+  void isLeadership;
+}
+
 // ======================== DASHBOARDS ========================
 const DASHBOARDS: Record<string, DashboardOverview> = {
   ADMIN: {
@@ -1551,6 +1777,9 @@ export async function mockRequest<T>(url: string, _init?: RequestInit, user?: Au
 
   // =========== DASHBOARD ===========
   if (basePath === "/dashboard/overview") return (DASHBOARDS[role] ?? DASHBOARDS.ADMIN) as T;
+
+  // =========== MODULE 1: HOME DASHBOARD & COMMAND CENTER ===========
+  if (basePath === "/module-1/overview") return buildModule1Overview(role) as T;
 
   // =========== OTHER MODULES ===========
   if (basePath === "/analytics/overview") return {

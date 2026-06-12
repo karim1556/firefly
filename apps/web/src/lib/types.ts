@@ -1588,3 +1588,170 @@ export interface GovernanceAnalytics {
   reviewPerformance: Array<{ month: string; reviewsCompleted: number; overdueCount: number }>;
   trainingAdoption: Array<{ trainingName: string; completionRate: number }>;
 }
+
+// =============== Module 1: Home Dashboard & Command Center ===============
+
+export type HealthScoreCategory = "EXCELLENT" | "HEALTHY" | "NEEDS_ATTENTION" | "CRITICAL";
+export type RiskLevelChip = "MODERATE" | "HIGH" | "CRITICAL";
+export type TrendRange = "7d" | "30d" | "Q" | "Y";
+export type FollowUpBucket = "DUE_TODAY" | "DUE_THIS_WEEK" | "OVERDUE";
+export type TeamRole = "COUNSELLOR" | "COORDINATOR" | "LEADERSHIP";
+
+export interface Module1Greeting {
+  firstName: string;
+  schoolName: string;
+  role: string;
+  date: string; // ISO
+  healthScoreCategory: HealthScoreCategory;
+}
+
+export interface SchoolHealthScore {
+  score: number; // 0-100
+  category: HealthScoreCategory;
+  delta: number; // change vs last period
+}
+
+export interface Module1Kpis {
+  students: { total: number; active: number; newEnrollments: number };
+  wellbeing: { activeCases: number; openReferrals: number; crisisIncidents: number; studentsAtRisk: number; pendingAssistance: number; completedCases: number };
+  sel: { activePrograms: number; completionRate: number; sessionsConducted: number; participationRate: number };
+  compliance: { policyCompliance: number; staffAcknowledgementRate: number; trainingCompletion: number; reviewsDue: number };
+}
+
+export interface TrendPoint {
+  label: string;
+  value: number;
+}
+
+export interface Module1Trends {
+  range: TrendRange;
+  flags: TrendPoint[];
+  cases: TrendPoint[];
+  referrals: TrendPoint[];
+  crisis: TrendPoint[];
+}
+
+export interface ActiveCaseRow {
+  id: string;
+  studentName: string;
+  studentGrade: string;
+  riskLevel: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  counsellor: string;
+  status: "OPEN" | "IN_PROGRESS" | "ON_HOLD" | "CLOSED";
+  openedAt: string;
+  tier: "TIER_1" | "TIER_2" | "TIER_3";
+}
+
+export interface CrisisAlertRow {
+  id: string;
+  type: "SELF_HARM_RISK" | "SUICIDE_IDEATION" | "ABUSE" | "BULLYING" | "VIOLENCE" | "EMOTIONAL_DISTRESS" | "MISSING" | "SAFETY";
+  severity: "LOW" | "MODERATE" | "HIGH" | "CRITICAL";
+  title: string;
+  description: string;
+  studentName: string;
+  actionTaken: string;
+  createdAt: string;
+}
+
+export interface SelCategoryProgress {
+  category: string;
+  completion: number; // 0-100
+  target: number; // 0-100
+}
+
+export interface SelPerformance {
+  activePrograms: number;
+  sessionsConducted: number;
+  participationRate: number;
+  completionRate: number;
+  byCategory: SelCategoryProgress[];
+  donut: TrendPoint[];
+}
+
+export interface ReferralSummaryCard {
+  active: number;
+  pending: number;
+  assistance: number;
+  resolved: number;
+}
+
+export interface Module1HighRiskStudent {
+  id: string;
+  name: string;
+  grade: string;
+  classroom: string;
+  riskLevel: RiskLevelChip;
+  openCases: number;
+  lastActivity: string;
+}
+
+export interface FollowUpItem {
+  id: string;
+  studentName: string;
+  caseId: string;
+  scheduledAt: string;
+  bucket: FollowUpBucket;
+  notes?: string | null;
+}
+
+export interface TeamMemberPerf {
+  id: string;
+  name: string;
+  role: TeamRole;
+  metric: string; // e.g. "Cases managed", "Programs led", "Resolution rate"
+  value: number;
+  target: number;
+}
+
+export interface ComplianceSnapshot {
+  policyCompliance: number;
+  trainingCompletion: number;
+  acknowledgementsPending: number;
+  reviewsDue: number;
+  byCategory: Array<{ category: string; rate: number }>;
+}
+
+export interface HeatmapRow {
+  grade: string;
+  classroom?: string;
+  low: number;
+  medium: number;
+  high: number;
+  critical: number;
+}
+
+export interface AIInsight {
+  id: string;
+  severity: "INFO" | "WARNING" | "ALERT";
+  insight: string;
+  description: string;
+  suggestedActions: string[];
+}
+
+export interface ExecutiveAnalytics {
+  resolutionRate: number;
+  referralOutcomes: number;
+  crisisResponseTime: string; // e.g. "12 min"
+  selEffectiveness: number;
+  trendPoints: TrendPoint[];
+}
+
+export interface Module1Overview {
+  greeting: Module1Greeting;
+  schoolHealthScore: SchoolHealthScore;
+  kpis: Module1Kpis;
+  trends: Record<TrendRange, Module1Trends>;
+  activeCases: ActiveCaseRow[];
+  crisisAlerts: CrisisAlertRow[];
+  sel: SelPerformance;
+  referrals: ReferralSummaryCard;
+  calendar: CalendarEvent[];
+  recentActivity: Array<{ id: string; type: string; title: string; subtitle: string; createdAt: string }>;
+  highRiskStudents: Module1HighRiskStudent[];
+  followUps: { dueToday: FollowUpItem[]; dueThisWeek: FollowUpItem[]; overdue: FollowUpItem[] };
+  teamPerformance: { counsellors: TeamMemberPerf[]; coordinators: TeamMemberPerf[]; leadership: TeamMemberPerf[] };
+  compliance: ComplianceSnapshot;
+  heatmap: HeatmapRow[];
+  aiInsights: AIInsight[];
+  executiveAnalytics: ExecutiveAnalytics;
+}

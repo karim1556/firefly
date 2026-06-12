@@ -45,6 +45,13 @@ const navItems: NavItem[] = [
     icon: Home,
     roles: ["ADMIN", "COUNSELLOR", "TEACHER", "PARENT", "STUDENT", "SYSTEM_ADMIN", "FIREFLY_REPRESENTATIVE", "SUPER_ADMIN", "SCHOOL_ADMIN", "PRINCIPAL", "VICE_PRINCIPAL", "CLASS_TEACHER", "SWT_TEAM", "SEL_TEAM", "CLINICAL_SPECIALIST", "CAREER_SPECIALIST", "EXTERNAL_PARTNER"]
   },
+  {
+    href: "/module-1",
+    label: "Command Center",
+    group: "workspace",
+    icon: Activity,
+    roles: ["ADMIN", "COUNSELLOR", "TEACHER", "PARENT", "STUDENT", "SYSTEM_ADMIN", "FIREFLY_REPRESENTATIVE", "SUPER_ADMIN", "SCHOOL_ADMIN", "PRINCIPAL", "VICE_PRINCIPAL", "CLASS_TEACHER", "SWT_TEAM", "SEL_TEAM", "CLINICAL_SPECIALIST", "CAREER_SPECIALIST", "EXTERNAL_PARTNER"]
+  },
   // Care
   {
     href: "/students",
