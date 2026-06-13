@@ -19,6 +19,11 @@ import { UpcomingCalendar } from "@/components/modules/module-1/upcoming-calenda
 import { ActivityFeed } from "@/components/modules/module-1/activity-feed";
 import { HighRiskMonitor } from "@/components/modules/module-1/high-risk-monitor";
 import { FollowUpTracker } from "@/components/modules/module-1/follow-up-tracker";
+import { TeamPerformanceWidget } from "@/components/modules/module-1/team-performance-widget";
+import { ComplianceSnapshotWidget } from "@/components/modules/module-1/compliance-snapshot-widget";
+import { WellbeingHeatmap } from "@/components/modules/module-1/wellbeing-heatmap";
+import { AIInsightsPanel } from "@/components/modules/module-1/ai-insights-panel";
+import { ExecutiveAnalyticsDashboard } from "@/components/modules/module-1/executive-analytics";
 import type { Module1Overview } from "@/lib/types";
 
 export default function Module1Page() {
@@ -91,6 +96,11 @@ export default function Module1Page() {
       </div>
       <HighRiskMonitor students={query.data.highRiskStudents} />
       <FollowUpTracker followUps={query.data.followUps} />
+      <TeamPerformanceWidget teamPerformance={query.data.teamPerformance} />
+      <ComplianceSnapshotWidget compliance={query.data.compliance} />
+      <WellbeingHeatmap heatmap={query.data.heatmap} />
+      <AIInsightsPanel aiInsights={query.data.aiInsights} />
+      <ExecutiveAnalyticsDashboard executiveAnalytics={query.data.executiveAnalytics} />
     </div>
   );
 }
