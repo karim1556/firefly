@@ -45,6 +45,13 @@ const navItems: NavItem[] = [
     icon: Home,
     roles: ["ADMIN", "COUNSELLOR", "TEACHER", "PARENT", "STUDENT", "SYSTEM_ADMIN", "FIREFLY_REPRESENTATIVE", "SUPER_ADMIN", "SCHOOL_ADMIN", "PRINCIPAL", "VICE_PRINCIPAL", "CLASS_TEACHER", "SWT_TEAM", "SEL_TEAM", "CLINICAL_SPECIALIST", "CAREER_SPECIALIST", "EXTERNAL_PARTNER"]
   },
+  {
+    href: "/module-1",
+    label: "Command Center",
+    group: "workspace",
+    icon: Activity,
+    roles: ["ADMIN", "COUNSELLOR", "TEACHER", "PARENT", "STUDENT", "SYSTEM_ADMIN", "FIREFLY_REPRESENTATIVE", "SUPER_ADMIN", "SCHOOL_ADMIN", "PRINCIPAL", "VICE_PRINCIPAL", "CLASS_TEACHER", "SWT_TEAM", "SEL_TEAM", "CLINICAL_SPECIALIST", "CAREER_SPECIALIST", "EXTERNAL_PARTNER"]
+  },
   // Care
   {
     href: "/students",
@@ -91,10 +98,73 @@ const navItems: NavItem[] = [
   },
   {
     href: "/sel",
-    label: "SEL Planner",
+    label: "SEL Management",
     group: "interventions",
     icon: BookOpen,
     roles: ["ADMIN", "COUNSELLOR", "SYSTEM_ADMIN", "SUPER_ADMIN", "SEL_TEAM", "CLASS_TEACHER"]
+  },
+  {
+    href: "/sel/curriculum",
+    label: "SEL Curriculum",
+    group: "interventions",
+    icon: BookHeart,
+    roles: ["ADMIN", "COUNSELLOR", "SYSTEM_ADMIN", "SUPER_ADMIN", "SEL_TEAM"]
+  },
+  {
+    href: "/workshops",
+    label: "Workshops",
+    group: "interventions",
+    icon: Users,
+    roles: ["ADMIN", "COUNSELLOR", "SYSTEM_ADMIN", "SUPER_ADMIN", "SCHOOL_ADMIN", "PRINCIPAL", "SEL_TEAM", "CLASS_TEACHER"]
+  },
+  {
+    href: "/facilitators",
+    label: "Facilitators",
+    group: "interventions",
+    icon: UserPlus,
+    roles: ["ADMIN", "COUNSELLOR", "SYSTEM_ADMIN", "SUPER_ADMIN", "SEL_TEAM"]
+  },
+  {
+    href: "/sel/approvals",
+    label: "SEL Approvals",
+    group: "interventions",
+    icon: ClipboardCheck,
+    roles: ["ADMIN", "COUNSELLOR", "SYSTEM_ADMIN", "SUPER_ADMIN", "SEL_TEAM"]
+  },
+  {
+    href: "/sel/attendance",
+    label: "SEL Attendance",
+    group: "interventions",
+    icon: Users,
+    roles: ["ADMIN", "COUNSELLOR", "SYSTEM_ADMIN", "SUPER_ADMIN", "SEL_TEAM", "CLASS_TEACHER"]
+  },
+  {
+    href: "/workshops/attendance",
+    label: "Workshop Attendance",
+    group: "interventions",
+    icon: Users,
+    roles: ["ADMIN", "COUNSELLOR", "SYSTEM_ADMIN", "SUPER_ADMIN", "SEL_TEAM"]
+  },
+  {
+    href: "/sel/feedback",
+    label: "SEL Feedback",
+    group: "interventions",
+    icon: BarChart3,
+    roles: ["ADMIN", "COUNSELLOR", "SYSTEM_ADMIN", "SUPER_ADMIN", "SEL_TEAM", "SCHOOL_ADMIN"]
+  },
+  {
+    href: "/workshops/feedback",
+    label: "Workshop Feedback",
+    group: "interventions",
+    icon: BarChart3,
+    roles: ["ADMIN", "COUNSELLOR", "SYSTEM_ADMIN", "SUPER_ADMIN", "SEL_TEAM", "SCHOOL_ADMIN"]
+  },
+  {
+    href: "/calendar",
+    label: "SEL Calendar",
+    group: "interventions",
+    icon: Calendar,
+    roles: ["ADMIN", "COUNSELLOR", "SYSTEM_ADMIN", "SUPER_ADMIN", "SEL_TEAM", "CLASS_TEACHER", "SCHOOL_ADMIN", "PRINCIPAL"]
   },
   {
     href: "/incidents",

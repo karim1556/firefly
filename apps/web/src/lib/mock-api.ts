@@ -1,6 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import type { AuthUser, Role, DashboardOverview, AnalyticsData, SELSession, ReferralItem, CrisisIncident, ComplianceRecord, NotificationItem, AppointmentItem, StudentSummary, CaseSummary } from "@/lib/types";
+import type {
+  AuthUser, Role, DashboardOverview, StudentSummary,
+  Teacher, TimetableSlot, SELSessionDetailed, SessionFeedback, StudentDemographics,
+  IEP, IEPFeedback, IEPFeedbackProgress, IEPGoalStatus, ObservationEntry, ObservationType, FlagEntry, FlagCategory, FlagPriority, ClassroomActivityItem,
+  Module1Overview, Module1Greeting, Module1HighRiskStudent, FollowUpItem, TeamMemberPerf, AIInsight, CalendarEvent, SelCategoryProgress, HeatmapRow, Module1Trends, TrendRange,
+} from "@/lib/types";
 
 export function isMockToken(token: string | null): boolean {
   return token !== null && token.startsWith("mock_");
@@ -24,7 +27,7 @@ const ROLE_NAMES: Record<string, string> = {
   CAREER_SPECIALIST: "Meera Joshi", EXTERNAL_PARTNER: "Ravi Deshmukh"
 };
 
-export function mockLogin(email: string, password: string) {
+export function mockLogin(email: string) {
   const role = ROLE_BY_EMAIL[email] ?? "ADMIN" as Role;
   return { accessToken: `mock_access_token_${role}`, refreshToken: `mock_refresh_token_${role}`, user: { id: `mock-user-${role}`, email, fullName: ROLE_NAMES[role], role } };
 }
@@ -35,21 +38,21 @@ const H = 60*60*1000; const D = 24*H;
 
 // ======================== STUDENTS (15 with INDIAN names) ========================
 const STUDENTS = [
-  { id:"s1", firstName:"Arjun", lastName:"Patel", grade:"8", classroom:"8A", tier:"TIER_3", status:"NEEDS_INTERVENTION", riskScore:84, admissionNumber:"FF-2024-001", _count:{cases:2,assessments:3} },
-  { id:"s2", firstName:"Priya", lastName:"Sharma", grade:"10", classroom:"10B", tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:62, admissionNumber:"FF-2024-002", _count:{cases:1,assessments:2} },
-  { id:"s3", firstName:"Rohan", lastName:"Verma", grade:"7", classroom:"7A", tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:55, admissionNumber:"FF-2024-003", _count:{cases:1,assessments:1} },
-  { id:"s4", firstName:"Ananya", lastName:"Reddy", grade:"9", classroom:"9C", tier:"TIER_3", status:"NEEDS_INTERVENTION", riskScore:91, admissionNumber:"FF-2024-004", _count:{cases:2,assessments:2} },
-  { id:"s5", firstName:"Vikram", lastName:"Singh", grade:"6", classroom:"6B", tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:48, admissionNumber:"FF-2024-005", _count:{cases:1,assessments:1} },
-  { id:"s6", firstName:"Kavya", lastName:"Nair", grade:"5", classroom:"5A", tier:"TIER_1", status:"STABLE", riskScore:32, admissionNumber:"FF-2024-006", _count:{cases:0,assessments:1} },
-  { id:"s7", firstName:"Aryan", lastName:"Joshi", grade:"8", classroom:"8B", tier:"TIER_3", status:"NEEDS_INTERVENTION", riskScore:76, admissionNumber:"FF-2024-007", _count:{cases:1,assessments:1} },
-  { id:"s8", firstName:"Isha", lastName:"Kapoor", grade:"10", classroom:"10A", tier:"TIER_1", status:"STABLE", riskScore:18, admissionNumber:"FF-2024-008", _count:{cases:0,assessments:1} },
-  { id:"s9", firstName:"Rahul", lastName:"Desai", grade:"7", classroom:"7C", tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:58, admissionNumber:"FF-2024-009", _count:{cases:1,assessments:1} },
-  { id:"s10", firstName:"Neha", lastName:"Gupta", grade:"5", classroom:"5B", tier:"TIER_1", status:"STABLE", riskScore:25, admissionNumber:"FF-2024-010", _count:{cases:0,assessments:1} },
-  { id:"s11", firstName:"Aditya", lastName:"Mishra", grade:"6", classroom:"6A", tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:45, admissionNumber:"FF-2024-011", _count:{cases:1,assessments:0} },
-  { id:"s12", firstName:"Sanya", lastName:"Khanna", grade:"9", classroom:"9B", tier:"TIER_1", status:"STABLE", riskScore:22, admissionNumber:"FF-2024-012", _count:{cases:0,assessments:0} },
-  { id:"s13", firstName:"Karan", lastName:"Mehta", grade:"8", classroom:"8A", tier:"TIER_3", status:"NEEDS_INTERVENTION", riskScore:72, admissionNumber:"FF-2024-013", _count:{cases:1,assessments:1} },
-  { id:"s14", firstName:"Diya", lastName:"Rao", grade:"7", classroom:"7B", tier:"TIER_1", status:"STABLE", riskScore:15, admissionNumber:"FF-2024-014", _count:{cases:0,assessments:0} },
-  { id:"s15", firstName:"Ravi", lastName:"Yadav", grade:"10", classroom:"10C", tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:52, admissionNumber:"FF-2024-015", _count:{cases:1,assessments:1} },
+  { id:"s1", firstName:"Arjun", lastName:"Patel", grade:"8", classroom:"8A", age:13, tier:"TIER_3", status:"NEEDS_INTERVENTION", riskScore:84, admissionNumber:"FF-2024-001", _count:{cases:2,assessments:3} },
+  { id:"s2", firstName:"Priya", lastName:"Sharma", grade:"10", classroom:"10B", age:15, tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:62, admissionNumber:"FF-2024-002", _count:{cases:1,assessments:2} },
+  { id:"s3", firstName:"Rohan", lastName:"Verma", grade:"7", classroom:"7A", age:12, tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:55, admissionNumber:"FF-2024-003", _count:{cases:1,assessments:1} },
+  { id:"s4", firstName:"Ananya", lastName:"Reddy", grade:"9", classroom:"9C", age:14, tier:"TIER_3", status:"NEEDS_INTERVENTION", riskScore:91, admissionNumber:"FF-2024-004", _count:{cases:2,assessments:2} },
+  { id:"s5", firstName:"Vikram", lastName:"Singh", grade:"6", classroom:"6B", age:11, tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:48, admissionNumber:"FF-2024-005", _count:{cases:1,assessments:1} },
+  { id:"s6", firstName:"Kavya", lastName:"Nair", grade:"5", classroom:"5A", age:10, tier:"TIER_1", status:"STABLE", riskScore:32, admissionNumber:"FF-2024-006", _count:{cases:0,assessments:1} },
+  { id:"s7", firstName:"Aryan", lastName:"Joshi", grade:"8", classroom:"8B", age:13, tier:"TIER_3", status:"NEEDS_INTERVENTION", riskScore:76, admissionNumber:"FF-2024-007", _count:{cases:1,assessments:1} },
+  { id:"s8", firstName:"Isha", lastName:"Kapoor", grade:"10", classroom:"10A", age:15, tier:"TIER_1", status:"STABLE", riskScore:18, admissionNumber:"FF-2024-008", _count:{cases:0,assessments:1} },
+  { id:"s9", firstName:"Rahul", lastName:"Desai", grade:"7", classroom:"7C", age:12, tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:58, admissionNumber:"FF-2024-009", _count:{cases:1,assessments:1} },
+  { id:"s10", firstName:"Neha", lastName:"Gupta", grade:"5", classroom:"5B", age:10, tier:"TIER_1", status:"STABLE", riskScore:25, admissionNumber:"FF-2024-010", _count:{cases:0,assessments:1} },
+  { id:"s11", firstName:"Aditya", lastName:"Mishra", grade:"6", classroom:"6A", age:11, tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:45, admissionNumber:"FF-2024-011", _count:{cases:1,assessments:0} },
+  { id:"s12", firstName:"Sanya", lastName:"Khanna", grade:"9", classroom:"9B", age:14, tier:"TIER_1", status:"STABLE", riskScore:22, admissionNumber:"FF-2024-012", _count:{cases:0,assessments:0} },
+  { id:"s13", firstName:"Karan", lastName:"Mehta", grade:"8", classroom:"8A", age:13, tier:"TIER_3", status:"NEEDS_INTERVENTION", riskScore:72, admissionNumber:"FF-2024-013", _count:{cases:1,assessments:1} },
+  { id:"s14", firstName:"Diya", lastName:"Rao", grade:"7", classroom:"7B", age:12, tier:"TIER_1", status:"STABLE", riskScore:15, admissionNumber:"FF-2024-014", _count:{cases:0,assessments:0} },
+  { id:"s15", firstName:"Ravi", lastName:"Yadav", grade:"10", classroom:"10C", age:15, tier:"TIER_2", status:"NEEDS_SUPPORT", riskScore:52, admissionNumber:"FF-2024-015", _count:{cases:1,assessments:1} },
 ];
 
 // ======================== CASES (8 with INDIAN names) ========================
@@ -63,6 +66,207 @@ const CASES = [
   { id:"c7", title:"Emotional regulation - Karan Mehta", tier:"TIER_3", type:"COUNSELLING", riskLevel:"HIGH", status:"OPEN", openedAt:new Date(NOW-10*D).toISOString(), closedAt:null, student:{id:"s13",firstName:"Karan",lastName:"Mehta",grade:"8",classroom:"8A"}, _count:{sessions:1,timelineEvents:2} },
   { id:"c8", title:"Anger management - Aditya Mishra", tier:"TIER_2", type:"SEL", riskLevel:"MEDIUM", status:"ON_HOLD", openedAt:new Date(NOW-12*D).toISOString(), closedAt:null, student:{id:"s11",firstName:"Aditya",lastName:"Mishra",grade:"6",classroom:"6A"}, _count:{sessions:2,timelineEvents:3} },
 ];
+
+// ======================== MODULE 5: CASE MANAGEMENT MOCK DATA ========================
+
+// Case Dashboard Stats
+const CASE_DASHBOARD_STATS = {
+  totalCases: 70,
+  activeCases: 40,
+  closedCases: 20,
+  highRiskCases: 10,
+  casesAwaitingAction: 8,
+  upcomingFollowUps: 15,
+  casesByStatus: [
+    { status: "OPEN", count: 15 },
+    { status: "ASSESSMENT_IN_PROGRESS", count: 8 },
+    { status: "INTERVENTION_ACTIVE", count: 12 },
+    { status: "MONITORING", count: 5 },
+    { status: "ESCALATED", count: 3 },
+    { status: "RESOLVED", count: 7 },
+    { status: "CLOSED", count: 20 },
+  ],
+  casesByPriority: [
+    { priority: "LOW", count: 12 },
+    { priority: "MEDIUM", count: 28 },
+    { priority: "HIGH", count: 18 },
+    { priority: "CRITICAL", count: 12 },
+  ],
+  casesByCategory: [
+    { category: "Emotional Wellbeing", count: 18 },
+    { category: "Academic Stress", count: 15 },
+    { category: "Bullying", count: 10 },
+    { category: "Attendance Issues", count: 8 },
+    { category: "Family Concerns", count: 7 },
+    { category: "Behavioral Challenges", count: 8 },
+    { category: "Social Isolation", count: 4 },
+  ],
+  monthlyTrends: [
+    { month: "Jan", opened: 12, closed: 8 },
+    { month: "Feb", opened: 15, closed: 10 },
+    { month: "Mar", opened: 18, closed: 14 },
+    { month: "Apr", opened: 14, closed: 12 },
+    { month: "May", opened: 16, closed: 15 },
+    { month: "Jun", opened: 10, closed: 8 },
+  ],
+};
+
+// Case Interventions
+const CASE_INTERVENTIONS = [
+  { id: "int-1", caseId: "c1", interventionType: "COUNSELLING_SESSION", name: "Weekly Counselling Sessions", objective: "Provide ongoing emotional support and coping strategies", owner: { id: "u-couns", fullName: "Priya Sharma" }, dueDate: new Date(NOW + 14 * D).toISOString(), successCriteria: "Student reports reduced anxiety levels and demonstrates coping techniques", status: "IN_PROGRESS", createdAt: new Date(NOW - 3 * D).toISOString() },
+  { id: "int-2", caseId: "c1", interventionType: "EXTERNAL_REFERRAL", name: "External Psychiatry Referral", objective: "Assess need for medication support", owner: { id: "u-couns", fullName: "Priya Sharma" }, dueDate: new Date(NOW + 7 * D).toISOString(), successCriteria: "External assessment completed", status: "IN_PROGRESS", createdAt: new Date(NOW - 2 * D).toISOString() },
+  { id: "int-3", caseId: "c2", interventionType: "COUNSELLING_SESSION", name: "Safety Planning Sessions", objective: "Develop and reinforce safety plan", owner: { id: "u-couns", fullName: "Priya Sharma" }, dueDate: new Date(NOW + 10 * D).toISOString(), successCriteria: "Student has a current safety plan and can articulate it", status: "IN_PROGRESS", createdAt: new Date(NOW - 4 * D).toISOString() },
+  { id: "int-4", caseId: "c2", interventionType: "PARENT_MEETING", name: "Parent Support Session", objective: "Train parents on safety monitoring and support", owner: { id: "u-couns", fullName: "Priya Sharma" }, dueDate: new Date(NOW + 5 * D).toISOString(), successCriteria: "Parents demonstrate understanding of safety protocols", status: "COMPLETED", createdAt: new Date(NOW - 5 * D).toISOString() },
+  { id: "int-5", caseId: "c3", interventionType: "ACADEMIC_ASSISTANCE", name: "Study Skills Workshop", objective: "Help student develop better study habits", owner: { id: "u-teach", fullName: "Rajesh Kumar" }, dueDate: new Date(NOW + 21 * D).toISOString(), successCriteria: "Student shows improvement in assignment completion", status: "NOT_STARTED", createdAt: new Date(NOW - 2 * D).toISOString() },
+  { id: "int-6", caseId: "c4", interventionType: "PEER_SUPPORT", name: "Peer Mentoring Program", objective: "Pair student with a positive peer mentor", owner: { id: "u-couns", fullName: "Priya Sharma" }, dueDate: new Date(NOW + 14 * D).toISOString(), successCriteria: "Student engages positively with mentor", status: "IN_PROGRESS", createdAt: new Date(NOW - 3 * D).toISOString() },
+  { id: "int-7", caseId: "c5", interventionType: "COUNSELLING_SESSION", name: "Social Skills Group", objective: "Improve social interaction skills", owner: { id: "u-couns", fullName: "Sneha Reddy" }, dueDate: new Date(NOW + 10 * D).toISOString(), successCriteria: "Student demonstrates improved peer interactions", status: "IN_PROGRESS", createdAt: new Date(NOW - 5 * D).toISOString() },
+  { id: "int-8", caseId: "c7", interventionType: "TEACHER_SUPPORT", name: "Classroom Accommodations", objective: "Implement behavioral support strategies in class", owner: { id: "u-couns", fullName: "Dr. Anil Kumar" }, dueDate: new Date(NOW + 7 * D).toISOString(), successCriteria: "Teachers report reduced disruptive behavior", status: "IN_PROGRESS", createdAt: new Date(NOW - 8 * D).toISOString() },
+];
+
+// Case Follow-ups
+const CASE_FOLLOW_UPS = [
+  { id: "fu-1", caseId: "c1", scheduledAt: new Date(NOW + 1 * D).toISOString(), status: "SCHEDULED", notes: "Weekly check-in to assess progress", completedAt: null, createdAt: new Date(NOW - 2 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  { id: "fu-2", caseId: "c1", scheduledAt: new Date(NOW - 2 * D).toISOString(), status: "COMPLETED", notes: "Reviewed safety plan - student feeling supported", completedAt: new Date(NOW - 2 * D).toISOString(), createdAt: new Date(NOW - 5 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  { id: "fu-3", caseId: "c2", scheduledAt: new Date(NOW - 1 * D).toISOString(), status: "MISSED", notes: "Student was absent", completedAt: null, createdAt: new Date(NOW - 4 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  { id: "fu-4", caseId: "c2", scheduledAt: new Date(NOW + 2 * D).toISOString(), status: "SCHEDULED", notes: "Rescheduled follow-up", completedAt: null, createdAt: new Date(NOW - 1 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  { id: "fu-5", caseId: "c3", scheduledAt: new Date(NOW + 3 * D).toISOString(), status: "SCHEDULED", notes: "Academic progress review", completedAt: null, createdAt: new Date(NOW - 1 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Dr. Anil Kumar" } },
+  { id: "fu-6", caseId: "c4", scheduledAt: new Date(NOW + 5 * D).toISOString(), status: "SCHEDULED", notes: "Peer mentor check-in", completedAt: null, createdAt: new Date(NOW - 2 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  { id: "fu-7", caseId: "c5", scheduledAt: new Date(NOW - 3 * D).toISOString(), status: "COMPLETED", notes: "Social skills progress reviewed", completedAt: new Date(NOW - 3 * D).toISOString(), createdAt: new Date(NOW - 6 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Sneha Reddy" } },
+  { id: "fu-8", caseId: "c7", scheduledAt: new Date(NOW + 1 * D).toISOString(), status: "SCHEDULED", notes: "Behavioral support plan review with teachers", completedAt: null, createdAt: new Date(NOW - 1 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Dr. Anil Kumar" } },
+];
+
+// Case Notes
+const CASE_NOTES = [
+  { id: "cn-1", caseId: "c1", noteType: "COUNSELLOR_NOTE", title: "Initial Assessment", content: "Student presented with significant emotional distress. Self-harm ideation disclosed during check-in. Crisis protocol activated immediately.", createdAt: new Date(NOW - 3 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma", role: "COUNSELLOR" } },
+  { id: "cn-2", caseId: "c1", noteType: "TEACHER_NOTE", title: "Classroom Observation", content: "Student appeared withdrawn during class. Did not participate in group activities. Teacher concerned about academic decline.", createdAt: new Date(NOW - 2.5 * D).toISOString(), createdBy: { id: "u-teach", fullName: "Rajesh Kumar", role: "TEACHER" } },
+  { id: "cn-3", caseId: "c1", noteType: "ADMINISTRATIVE_NOTE", title: "Escalation Record", content: "Case escalated to Principal due to critical risk level. External referral initiated.", createdAt: new Date(NOW - 2 * D).toISOString(), createdBy: { id: "u-admin", fullName: "Aarav Mehta", role: "ADMIN" } },
+  { id: "cn-4", caseId: "c2", noteType: "COUNSELLOR_NOTE", title: "Safety Plan Discussion", content: "Developed a comprehensive safety plan with student. Identified trusted adults and coping strategies. Student agreed to daily check-ins.", createdAt: new Date(NOW - 4 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma", role: "COUNSELLOR" } },
+  { id: "cn-5", caseId: "c3", noteType: "COUNSELLOR_NOTE", title: "Academic Anxiety Assessment", content: "Student reports feeling overwhelmed by board exam preparations. Sleep patterns affected. Introduced relaxation techniques.", createdAt: new Date(NOW - 6 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Dr. Anil Kumar", role: "COUNSELLOR" } },
+  { id: "cn-6", caseId: "c4", noteType: "TEACHER_NOTE", title: "Behavioral Incident", content: "Student involved in physical altercation during recess. No injuries but situation escalated quickly. Mediation scheduled.", createdAt: new Date(NOW - 4 * D).toISOString(), createdBy: { id: "u-teach", fullName: "Lakshmi Iyer", role: "TEACHER" } },
+  { id: "cn-7", caseId: "c5", noteType: "COUNSELLOR_NOTE", title: "Social Skills Progress", content: "Student showed improved engagement during group session. Making eye contact and participating more. Continue current approach.", createdAt: new Date(NOW - 3 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Sneha Reddy", role: "COUNSELLOR" } },
+  { id: "cn-8", caseId: "c7", noteType: "COUNSELLOR_NOTE", title: "Emotional Regulation Update", content: "Student used grounding technique during frustrating situation - first time applying learned skill independently. Positive progress.", createdAt: new Date(NOW - 2 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Dr. Anil Kumar", role: "COUNSELLOR" } },
+];
+
+// Parent Interactions
+const PARENT_INTERACTIONS = [
+  { id: "pi-1", caseId: "c1", interactionType: "PHONE_CALL", date: new Date(NOW - 2 * D).toISOString(), outcome: "Parents informed about crisis protocol. Agreed to increased monitoring at home and scheduling external evaluation.", nextActions: "Complete external psychiatric evaluation", createdBy: { id: "u-couns", fullName: "Priya Sharma" }, createdAt: new Date(NOW - 2 * D).toISOString() },
+  { id: "pi-2", caseId: "c1", interactionType: "PARENT_MEETING", date: new Date(NOW - 1 * D).toISOString(), outcome: "Met with parents and student together. Safety plan reviewed and reinforced. Parents committed to daily check-ins.", nextActions: "Weekly updates to parents", createdBy: { id: "u-couns", fullName: "Priya Sharma" }, createdAt: new Date(NOW - 1 * D).toISOString() },
+  { id: "pi-3", caseId: "c2", interactionType: "PARENT_MEETING", date: new Date(NOW - 5 * D).toISOString(), outcome: "Trained parents on safety monitoring. Provided emergency contacts and crisis resources.", nextActions: "Follow-up in 2 weeks to assess home environment", createdBy: { id: "u-couns", fullName: "Priya Sharma" }, createdAt: new Date(NOW - 5 * D).toISOString() },
+  { id: "pi-4", caseId: "c2", interactionType: "PHONE_CALL", date: new Date(NOW - 1 * D).toISOString(), outcome: "Student missed scheduled session. Parents confirmed absence and will ensure attendance.", nextActions: "Reschedule missed session", createdBy: { id: "u-couns", fullName: "Priya Sharma" }, createdAt: new Date(NOW - 1 * D).toISOString() },
+  { id: "pi-5", caseId: "c3", interactionType: "EMAIL", date: new Date(NOW - 3 * D).toISOString(), outcome: "Sent parents information about managing exam stress at home. Provided resources and tips.", nextActions: null, createdBy: { id: "u-couns", fullName: "Dr. Anil Kumar" }, createdAt: new Date(NOW - 3 * D).toISOString() },
+  { id: "pi-6", caseId: "c4", interactionType: "PARENT_MEETING", date: new Date(NOW - 3 * D).toISOString(), outcome: "Discussed behavioral incident with parents. They agreed to family counselling. Student will have reduced screen time.", nextActions: "Family counselling appointment scheduled", createdBy: { id: "u-couns", fullName: "Priya Sharma" }, createdAt: new Date(NOW - 3 * D).toISOString() },
+  { id: "pi-7", caseId: "c7", interactionType: "PHONE_CALL", date: new Date(NOW - 4 * D).toISOString(), outcome: "Parents reported positive behavior at home this week. Student is using coping techniques.", nextActions: "Continue weekly check-ins", createdBy: { id: "u-couns", fullName: "Dr. Anil Kumar" }, createdAt: new Date(NOW - 4 * D).toISOString() },
+];
+
+// Risk Assessments
+const RISK_ASSESSMENTS = [
+  { id: "ra-1", caseId: "c1", riskLevel: "CRITICAL_RISK", riskScore: 91, riskFactors: [{ factor: "Self-harm ideation", currentValue: "Active", previousValue: "None", trend: "declining" }, { factor: "Academic performance", currentValue: "Declining", previousValue: "Stable", trend: "declining" }, { factor: "Social engagement", currentValue: "Isolated", previousValue: "Moderate", trend: "declining" }, { factor: "Sleep patterns", currentValue: "Poor", previousValue: "Average", trend: "declining" }], assessedAt: new Date(NOW - 1 * D).toISOString(), assessedBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  { id: "ra-2", caseId: "c2", riskLevel: "HIGH_RISK", riskScore: 78, riskFactors: [{ factor: "Self-harm ideation", currentValue: "Present", previousValue: "None", trend: "declining" }, { factor: "Safety plan adherence", currentValue: "Good", previousValue: "N/A", trend: "improving" }, { factor: "Support system", currentValue: "Moderate", previousValue: "Limited", trend: "improving" }], assessedAt: new Date(NOW - 2 * D).toISOString(), assessedBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  { id: "ra-3", caseId: "c3", riskLevel: "MODERATE_RISK", riskScore: 55, riskFactors: [{ factor: "Academic stress", currentValue: "High", previousValue: "Moderate", trend: "stable" }, { factor: "Sleep quality", currentValue: "Fair", previousValue: "Good", trend: "declining" }, { factor: "Coping strategies", currentValue: "Developing", previousValue: "Limited", trend: "improving" }], assessedAt: new Date(NOW - 3 * D).toISOString(), assessedBy: { id: "u-couns", fullName: "Dr. Anil Kumar" } },
+  { id: "ra-4", caseId: "c4", riskLevel: "HIGH_RISK", riskScore: 72, riskFactors: [{ factor: "Behavioral incidents", currentValue: "Frequent", previousValue: "Moderate", trend: "stable" }, { factor: "Peer relationships", currentValue: "Conflict", previousValue: "Neutral", trend: "declining" }, { factor: "Impulse control", currentValue: "Poor", previousValue: "Fair", trend: "declining" }], assessedAt: new Date(NOW - 2 * D).toISOString(), assessedBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  { id: "ra-5", caseId: "c7", riskLevel: "HIGH_RISK", riskScore: 68, riskFactors: [{ factor: "Emotional regulation", currentValue: "Improving", previousValue: "Poor", trend: "improving" }, { factor: "Classroom behavior", currentValue: "Occasional issues", previousValue: "Frequent issues", trend: "improving" }, { factor: "Academic engagement", currentValue: "Moderate", previousValue: "Low", trend: "improving" }], assessedAt: new Date(NOW - 1 * D).toISOString(), assessedBy: { id: "u-couns", fullName: "Dr. Anil Kumar" } },
+];
+
+// Escalation Events
+const ESCALATION_EVENTS = [
+  { id: "esc-1", caseId: "c1", escalatedTo: "COORDINATOR", reason: "Critical risk level - requires additional oversight", escalatedAt: new Date(NOW - 2 * D).toISOString(), escalatedBy: { id: "u-couns", fullName: "Priya Sharma" }, status: "ACKNOWLEDGED" },
+  { id: "esc-2", caseId: "c1", escalatedTo: "PRINCIPAL", reason: "Student disclosed self-harm ideation - immediate escalation required", escalatedAt: new Date(NOW - 3 * D).toISOString(), escalatedBy: { id: "u-couns", fullName: "Priya Sharma" }, status: "RESOLVED" },
+  { id: "esc-3", caseId: "c2", escalatedTo: "COORDINATOR", reason: "High risk with recent deterioration", escalatedAt: new Date(NOW - 3 * D).toISOString(), escalatedBy: { id: "u-couns", fullName: "Priya Sharma" }, status: "ACKNOWLEDGED" },
+  { id: "esc-4", caseId: "c4", escalatedTo: "COORDINATOR", reason: "Physical altercation - safety concern", escalatedAt: new Date(NOW - 4 * D).toISOString(), escalatedBy: { id: "u-couns", fullName: "Priya Sharma" }, status: "RESOLVED" },
+];
+
+// Student Journey Events (per student)
+const STUDENT_JOURNEY_EVENTS: Record<string, Array<{ id: string; studentId: string; eventType: string; title: string; description: string; createdAt: string; createdBy?: { id: string; fullName: string } }>> = {
+  "s4": [
+    { id: "je-s4-1", studentId: "s4", eventType: "OBSERVATION_ADDED", title: "Teacher Observation", description: "Student appeared withdrawn in class. Not participating in group activities.", createdAt: new Date(NOW - 10 * D).toISOString(), createdBy: { id: "u-teach", fullName: "Rajesh Kumar" } },
+    { id: "je-s4-2", studentId: "s4", eventType: "FLAG_RAISED", title: "Emotional Distress Flag", description: "Student flagged for emotional wellbeing concerns by class teacher.", createdAt: new Date(NOW - 8 * D).toISOString(), createdBy: { id: "u-teach", fullName: "Rajesh Kumar" } },
+    { id: "je-s4-3", studentId: "s4", eventType: "CASE_OPENED", title: "Case Opened", description: "Crisis intervention case opened after self-harm ideation disclosed.", createdAt: new Date(NOW - 3 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+    { id: "je-s4-4", studentId: "s4", eventType: "COUNSELLING_SESSION", title: "Initial Crisis Session", description: "First counselling session to assess immediate safety needs.", createdAt: new Date(NOW - 2.5 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+    { id: "je-s4-5", studentId: "s4", eventType: "RISK_ASSESSMENT", title: "Risk Assessment Completed", description: "Critical risk level identified. Risk score: 91.", createdAt: new Date(NOW - 2 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+    { id: "je-s4-6", studentId: "s4", eventType: "ESCALATION", title: "Escalated to Principal", description: "Case escalated due to critical risk level and self-harm disclosure.", createdAt: new Date(NOW - 3 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+    { id: "je-s4-7", studentId: "s4", eventType: "INTERVENTION_ADDED", title: "Intervention Planned", description: "Weekly counselling sessions and external referral initiated.", createdAt: new Date(NOW - 3 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+    { id: "je-s4-8", studentId: "s4", eventType: "PARENT_MEETING", title: "Parent Meeting", description: "Met with parents to discuss safety plan and home support.", createdAt: new Date(NOW - 1 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  ],
+  "s1": [
+    { id: "je-s1-1", studentId: "s1", eventType: "FLAG_RAISED", title: "Self-harm Concern Flag", description: "Teacher reported concerning statements in student journal.", createdAt: new Date(NOW - 7 * D).toISOString(), createdBy: { id: "u-teach", fullName: "Rajesh Kumar" } },
+    { id: "je-s1-2", studentId: "s1", eventType: "CASE_OPENED", title: "Case Opened", description: "Self-harm monitoring case opened.", createdAt: new Date(NOW - 5 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+    { id: "je-s1-3", studentId: "s1", eventType: "COUNSELLING_SESSION", title: "Safety Planning Session", description: "Developed safety plan with student.", createdAt: new Date(NOW - 4 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+    { id: "je-s1-4", studentId: "s1", eventType: "PARENT_MEETING", title: "Parent Support Training", description: "Trained parents on safety monitoring.", createdAt: new Date(NOW - 5 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+    { id: "je-s1-5", studentId: "s1", eventType: "INTERVENTION_ADDED", title: "Safety Plan Intervention", description: "Ongoing safety planning and daily check-ins.", createdAt: new Date(NOW - 4 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  ],
+  "s7": [
+    { id: "je-s7-1", studentId: "s7", eventType: "OBSERVATION_ADDED", title: "Physical Altercation", description: "Student involved in fight during recess.", createdAt: new Date(NOW - 12 * H).toISOString(), createdBy: { id: "u-teach", fullName: "Lakshmi Iyer" } },
+    { id: "je-s7-2", studentId: "s7", eventType: "FLAG_RAISED", title: "Behavioral Concern Flag", description: "Aggressive behavior flagged.", createdAt: new Date(NOW - 12 * H).toISOString(), createdBy: { id: "u-teach", fullName: "Lakshmi Iyer" } },
+    { id: "je-s7-3", studentId: "s7", eventType: "CASE_OPENED", title: "Case Opened", description: "Behavioural support case opened.", createdAt: new Date(NOW - 4 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+    { id: "je-s7-4", studentId: "s7", eventType: "PARENT_MEETING", title: "Parent Meeting", description: "Discussed incident with parents. Agreed to family counselling.", createdAt: new Date(NOW - 3 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+    { id: "je-s7-5", studentId: "s7", eventType: "INTERVENTION_ADDED", title: "Peer Mentoring", description: "Student paired with peer mentor for positive engagement.", createdAt: new Date(NOW - 3 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Priya Sharma" } },
+  ],
+  "s13": [
+    { id: "je-s13-1", studentId: "s13", eventType: "OBSERVATION_ADDED", title: "Outburst During Activity", description: "Outburst during group activity - pushed a chair.", createdAt: new Date(NOW - 3 * H).toISOString(), createdBy: { id: "u-teach", fullName: "Rajesh Kumar" } },
+    { id: "je-s13-2", studentId: "s13", eventType: "FLAG_RAISED", title: "Emotional Distress Flag", description: "Aggressive behaviour flagged as Emotional Distress.", createdAt: new Date(NOW - 2 * H).toISOString(), createdBy: { id: "u-teach", fullName: "Rajesh Kumar" } },
+    { id: "je-s13-3", studentId: "s13", eventType: "CASE_OPENED", title: "Case Opened", description: "Emotional regulation case opened.", createdAt: new Date(NOW - 10 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Dr. Anil Kumar" } },
+    { id: "je-s13-4", studentId: "s13", eventType: "INTERVENTION_ADDED", title: "Classroom Accommodations", description: "Behavioral support strategies being implemented in class.", createdAt: new Date(NOW - 8 * D).toISOString(), createdBy: { id: "u-couns", fullName: "Dr. Anil Kumar" } },
+  ],
+};
+
+// High Risk Cases
+const HIGH_RISK_CASES = [
+  { id: "c1", title: "Crisis intervention - Ananya Reddy", student: { id: "s4", firstName: "Ananya", lastName: "Reddy", grade: "9", classroom: "9C" }, riskLevel: "CRITICAL_RISK", priority: "CRITICAL", status: "INTERVENTION_ACTIVE", assignedCounsellor: { fullName: "Priya Sharma" }, lastUpdated: new Date(NOW - 1 * D).toISOString(), overdueFollowUps: 0, daysOpen: 3 },
+  { id: "c2", title: "Self-harm monitoring - Arjun Patel", student: { id: "s1", firstName: "Arjun", lastName: "Patel", grade: "8", classroom: "8A" }, riskLevel: "HIGH_RISK", priority: "HIGH", status: "INTERVENTION_ACTIVE", assignedCounsellor: { fullName: "Priya Sharma" }, lastUpdated: new Date(NOW - 1 * D).toISOString(), overdueFollowUps: 1, daysOpen: 5 },
+  { id: "c4", title: "Behavioural support - Aryan Joshi", student: { id: "s7", firstName: "Aryan", lastName: "Joshi", grade: "8", classroom: "8B" }, riskLevel: "HIGH_RISK", priority: "HIGH", status: "ASSESSMENT_IN_PROGRESS", assignedCounsellor: { fullName: "Priya Sharma" }, lastUpdated: new Date(NOW - 2 * D).toISOString(), overdueFollowUps: 0, daysOpen: 4 },
+  { id: "c7", title: "Emotional regulation - Karan Mehta", student: { id: "s13", firstName: "Karan", lastName: "Mehta", grade: "8", classroom: "8A" }, riskLevel: "HIGH_RISK", priority: "HIGH", status: "INTERVENTION_ACTIVE", assignedCounsellor: { fullName: "Dr. Anil Kumar" }, lastUpdated: new Date(NOW - 1 * D).toISOString(), overdueFollowUps: 0, daysOpen: 10 },
+];
+
+// Case Analytics
+const CASE_ANALYTICS = {
+  casesByCategory: [
+    { name: "Emotional Wellbeing", value: 18 },
+    { name: "Academic Stress", value: 15 },
+    { name: "Bullying", value: 10 },
+    { name: "Attendance Issues", value: 8 },
+    { name: "Family Concerns", value: 7 },
+    { name: "Behavioral Challenges", value: 8 },
+    { name: "Social Isolation", value: 4 },
+  ],
+  casesByGrade: [
+    { grade: "5", count: 8 },
+    { grade: "6", count: 12 },
+    { grade: "7", count: 15 },
+    { grade: "8", count: 18 },
+    { grade: "9", count: 10 },
+    { grade: "10", count: 7 },
+  ],
+  casesByPriority: [
+    { name: "Low", value: 12 },
+    { name: "Medium", value: 28 },
+    { name: "High", value: 18 },
+    { name: "Critical", value: 12 },
+  ],
+  resolutionRate: 72,
+  averageClosureDays: 24,
+  escalationRate: 15,
+  monthlyTrends: [
+    { month: "Jan", cases: 12 },
+    { month: "Feb", cases: 15 },
+    { month: "Mar", cases: 18 },
+    { month: "Apr", cases: 14 },
+    { month: "May", cases: 16 },
+    { month: "Jun", cases: 10 },
+  ],
+  interventionSuccessRates: [
+    { type: "Counselling Sessions", successRate: 78 },
+    { type: "Peer Support", successRate: 65 },
+    { type: "Academic Assistance", successRate: 72 },
+    { type: "Parent Engagement", successRate: 82 },
+    { type: "Teacher Support", successRate: 70 },
+  ],
+};
+
+// Outcome Measurements
+const OUTCOME_MEASUREMENTS: Record<string, { caseId: string; academicImprovement: number; attendanceImprovement: number; behavioralImprovement: number; emotionalWellbeingImprovement: number; overallProgressScore: number; trend: "improving" | "stable" | "declining"; lastUpdated: string }> = {
+  "c5": { caseId: "c5", academicImprovement: 20, attendanceImprovement: 15, behavioralImprovement: 30, emotionalWellbeingImprovement: 25, overallProgressScore: 68, trend: "improving", lastUpdated: new Date(NOW - 1 * D).toISOString() },
+  "c7": { caseId: "c7", academicImprovement: 10, attendanceImprovement: 25, behavioralImprovement: 40, emotionalWellbeingImprovement: 35, overallProgressScore: 72, trend: "improving", lastUpdated: new Date(NOW - 1 * D).toISOString() },
+};
 
 // ======================== SESSIONS ========================
 const SESSIONS = [
@@ -82,17 +286,375 @@ const INCIDENTS = [
   { id:"inc-4", severity:"CRITICAL", incidentType:"Substance concern - Vikram Singh", description:"Suspected substance possession reported by peer. Campus security involved.", actionTaken:"Student search conducted. Counsellor debrief completed. Disciplinary committee notified.", createdAt:new Date(NOW-7*D).toISOString(), student:{firstName:"Vikram",lastName:"Singh"} },
 ];
 
-// ======================== FLAGS & OBSERVATIONS (in-memory) ========================
-const FLAGS: Array<any> = [
-  { id: "f-1", classroom: "8A", studentId: "s13", raisedBy: "Rajesh Kumar", reason: "Aggressive behaviour observed in class", createdAt: new Date(NOW-2*H).toISOString() },
-  { id: "f-2", classroom: "6A", studentId: "s11", raisedBy: "Lakshmi Iyer", reason: "Attendance concerns and withdrawn behaviour", createdAt: new Date(NOW-1*D).toISOString() },
+// ======================== OBSERVATIONS (in-memory) ========================
+const OBSERVATIONS: Array<ObservationEntry> = [
+  { id: "o-1", classroom: "8A", studentId: "s13", type: "BEHAVIOURAL", severity: "HIGH", notes: "Outburst during group activity", createdAt: new Date(NOW-3*H).toISOString(), createdBy: "Rajesh Kumar" },
+  { id: "o-2", classroom: "9C", studentId: "s4", type: "EMOTIONAL", severity: "HIGH", notes: "Low mood reported in check-in", createdAt: new Date(NOW-5*H).toISOString(), createdBy: "Priya Sharma" },
 ];
 
-const OBSERVATIONS: Array<any> = [
-  { id: "o-1", classroom: "8A", studentId: "s13", observedBy: "Rajesh Kumar", notes: "Outburst during group activity", createdAt: new Date(NOW-3*H).toISOString() },
-  { id: "o-2", classroom: "9C", studentId: "s4", observedBy: "Priya Sharma", notes: "Low mood reported in check-in", createdAt: new Date(NOW-5*H).toISOString() },
+
+// ======================== ACADEMIC & WELLBEING DATA ========================
+const ACADEMIC_DATA: Record<string, { attendancePercent: number; assignmentCompletionPercent: number; recentPerformance: string }> = {
+  s1:  { attendancePercent: 78, assignmentCompletionPercent: 65, recentPerformance: "Declining — Maths and Science dropped15%" },
+  s2:  { attendancePercent: 92, assignmentCompletionPercent: 88, recentPerformance: "Consistent — Top10% of class" },
+  s3:  { attendancePercent: 85, assignmentCompletionPercent: 72, recentPerformance: "Stable — Average performance" },
+  s4:  { attendancePercent: 70, assignmentCompletionPercent: 58, recentPerformance: "Declining — Withdrawn from activities" },
+  s5:  { attendancePercent: 95, assignmentCompletionPercent: 90, recentPerformance: "Excellent — All subjects above85%" },
+  s6:  { attendancePercent: 98, assignmentCompletionPercent: 95, recentPerformance: "Outstanding — Consistent high achiever" },
+  s7:  { attendancePercent: 72, assignmentCompletionPercent: 62, recentPerformance: "Declining — Behaviour affecting performance" },
+  s8:  { attendancePercent: 96, assignmentCompletionPercent: 92, recentPerformance: "Excellent — Engaged and proactive" },
+  s9:  { attendancePercent: 80, assignmentCompletionPercent: 75, recentPerformance: "Stable — Minor anxiety affecting exams" },
+  s10: { attendancePercent: 99, assignmentCompletionPercent: 98, recentPerformance: "Outstanding — Top performer" },
+  s11: { attendancePercent: 75, assignmentCompletionPercent: 68, recentPerformance: "Declining — Outbursts affecting focus" },
+  s12: { attendancePercent: 94, assignmentCompletionPercent: 91, recentPerformance: "Good — Consistent and reliable" },
+  s13: { attendancePercent: 68, assignmentCompletionPercent: 55, recentPerformance: "Declining — Aggressive behaviour noted" },
+  s14: { attendancePercent: 97, assignmentCompletionPercent: 93, recentPerformance: "Excellent — Socially well-integrated" },
+  s15: { attendancePercent: 88, assignmentCompletionPercent: 80, recentPerformance: "Good — Improving steadily" },
+};
+
+const WELLBEING_DATA: Record<string, { selParticipation: number; emotionalWellnessScore: number }> = {
+  s1:  { selParticipation: 45, emotionalWellnessScore: 28 },
+  s2:  { selParticipation: 78, emotionalWellnessScore: 62 },
+  s3:  { selParticipation: 65, emotionalWellnessScore: 55 },
+  s4:  { selParticipation: 30, emotionalWellnessScore: 22 },
+  s5:  { selParticipation: 88, emotionalWellnessScore: 74 },
+  s6:  { selParticipation: 95, emotionalWellnessScore: 88 },
+  s7:  { selParticipation: 40, emotionalWellnessScore: 35 },
+  s8:  { selParticipation: 92, emotionalWellnessScore: 85 },
+  s9:  { selParticipation: 60, emotionalWellnessScore: 48 },
+  s10: { selParticipation: 98, emotionalWellnessScore: 90 },
+  s11: { selParticipation: 50, emotionalWellnessScore: 42 },
+  s12: { selParticipation: 85, emotionalWellnessScore: 78 },
+  s13: { selParticipation: 35, emotionalWellnessScore: 30 },
+  s14: { selParticipation: 90, emotionalWellnessScore: 82 },
+  s15: { selParticipation: 70, emotionalWellnessScore: 65 },
+};
+
+const SEL_PROGRESS: Record<string, { assigned: number; completed: number; pending: number }> = {
+  s1:  { assigned: 8, completed: 4, pending: 2 },
+  s2:  { assigned: 6, completed: 5, pending: 0 },
+  s3:  { assigned: 7, completed: 4, pending: 1 },
+  s4:  { assigned: 10, completed: 3, pending: 4 },
+  s5:  { assigned: 5, completed: 5, pending: 0 },
+  s6:  { assigned: 4, completed: 4, pending: 0 },
+  s7:  { assigned: 9, completed: 3, pending: 3 },
+  s8:  { assigned: 5, completed: 5, pending: 0 },
+  s9:  { assigned: 6, completed: 3, pending: 1 },
+  s10: { assigned: 3, completed: 3, pending: 0 },
+  s11: { assigned: 7, completed: 3, pending: 2 },
+  s12: { assigned: 4, completed: 3, pending: 0 },
+  s13: { assigned: 8, completed: 2, pending: 3 },
+  s14: { assigned: 4, completed: 4, pending: 0 },
+  s15: { assigned: 6, completed: 4, pending: 1 },
+};
+
+// ======================== RICH OBSERVATIONS (20+) ========================
+const OBSERVATIONS_RICH: Array<ObservationEntry> = [
+  { id:"obs-1", studentId:"s13", classroom:"8A", type:"BEHAVIOURAL", severity:"HIGH", notes:"Outburst during group activity — pushed a chair at another student", createdAt:new Date(NOW-3*H).toISOString(), createdBy:"Rajesh Kumar" },
+  { id:"obs-2", studentId:"s4", classroom:"9C", type:"EMOTIONAL", severity:"HIGH", notes:"Low mood reported in morning check-in. Withdrawn during break.", createdAt:new Date(NOW-5*H).toISOString(), createdBy:"Priya Sharma" },
+  { id:"obs-3", studentId:"s1", classroom:"8A", type:"BEHAVIOURAL", severity:"MEDIUM", notes:"Aggressive response to peer feedback in Science class", createdAt:new Date(NOW-8*H).toISOString(), createdBy:"Rajesh Kumar" },
+  { id:"obs-4", studentId:"s7", classroom:"8B", type:"BEHAVIOURAL", severity:"HIGH", notes:"Physical altercation during recess — punched a wall", createdAt:new Date(NOW-12*H).toISOString(), createdBy:"Lakshmi Iyer" },
+  { id:"obs-5", studentId:"s11", classroom:"6A", type:"ACADEMIC", severity:"MEDIUM", notes:"Assignment submission dropped from 90% to 55% in past month", createdAt:new Date(NOW-1*D).toISOString(), createdBy:"Sunita O'Brien" },
+  { id:"obs-6", studentId:"s9", classroom:"7C", type:"ATTENDANCE", severity:"MEDIUM", notes:"4 absences in the last2 weeks — family trip reported", createdAt:new Date(NOW-2*D).toISOString(), createdBy:"Ravi Patel" },
+  { id:"obs-7", studentId:"s2", classroom:"10B", type:"SOCIAL", severity:"LOW", notes:"Noticed eating alone during lunch — usually social", createdAt:new Date(NOW-18*H).toISOString(), createdBy:"Anita Verma" },
+  { id:"obs-8", studentId:"s6", classroom:"5A", type:"EMOTIONAL", severity:"LOW", notes:"Seemed anxious before the Math test — breathing exercises helped", createdAt:new Date(NOW-20*H).toISOString(), createdBy:"Meera Joshi" },
+  { id:"obs-9", studentId:"s3", classroom:"7A", type:"ACADEMIC", severity:"MEDIUM", notes:"Struggling with reading comprehension — possible dyslexia screening needed", createdAt:new Date(NOW-1*D).toISOString(), createdBy:"Deepa Menon" },
+  { id:"obs-10", studentId:"s15", classroom:"10C", type:"SOCIAL", severity:"LOW", notes:"Participated actively in group discussion — good improvement", createdAt:new Date(NOW-30*H).toISOString(), createdBy:"Sneha Reddy" },
+  { id:"obs-11", studentId:"s5", classroom:"6B", type:"BEHAVIOURAL", severity:"LOW", notes:"Helped a younger student who fell during assembly — positive leadership", createdAt:new Date(NOW-4*H).toISOString(), createdBy:"Anita Verma" },
+  { id:"obs-12", studentId:"s8", classroom:"10A", type:"EMOTIONAL", severity:"LOW", notes:"Reported feeling stressed about board exams — coping strategies discussed", createdAt:new Date(NOW-6*H).toISOString(), createdBy:"Dr. Anil Kumar" },
+  { id:"obs-13", studentId:"s12", classroom:"9B", type:"ATTENDANCE", severity:"LOW", notes:"Late arrival3 times this week — alarm issue reported", createdAt:new Date(NOW-10*H).toISOString(), createdBy:"Sunita O'Brien" },
+  { id:"obs-14", studentId:"s14", classroom:"7B", type:"SOCIAL", severity:"LOW", notes:"Facilitated peer study group — excellent social skills", createdAt:new Date(NOW-36*H).toISOString(), createdBy:"Deepa Menon" },
+  { id:"obs-15", studentId:"s10", classroom:"5B", type:"ACADEMIC", severity:"LOW", notes:"Creative project submission — exceeded expectations", createdAt:new Date(NOW-48*H).toISOString(), createdBy:"Meera Joshi" },
+  { id:"obs-16", studentId:"s13", classroom:"8A", type:"EMOTIONAL", severity:"HIGH", notes:"Expressed hopelessness about academic performance — immediate check-in needed", createdAt:new Date(NOW-6*H).toISOString(), createdBy:"Priya Sharma" },
+  { id:"obs-17", studentId:"s4", classroom:"9C", type:"BEHAVIOURAL", severity:"CRITICAL", notes:"Self-harm ideation disclosed to class teacher", createdAt:new Date(NOW-1*H).toISOString(), createdBy:"Rajesh Kumar" },
+  { id:"obs-18", studentId:"s7", classroom:"8B", type:"ACADEMIC", severity:"MEDIUM", notes:"Test anxiety causing incomplete papers — extra time granted", createdAt:new Date(NOW-2*D).toISOString(), createdBy:"Lakshmi Iyer" },
+  { id:"obs-19", studentId:"s1", classroom:"8A", type:"ATTENDANCE", severity:"MEDIUM", notes:"Arrived late 5 times — pattern suggests avoidance of specific class", createdAt:new Date(NOW-3*D).toISOString(), createdBy:"Ravi Patel" },
+  { id:"obs-20", studentId:"s11", classroom:"6A", type:"SOCIAL", severity:"MEDIUM", notes:"Excluded from peer group during lunch — possible social isolation", createdAt:new Date(NOW-5*D).toISOString(), createdBy:"Sunita O'Brien" },
+  { id:"obs-21", studentId:"s2", classroom:"10B", type:"EMOTIONAL", severity:"MEDIUM", notes:"Mood swings noted — tearful after PTM results discussion", createdAt:new Date(NOW-7*D).toISOString(), createdBy:"Dr. Anil Kumar" },
+  { id:"obs-22", studentId:"s9", classroom:"7C", type:"BEHAVIOURAL", severity:"LOW", notes:"Apologized unprompted after losing temper — good self-awareness", createdAt:new Date(NOW-9*D).toISOString(), createdBy:"Ravi Patel" },
 ];
 
+// ======================== FLAG HISTORY ========================
+const FLAGS_HISTORY: Array<FlagEntry> = [
+  { id:"fh-1", studentId:"s13", classroom:"8A", category:"EMOTIONAL_DISTRESS", priority:"HIGH", notes:"Aggressive behaviour observed in class", status:"OPEN", createdAt:new Date(NOW-2*H).toISOString(), createdBy:"Rajesh Kumar", updatedAt:new Date(NOW-1*H).toISOString(), updatedBy:"Priya Sharma" },
+  { id:"fh-2", studentId:"s11", classroom:"6A", category:"ATTENDANCE_ISSUES", priority:"MEDIUM", notes:"Attendance concerns and withdrawn behaviour", status:"OPEN", createdAt:new Date(NOW-1*D).toISOString(), createdBy:"Lakshmi Iyer" },
+  { id:"fh-3", studentId:"s4", classroom:"9C", category:"EMOTIONAL_DISTRESS", priority:"CRITICAL", notes:"Self-harm ideation disclosed — crisis protocol activated", status:"OPEN", createdAt:new Date(NOW-H).toISOString(), createdBy:"Priya Sharma", updatedAt:new Date(NOW-30*60*1000).toISOString(), updatedBy:"Dr. Anil Kumar" },
+  { id:"fh-4", studentId:"s7", classroom:"8B", category:"BULLYING", priority:"HIGH", notes:"Physical altercation — peer conflict escalation", status:"RESOLVED", createdAt:new Date(NOW-4*D).toISOString(), createdBy:"Lakshmi Iyer", resolvedAt:new Date(NOW-2*D).toISOString() },
+  { id:"fh-5", studentId:"s1", classroom:"8A", category:"ACADEMIC_DECLINE", priority:"MEDIUM", notes:"Grades dropped 20% — maths and science affected", status:"RESOLVED", createdAt:new Date(NOW-10*D).toISOString(), createdBy:"Rajesh Kumar", updatedAt:new Date(NOW-7*D).toISOString(), updatedBy:"Rajesh Kumar", resolvedAt:new Date(NOW-5*D).toISOString() },
+  { id:"fh-6", studentId:"s9", classroom:"7C", category:"SOCIAL_ISOLATION", priority:"LOW", notes:"Eating alone during lunch — possible exclusion", status:"RESOLVED", createdAt:new Date(NOW-7*D).toISOString(), createdBy:"Ravi Patel", resolvedAt:new Date(NOW-3*D).toISOString() },
+  { id:"fh-7", studentId:"s3", classroom:"7A", category:"ACADEMIC_DECLINE", priority:"MEDIUM", notes:"Reading comprehension difficulties — screening needed", status:"OPEN", createdAt:new Date(NOW-1*D).toISOString(), createdBy:"Deepa Menon" },
+  { id:"fh-8", studentId:"s2", classroom:"10B", category:"EMOTIONAL_DISTRESS", priority:"MEDIUM", notes:"Mood swings and tearfulness reported by PTM", status:"OPEN", createdAt:new Date(NOW-7*D).toISOString(), createdBy:"Dr. Anil Kumar" },
+];
+
+// ======================== NAME POOL FOR SYNTHETIC STUDENTS ========================
+const FIRST_NAMES_M = ["Aarav","Vivaan","Aditya","Vihaan","Arjun","Reyansh","Sai","Aryan","Krishna","Ishaan","Shaurya","Atharv","Ayush","Aarush","Advait","Pranav","Adhrit","Riaan","Veer","Samarth","Devansh","Yash","Arnav","Kabir","Rudra","Ansh","Kian","Darsh","Aarush","Veer","Aaditya","Rohit","Saurav","Kunal","Manan","Yuvraj","Hriday","Tejas","Nirvan","Akshar"];
+const FIRST_NAMES_F = ["Saanvi","Aanya","Aadhya","Aaradhya","Ananya","Pari","Anika","Isha","Anvi","Navya","Arya","Myra","Ira","Aahana","Anaya","Pihu","Riya","Aaradhya","Aarohi","Anvi","Prisha","Kavya","Khushi","Aarna","Ishita","Siya","Tara","Misha","Anvi","Kiara","Nitya","Sara","Mira","Aditi","Riya","Suhana","Trisha","Mahika","Pranavi","Ishani","Aahana"];
+const LAST_NAMES = ["Sharma","Verma","Patel","Reddy","Iyer","Nair","Khan","Kapoor","Joshi","Rao","Mehta","Bose","Chatterjee","Banerjee","Mukherjee","Das","Gupta","Singh","Kumar","Mishra","Yadav","Pandey","Saxena","Srinivasan","Bhat","Pillai","Menon","Kaur","Dhillon","Chopra","Bajaj","Malhotra","Khanna","Sethi","Ahuja","Bhatt","Soni","Trivedi","Desai"];
+const FATHER_NAMES = ["Rajesh","Suresh","Anil","Vijay","Prakash","Manoj","Arun","Dinesh","Ramesh","Sanjay","Mahesh","Ashok","Karthik","Ravi","Sunil","Naveen","Pradeep","Vinod","Ganesh","Rakesh","Subramaniam","Raghunathan","Harish","Pankaj","Mohan","Rajendra","Devendra","Yogesh","Naresh","Umesh"];
+const MOTHER_NAMES = ["Sunita","Anita","Priya","Meena","Lakshmi","Sushma","Kavita","Rekha","Geeta","Asha","Pooja","Sapna","Seema","Neeta","Anjali","Nirmala","Mala","Reema","Vandana","Sarita","Indira","Radha","Sneha","Nandini","Lalitha","Saroj","Kiran","Manju","Suman","Urmila"];
+
+const NAME_POOL: Array<{ firstName: string; lastName: string; gender: "Male" | "Female" }> = [];
+(function buildNamePool() {
+  FIRST_NAMES_M.forEach((fn) => LAST_NAMES.forEach((ln) => NAME_POOL.push({ firstName: fn, lastName: ln, gender: "Male" })));
+  FIRST_NAMES_F.forEach((fn) => LAST_NAMES.forEach((ln) => NAME_POOL.push({ firstName: fn, lastName: ln, gender: "Female" })));
+})();
+
+const SEED_CLASSROOMS = Array.from(new Set(STUDENTS.map((s) => s.classroom))).sort();
+const DETERMINISTIC_RNG = (() => {
+  let seed = 0xC0FFEE;
+  return () => {
+    seed = (seed * 1664525 + 1013904223) >>> 0;
+    return seed / 0xFFFFFFFF;
+  };
+})();
+
+const PARENT_CONTACT_PREFIX = ["98","97","96","95","90","89","88","87","80","79"];
+
+const SYNTHETIC_STUDENTS: Array<StudentSummary & { gender: string; isSynthetic: boolean }> = (() => {
+  const out: Array<StudentSummary & { gender: string; isSynthetic: boolean }> = [];
+  let poolIdx = 0;
+  let idCounter = 100;
+  SEED_CLASSROOMS.forEach((classroomName) => {
+    const grade = classroomName.replace(/[A-Z]/g, "");
+    const targetCount = 20 + Math.floor(DETERMINISTIC_RNG() * 5);
+    for (let i = 0; i < targetCount; i++) {
+      const n = NAME_POOL[poolIdx % NAME_POOL.length];
+      poolIdx++;
+      const riskScore = 15 + Math.floor(DETERMINISTIC_RNG() * 75);
+      const tier = riskScore >= 70 ? "TIER_3" : riskScore >= 40 ? "TIER_2" : "TIER_1";
+      const status = tier === "TIER_3" ? "NEEDS_INTERVENTION" : tier === "TIER_2" ? "NEEDS_SUPPORT" : "STABLE";
+      const year = 2024;
+      const seq = idCounter++;
+      out.push({
+        id: `gen-${seq}`,
+        firstName: n.firstName,
+        lastName: n.lastName,
+        grade,
+        classroom: classroomName,
+        age: parseInt(grade) + 5,
+        tier,
+        status,
+        riskScore,
+        admissionNumber: `FF-${year}-${String(seq).padStart(3, "0")}`,
+        _count: { cases: tier === "TIER_1" ? 0 : 1, assessments: tier === "TIER_1" ? 0 : 1 },
+        gender: n.gender,
+        isSynthetic: true,
+      });
+    }
+  });
+  return out;
+})();
+
+const ALL_STUDENTS = [...STUDENTS, ...SYNTHETIC_STUDENTS];
+
+// ======================== STUDENT DEMOGRAPHICS ========================
+const DEMOGRAPHICS: Record<string, StudentDemographics> = (() => {
+  const out: Record<string, StudentDemographics> = {};
+  ALL_STUDENTS.forEach((s, idx) => {
+    const year = 2026 - (parseInt(s.grade) + 5);
+    const month = 1 + (idx % 12);
+    const day = 1 + (idx % 28);
+    const dob = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    const age = 2026 - year;
+    const father = FATHER_NAMES[idx % FATHER_NAMES.length];
+    const mother = MOTHER_NAMES[(idx * 7) % MOTHER_NAMES.length];
+    const phone = `${PARENT_CONTACT_PREFIX[idx % PARENT_CONTACT_PREFIX.length]}${String(10000000 + (idx * 13579) % 90000000).padStart(8, "0")}`;
+    const gender = (s as Record<string, unknown>).gender as string | undefined;
+    out[s.id] = {
+      dateOfBirth: dob,
+      age,
+      gender: (gender as "Male" | "Female" | "Other") ?? (idx % 2 === 0 ? "Male" : "Female"),
+      fatherName: `${father} ${s.lastName}`,
+      motherName: `${mother} ${s.lastName}`,
+      parentContact: `+91 ${phone.slice(0, 5)} ${phone.slice(5)}`,
+      admissionNumber: s.admissionNumber ?? `FF-${year}-${String(idx + 1).padStart(3, "0")}`,
+      standard: `Grade ${s.grade}`,
+      section: s.classroom.replace(/[0-9]/g, ""),
+    };
+  });
+  return out;
+})();
+
+// ======================== TEACHERS ========================
+const TEACHER_TEMPLATES: Array<{ fullName: string; subject: string }> = [
+  { fullName: "Rajesh Kumar", subject: "Mathematics" },
+  { fullName: "Sunita O'Brien", subject: "English" },
+  { fullName: "Lakshmi Iyer", subject: "Science" },
+  { fullName: "Ravi Patel", subject: "Social Studies" },
+  { fullName: "Meera Joshi", subject: "Hindi" },
+  { fullName: "Deepa Menon", subject: "Computer Science" },
+  { fullName: "Anita Verma", subject: "Art" },
+  { fullName: "Sneha Reddy", subject: "Physical Education" },
+  { fullName: "Dr. Anil Kumar", subject: "Wellbeing" },
+  { fullName: "Vikram Singh", subject: "Music" },
+];
+
+const TEACHERS_BY_CLASSROOM: Record<string, Array<Teacher>> = (() => {
+  const out: Record<string, Array<Teacher>> = {};
+  SEED_CLASSROOMS.forEach((classroomName, idx) => {
+    const ct = TEACHER_TEMPLATES[idx % TEACHER_TEMPLATES.length];
+    const subjectTeachers = [0, 1, 2, 3].map((j) => TEACHER_TEMPLATES[(idx + j + 1) % TEACHER_TEMPLATES.length]);
+    const list: Array<Teacher> = [
+      { id: `t-ct-${classroomName}`, fullName: ct.fullName, subject: ct.subject, isClassTeacher: true, initials: initialsOf(ct.fullName) },
+      ...subjectTeachers.map((t, j) => ({ id: `t-sub-${classroomName}-${j}`, fullName: t.fullName, subject: t.subject, isClassTeacher: false, initials: initialsOf(t.fullName) })),
+    ];
+    out[classroomName] = list;
+  });
+  return out;
+})();
+
+function initialsOf(name: string) {
+  return name
+    .split(" ")
+    .map((p) => p[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+}
+
+// ======================== CLASSROOM TIMETABLES ========================
+const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"] as const;
+const PERIOD_TIMES = ["09:00", "10:00", "11:15", "13:00", "14:00"] as const;
+const SUBJECTS = ["Mathematics", "English", "Science", "Social Studies", "Hindi"];
+
+const CLASSROOM_TIMETABLES: Record<string, Array<TimetableSlot>> = (() => {
+  const out: Record<string, Array<TimetableSlot>> = {};
+  SEED_CLASSROOMS.forEach((classroomName, classIdx) => {
+    const slots: Array<TimetableSlot> = [];
+    const teachers = TEACHERS_BY_CLASSROOM[classroomName];
+    DAYS.forEach((day, dayIdx) => {
+      PERIOD_TIMES.forEach((time, period) => {
+        if (period === 2 && dayIdx === 2) {
+          slots.push({ day, period: period + 1, time, subject: "SEL: Building Empathy", teacherName: "Dr. Anil Kumar", type: "SEL" });
+          return;
+        }
+        if (period === 4 && dayIdx === 0) {
+          slots.push({ day, period: period + 1, time, subject: "SEL: Self-awareness", teacherName: "Dr. Anil Kumar", type: "SEL" });
+          return;
+        }
+        if (period === 1 && dayIdx === 4) {
+          slots.push({ day, period: period + 1, time, subject: "Free Period — Request SEL", teacherName: null, type: "FREE" });
+          return;
+        }
+        const subjectIdx = (classIdx + dayIdx + period) % SUBJECTS.length;
+        const subject = SUBJECTS[subjectIdx];
+        const teacher = teachers.find((t) => t.subject === subject) ?? teachers[0];
+        slots.push({ day, period: period + 1, time, subject, teacherName: teacher.fullName, type: "ACADEMIC" });
+      });
+    });
+    out[classroomName] = slots;
+  });
+  return out;
+})();
+
+// ======================== SEL SESSIONS (detailed) ========================
+const SEL_SESSIONS: Record<string, Array<SELSessionDetailed>> = (() => {
+  const out: Record<string, Array<SELSessionDetailed>> = {};
+  const topics = ["Managing Emotions", "Building Empathy", "Self-Awareness", "Conflict Resolution", "Mindfulness & Focus", "Stress Management", "Anger Management", "Social Skills"];
+  const facilitators = [
+    { id: "f-1", name: "Priya Sharma" },
+    { id: "f-2", name: "Dr. Anil Kumar" },
+    { id: "f-3", name: "Sneha Reddy" },
+  ];
+  SEED_CLASSROOMS.forEach((classroomName, idx) => {
+    const sessionCount = 3 + (idx % 3);
+    const arr: Array<SELSessionDetailed> = [];
+    for (let i = 0; i < sessionCount; i++) {
+      const topic = topics[(idx + i) % topics.length];
+      const f = facilitators[(idx + i) % facilitators.length];
+      const isCompleted = i < 2;
+      const isNoShow = i === 2 && idx % 2 === 0;
+      const daysOffset = i * 7 - 3;
+      arr.push({
+        id: `sess-${classroomName}-${i}`,
+        classroomId: `class-${classroomName}`,
+        topic,
+        scheduledAt: new Date(NOW + daysOffset * D).toISOString(),
+        durationMins: 45,
+        facilitatorId: f.id,
+        facilitatorName: f.name,
+        status: isCompleted ? "COMPLETED" : isNoShow ? "NO_SHOW" : "SCHEDULED",
+        feedback: isCompleted ? {
+          studentEngagement: "High",
+          learningUnderstanding: "Strong",
+          emotionalClimate: "Open & Receptive",
+          followUpNeed: "No Concerns",
+          planCompletion: "Yes",
+          activityCompletion: "Yes",
+          activityQuality: "Good",
+          notes: "Excellent participation from the cohort. Students engaged with the role-play scenario.",
+          submittedAt: new Date(NOW + daysOffset * D + 45 * 60 * 1000).toISOString(),
+          submittedBy: f.name,
+        } : null,
+      });
+    }
+    out[classroomName] = arr;
+  });
+  return out;
+})();
+
+// ======================== IEPS (sample for select students) ========================
+const IEPS: Record<string, IEP> = (() => {
+  const out: Record<string, IEP> = {};
+  const targets = [
+    { id: "s4", title: "IEP — Tier 3 Care Plan (Ananya Reddy)" },
+    { id: "s7", title: "IEP — Behavioural Support (Aryan Joshi)" },
+    { id: "s1", title: "IEP — Academic & Emotional Support (Arjun Patel)" },
+    { id: "s11", title: "IEP — Social Skills (Aditya Mishra)" },
+  ];
+  targets.forEach((t) => {
+    out[t.id] = {
+      id: `iep-${t.id}`,
+      studentId: t.id,
+      title: t.title,
+      uploadedBy: "Priya Sharma",
+      consentLogged: true,
+      createdAt: new Date(NOW - 30 * D).toISOString(),
+      goals: [
+        { id: `g-${t.id}-1`, title: "Manage emotional responses in classroom", description: "Use grounding technique when triggered; check in with CT after episode.", status: "IN_PROGRESS", accommodation: "5-minute cool-off pass; alternative workspace" },
+        { id: `g-${t.id}-2`, title: "Improve peer relationships", description: "Participate in at least one structured group activity per week.", status: "NOT_STARTED", accommodation: "Paired with peer mentor" },
+        { id: `g-${t.id}-3`, title: "Academic catch-up", description: "Close 60% of the gap in core subjects by term end.", status: "ACHIEVED", accommodation: "Extended time on tests" },
+      ],
+      feedback: [],
+    };
+  });
+  return out;
+})();
+
+// ======================== CLASSROOM ACTIVITY FEED ========================
+const CLASSROOM_ACTIVITY: Record<string, Array<ClassroomActivityItem>> = {
+  "8A": [
+    { id:"ca-1", type:"OBSERVATION_ADDED", studentId:"s13", studentName:"Karan Mehta", description:"Outburst during group activity", createdAt:new Date(NOW-3*H).toISOString(), createdBy:"Rajesh Kumar" },
+    { id:"ca-2", type:"FLAG_RAISED", studentId:"s13", studentName:"Karan Mehta", description:"Aggressive behaviour — Emotional Distress", createdAt:new Date(NOW-2*H).toISOString(), createdBy:"Rajesh Kumar" },
+    { id:"ca-3", type:"SEL_SESSION_COMPLETED", studentId:"s13", studentName:"Karan Mehta", description:"Completed 'Managing Emotions' session", createdAt:new Date(NOW-1*D).toISOString(), createdBy:"Priya Sharma" },
+    { id:"ca-4", type:"OBSERVATION_ADDED", studentId:"s1", studentName:"Arjun Patel", description:"Aggressive response to peer feedback", createdAt:new Date(NOW-8*H).toISOString(), createdBy:"Rajesh Kumar" },
+    { id:"ca-5", type:"WORKSHOP_ATTENDED", studentId:"s1", studentName:"Arjun Patel", description:"Attended 'Stress Management' workshop", createdAt:new Date(NOW-2*D).toISOString(), createdBy:"Sneha Reddy" },
+  ],
+  "9C": [
+    { id:"cb-1", type:"FLAG_RAISED", studentId:"s4", studentName:"Ananya Reddy", description:"Self-harm ideation — CRITICAL", createdAt:new Date(NOW-H).toISOString(), createdBy:"Priya Sharma" },
+    { id:"cb-2", type:"OBSERVATION_ADDED", studentId:"s4", studentName:"Ananya Reddy", description:"Low mood in morning check-in", createdAt:new Date(NOW-5*H).toISOString(), createdBy:"Priya Sharma" },
+    { id:"cb-3", type:"SEL_SESSION_COMPLETED", studentId:"s4", studentName:"Ananya Reddy", description:"Completed crisis intervention session", createdAt:new Date(NOW-2*H).toISOString(), createdBy:"Priya Sharma" },
+  ],
+  "6A": [
+    { id:"cc-1", type:"FLAG_RAISED", studentId:"s11", studentName:"Aditya Mishra", description:"Attendance concerns and withdrawn behaviour", createdAt:new Date(NOW-1*D).toISOString(), createdBy:"Lakshmi Iyer" },
+    { id:"cc-2", type:"OBSERVATION_ADDED", studentId:"s11", studentName:"Aditya Mishra", description:"Assignment submission dropped", createdAt:new Date(NOW-1*D).toISOString(), createdBy:"Sunita O'Brien" },
+    { id:"cc-3", type:"WORKSHOP_ATTENDED", studentId:"s11", studentName:"Aditya Mishra", description:"Attended 'Anger Management' SEL session", createdAt:new Date(NOW-3*D).toISOString(), createdBy:"Sneha Reddy" },
+  ],
+  "8B": [
+    { id:"cd-1", type:"FLAG_RESOLVED", studentId:"s7", studentName:"Aryan Joshi", description:"Bullying concern resolved after mediation", createdAt:new Date(NOW-2*D).toISOString(), createdBy:"Lakshmi Iyer" },
+    { id:"cd-2", type:"OBSERVATION_ADDED", studentId:"s7", studentName:"Aryan Joshi", description:"Physical altercation during recess", createdAt:new Date(NOW-12*H).toISOString(), createdBy:"Lakshmi Iyer" },
+  ],
+  "7A": [{ id:"ce-1", type:"OBSERVATION_ADDED", studentId:"s3", studentName:"Rohan Verma", description:"Reading comprehension difficulties noted", createdAt:new Date(NOW-1*D).toISOString(), createdBy:"Deepa Menon" }],
+  "7C": [{ id:"cf-1", type:"OBSERVATION_ADDED", studentId:"s9", studentName:"Rahul Desai", description:"4 absences in two weeks", createdAt:new Date(NOW-2*D).toISOString(), createdBy:"Ravi Patel" }],
+  "10B": [{ id:"cg-1", type:"OBSERVATION_ADDED", studentId:"s2", studentName:"Priya Sharma", description:"Mood swings and tearfulness", createdAt:new Date(NOW-7*D).toISOString(), createdBy:"Dr. Anil Kumar" }],
+  "5A": [{ id:"ch-1", type:"OBSERVATION_ADDED", studentId:"s6", studentName:"Kavya Nair", description:"Test anxiety — breathing exercises helped", createdAt:new Date(NOW-20*H).toISOString(), createdBy:"Meera Joshi" }],
+  "6B": [{ id:"ci-1", type:"OBSERVATION_ADDED", studentId:"s5", studentName:"Vikram Singh", description:"Helped younger student — positive leadership", createdAt:new Date(NOW-4*H).toISOString(), createdBy:"Anita Verma" }],
+  "10A": [{ id:"cj-1", type:"OBSERVATION_ADDED", studentId:"s8", studentName:"Isha Kapoor", description:"Exam stress reported", createdAt:new Date(NOW-6*H).toISOString(), createdBy:"Dr. Anil Kumar" }],
+  "9B": [{ id:"ck-1", type:"OBSERVATION_ADDED", studentId:"s12", studentName:"Sanya Khanna", description:"Late arrivals 3 times this week", createdAt:new Date(NOW-10*H).toISOString(), createdBy:"Sunita O'Brien" }],
+  "7B": [{ id:"cl-1", type:"OBSERVATION_ADDED", studentId:"s14", studentName:"Diya Rao", description:"Facilitated peer study group", createdAt:new Date(NOW-36*H).toISOString(), createdBy:"Deepa Menon" }],
+  "5B": [{ id:"cm-1", type:"OBSERVATION_ADDED", studentId:"s10", studentName:"Neha Gupta", description:"Creative project exceeded expectations", createdAt:new Date(NOW-48*H).toISOString(), createdBy:"Meera Joshi" }],
+  "10C": [{ id:"cn-1", type:"OBSERVATION_ADDED", studentId:"s15", studentName:"Ravi Yadav", description:"Active participation in group discussion", createdAt:new Date(NOW-30*H).toISOString(), createdBy:"Sneha Reddy" }],
+};
 
 // ======================== WELLBEING REPORT ========================
 const WELLBEING_REPORT = {
@@ -108,7 +670,7 @@ const COMPLIANCE_REPORT = {
     {code:"SC III",title:"SEL and Counselling Systems",status:"active"},
     {code:"SC IV",title:"School Wellbeing Workflows",status:"in_progress"},
     {code:"SC V",title:"Crisis Escalation Protocols",status:"active"},
-    {code:"SC VIII",title:"Case Management & Referrals",status:"active"},
+    {code:"SC VIII",title:"Case Management& Referrals",status:"active"},
     {code:"SC IX",title:"Safety & Monitoring Practices",status:"active"},
     {code:"SC X",title:"Supportive Policy Infrastructure",status:"in_progress"},
     {code:"SC XII",title:"Audit & Documentation",status:"active"},
@@ -116,6 +678,395 @@ const COMPLIANCE_REPORT = {
   ],
   metrics:{activeCases:124,incidentCount:29,sessionsCount:86}
 };
+
+// ======================== MODULE 4: SEL & WORKSHOP MOCK DATA ========================
+
+const SEL_CATEGORIES_LIST = ["SELF_AWARENESS","EMOTIONAL_REGULATION","EMPATHY","COMMUNICATION","LEADERSHIP","CONFLICT_RESOLUTION","RESILIENCE"];
+const WORKSHOP_CATEGORIES_LIST = ["BULLYING_PREVENTION","CAREER_GUIDANCE","MENTAL_HEALTH_AWARENESS","DIGITAL_SAFETY","STRESS_MANAGEMENT","PARENT_AWARENESS","TEACHER_WELLNESS"];
+
+const SEL_LESSON_TEMPLATES = [
+  { id:"tpl-1",title:"Understanding My Emotions",grade:"5-6",category:"SELF_AWARENESS",durationMins:45,learningObjectives:["Identify primary emotions","Recognize emotional triggers","Develop emotion vocabulary"],activities:["Emotion charades","Feelings journal","Body scan meditation"],reflectionQuestions:["What emotion did you feel most strongly today?","What triggered that emotion?","How did you respond?"],createdById:"u-couns",createdAt:new Date(NOW-60*D).toISOString(),updatedAt:new Date(NOW-60*D).toISOString() },
+  { id:"tpl-2",title:"Managing Exam Anxiety",grade:"7-8",category:"EMOTIONAL_REGULATION",durationMins:45,learningObjectives:["Recognize anxiety symptoms","Apply relaxation techniques","Develop coping strategies"],activities:["Deep breathing exercises","Progressive muscle relaxation","Grounding techniques"],reflectionQuestions:["What helps you feel calmer before a test?","Where do you feel anxiety in your body?"],createdById:"u-couns",createdAt:new Date(NOW-55*D).toISOString(),updatedAt:new Date(NOW-55*D).toISOString() },
+  { id:"tpl-3",title:"Walking in Someone Else's Shoes",grade:"6-7",category:"EMPATHY",durationMins:45,learningObjectives:["Understand different perspectives","Practice active listening","Show compassion to peers"],activities:["Perspective role-play","Active listening pairs","Empathy mapping"],reflectionQuestions:["How did it feel to see from another person's view?","How can you show empathy to someone who is struggling?"],createdById:"u-couns",createdAt:new Date(NOW-50*D).toISOString(),updatedAt:new Date(NOW-50*D).toISOString() },
+  { id:"tpl-4",title:"Effective Communication Skills",grade:"5-6",category:"COMMUNICATION",durationMins:45,learningObjectives:["Use assertive vs aggressive vs passive language","Practice active listening","Give and receive feedback"],activities:["I-statements practice","Role-play scenarios","Peer feedback exercise"],reflectionQuestions:["When do you find it hardest to speak up?","How does it feel when someone really listens to you?"],createdById:"u-couns",createdAt:new Date(NOW-45*D).toISOString(),updatedAt:new Date(NOW-45*D).toISOString() },
+  { id:"tpl-5",title:"Leadership Through Action",grade:"8-10",category:"LEADERSHIP",durationMins:45,learningObjectives:["Identify leadership styles","Practice collaborative decision-making","Take initiative responsibly"],activities:["Group challenge activity","Leadership style self-assessment","Community service planning"],reflectionQuestions:["What kind of leader are you?","How do you motivate others?"],createdById:"u-couns",createdAt:new Date(NOW-40*D).toISOString(),updatedAt:new Date(NOW-40*D).toISOString() },
+  { id:"tpl-6",title:"Resolving Conflicts Peacefully",grade:"6-8",category:"CONFLICT_RESOLUTION",durationMins:45,learningObjectives:["Understand conflict cycles","Practice win-win problem solving","Use 'I' statements"],activities:["Conflict scenario analysis","Mediation role-play","Peace agreement drafting"],reflectionQuestions:["What usually happens when you disagree with a friend?","How can you turn a conflict into an opportunity?"],createdById:"u-couns",createdAt:new Date(NOW-35*D).toISOString(),updatedAt:new Date(NOW-35*D).toISOString() },
+  { id:"tpl-7",title:"Bouncing Back from Setbacks",grade:"7-9",category:"RESILIENCE",durationMins:45,learningObjectives:["Understand resilience as a skill","Develop growth mindset","Build problem-solving confidence"],activities:["Failure recovery stories","Growth mindset workshop","Resilience action plan"],reflectionQuestions:["What is your biggest fear of failure?","What helps you get back up after a setback?"],createdById:"u-couns",createdAt:new Date(NOW-30*D).toISOString(),updatedAt:new Date(NOW-30*D).toISOString() },
+  { id:"tpl-8",title:"Building Healthy Friendships",grade:"5-6",category:"EMPATHY",durationMins:45,learningObjectives:["Identify qualities of good friends","Set healthy boundaries","Practice friendship skills"],activities:["Friendship qualities sorting","Boundary practice scenarios","Kindness challenge"],reflectionQuestions:["What makes a friendship healthy?","How do you handle it when a friendship becomes unhealthy?"],createdById:"u-couns",createdAt:new Date(NOW-25*D).toISOString(),updatedAt:new Date(NOW-25*D).toISOString() },
+  { id:"tpl-9",title:"Mindfulness for Focus",grade:"6-10",category:"SELF_AWARENESS",durationMins:45,learningObjectives:["Practice present-moment awareness","Improve concentration","Reduce distractions"],activities:["Guided meditation","Mindful eating exercise","Focus breathing"],reflectionQuestions:["How often do you get distracted during class?","What mindfulness technique will you use to focus?"],createdById:"u-couns",createdAt:new Date(NOW-20*D).toISOString(),updatedAt:new Date(NOW-20*D).toISOString() },
+  { id:"tpl-10",title:"Digital Citizenship & Online Safety",grade:"7-8",category:"COMMUNICATION",durationMins:45,learningObjectives:["Understand digital footprint","Recognize online risks","Practice safe online communication"],activities:["Digital footprint audit","Cyberbullying scenario analysis","Safe online pledge"],reflectionQuestions:["What is your digital footprint?","How can you be a positive influence online?"],createdById:"u-couns",createdAt:new Date(NOW-15*D).toISOString(),updatedAt:new Date(NOW-15*D).toISOString() },
+  { id:"tpl-11",title:"Stress Management Strategies",grade:"8-10",category:"EMOTIONAL_REGULATION",durationMins:45,learningObjectives:["Identify personal stress triggers","Apply stress management techniques","Develop personal wellness plan"],activities:["Stress trigger mapping","Coping technique toolbox","Wellness plan creation"],reflectionQuestions:["What is your biggest source of stress?","Which technique will work best for you?"],createdById:"u-couns",createdAt:new Date(NOW-10*D).toISOString(),updatedAt:new Date(NOW-10*D).toISOString() },
+  { id:"tpl-12",title:"Standing Up to Bullying",grade:"5-7",category:"LEADERSHIP",durationMins:45,learningObjectives:["Recognize different forms of bullying","Practice bystander intervention","Build inclusive communities"],activities:["Bullying scenario analysis","Bystander intervention practice","Inclusion activity"],reflectionQuestions:["What would you do if you saw someone being bullied?","How can you be an upstander instead of a bystander?"],createdById:"u-couns",createdAt:new Date(NOW-5*D).toISOString(),updatedAt:new Date(NOW-5*D).toISOString() },
+];
+
+const SEL_LESSONS = [
+  { id:"les-1",templateId:"tpl-2",title:"Managing Exam Anxiety",grade:"7",topic:"Emotional Regulation",category:"EMOTIONAL_REGULATION",learningObjectives:["Recognize anxiety symptoms","Apply relaxation techniques"],activities:["Deep breathing","Grounding"],reflectionQuestions:["What helps you feel calmer?"],durationMins:45,status:"APPROVED",approvedById:"u-admin",approvedAt:new Date(NOW-20*D).toISOString(),createdById:"u-couns",createdAt:new Date(NOW-25*D).toISOString(),updatedAt:new Date(NOW-20*D).toISOString() },
+  { id:"les-2",templateId:"tpl-1",title:"Understanding My Emotions",grade:"5",topic:"Self Awareness",category:"SELF_AWARENESS",learningObjectives:["Identify emotions","Build emotion vocabulary"],activities:["Emotion charades","Journaling"],reflectionQuestions:["What did you feel today?"],durationMins:45,status:"APPROVED",approvedById:"u-admin",approvedAt:new Date(NOW-18*D).toISOString(),createdById:"u-couns",createdAt:new Date(NOW-22*D).toISOString(),updatedAt:new Date(NOW-18*D).toISOString() },
+  { id:"les-3",templateId:"tpl-3",title:"Walking in Someone Else's Shoes",grade:"6",topic:"Empathy",category:"EMPATHY",learningObjectives:["Understand perspectives","Practice empathy"],activities:["Role-play","Empathy mapping"],reflectionQuestions:["How did it feel?"],durationMins:45,status:"APPROVED",approvedById:"u-admin",approvedAt:new Date(NOW-15*D).toISOString(),createdById:"u-couns",createdAt:new Date(NOW-20*D).toISOString(),updatedAt:new Date(NOW-15*D).toISOString() },
+  { id:"les-4",templateId:"tpl-6",title:"Resolving Conflicts Peacefully",grade:"7",topic:"Conflict Resolution",category:"CONFLICT_RESOLUTION",learningObjectives:["Understand conflict cycles","Practice win-win solving"],activities:["Mediation role-play","Peace agreement"],reflectionQuestions:["How do you resolve conflicts?"],durationMins:45,status:"PENDING_APPROVAL",createdById:"u-couns",createdAt:new Date(NOW-5*D).toISOString(),updatedAt:new Date(NOW-5*D).toISOString() },
+  { id:"les-5",templateId:"tpl-5",title:"Leadership Through Action",grade:"9",topic:"Leadership",category:"LEADERSHIP",learningObjectives:["Identify leadership styles","Practice collaboration"],activities:["Group challenge","Leadership assessment"],reflectionQuestions:["What kind of leader are you?"],durationMins:45,status:"PENDING_APPROVAL",createdById:"u-couns",createdAt:new Date(NOW-4*D).toISOString(),updatedAt:new Date(NOW-4*D).toISOString() },
+  { id:"les-6",templateId:"tpl-7",title:"Bouncing Back from Setbacks",grade:"8",topic:"Resilience",category:"RESILIENCE",learningObjectives:["Develop growth mindset","Build confidence"],activities:["Failure stories","Resilience plan"],reflectionQuestions:["How do you recover from setbacks?"],durationMins:45,status:"DRAFT",createdById:"u-couns",createdAt:new Date(NOW-2*D).toISOString(),updatedAt:new Date(NOW-2*D).toISOString() },
+  { id:"les-7",templateId:"tpl-4",title:"Effective Communication",grade:"6",topic:"Communication",category:"COMMUNICATION",learningObjectives:["Practice active listening","Use I-statements"],activities:["I-statement practice","Peer feedback"],reflectionQuestions:["How do you communicate under stress?"],durationMins:45,status:"DRAFT",createdById:"u-couns",createdAt:new Date(NOW-1*D).toISOString(),updatedAt:new Date(NOW-1*D).toISOString() },
+  { id:"les-8",templateId:"tpl-9",title:"Mindfulness for Focus",grade:"10",topic:"Self Awareness",category:"SELF_AWARENESS",learningObjectives:["Practice present-moment awareness","Improve concentration"],activities:["Guided meditation","Focus breathing"],reflectionQuestions:["How often do you get distracted?"],durationMins:45,status:"REJECTED",rejectionReason:"Needs more interactive activities",createdById:"u-couns",createdAt:new Date(NOW-8*D).toISOString(),updatedAt:new Date(NOW-6*D).toISOString() },
+  { id:"les-9",templateId:"tpl-11",title:"Stress Management",grade:"9",topic:"Emotional Regulation",category:"EMOTIONAL_REGULATION",learningObjectives:["Identify stress triggers","Apply coping techniques"],activities:["Trigger mapping","Coping toolbox"],reflectionQuestions:["What is your biggest stressor?"],durationMins:45,status:"APPROVED",approvedById:"u-admin",approvedAt:new Date(NOW-10*D).toISOString(),createdById:"u-couns",createdAt:new Date(NOW-15*D).toISOString(),updatedAt:new Date(NOW-10*D).toISOString() },
+  { id:"les-10",templateId:"tpl-8",title:"Building Healthy Friendships",grade:"5",topic:"Empathy",category:"EMPATHY",learningObjectives:["Identify healthy friendship qualities","Set boundaries"],activities:["Friendship sorting","Boundary practice"],reflectionQuestions:["What makes a friendship healthy?"],durationMins:45,status:"APPROVED",approvedById:"u-admin",approvedAt:new Date(NOW-12*D).toISOString(),createdById:"u-couns",createdAt:new Date(NOW-16*D).toISOString(),updatedAt:new Date(NOW-12*D).toISOString() },
+  { id:"les-11",templateId:"tpl-12",title:"Standing Up to Bullying",grade:"6",topic:"Leadership",category:"LEADERSHIP",learningObjectives:["Recognize bullying","Practice intervention"],activities:["Scenario analysis","Inclusion activity"],reflectionQuestions:["How can you be an upstander?"],durationMins:45,status:"APPROVED",approvedById:"u-admin",approvedAt:new Date(NOW-8*D).toISOString(),createdById:"u-couns",createdAt:new Date(NOW-12*D).toISOString(),updatedAt:new Date(NOW-8*D).toISOString() },
+  { id:"les-12",templateId:"tpl-10",title:"Digital Citizenship",grade:"8",topic:"Communication",category:"COMMUNICATION",learningObjectives:["Understand digital footprint","Practice safe online communication"],activities:["Digital audit","Cyberbullying analysis"],reflectionQuestions:["What is your digital footprint?"],durationMins:45,status:"PENDING_APPROVAL",createdById:"u-couns",createdAt:new Date(NOW-3*D).toISOString(),updatedAt:new Date(NOW-3*D).toISOString() },
+];
+
+const FACILITATORS = [
+  { id:"fac-1",userId:"u-couns",fullName:"Priya Sharma",email:"priya@firefly.school",expertise:["Emotional Regulation","Self-Awareness","Counselling"],type:"SCHOOL_COUNSELLOR",bio:"Certified school counsellor with 8 years of experience in SEL program delivery.",createdAt:new Date(NOW-365*D).toISOString(),updatedAt:new Date(NOW-365*D).toISOString() },
+  { id:"fac-2",userId:"u-doc",fullName:"Dr. Anil Kumar",email:"anil@firefly.school",expertise:["Mental Health","Trauma-Informed Practice","SEL Curriculum"],type:"SCHOOL_COUNSELLOR",bio:"Clinical psychologist specializing in adolescent mental health and SEL.",createdAt:new Date(NOW-365*D).toISOString(),updatedAt:new Date(NOW-365*D).toISOString() },
+  { id:"fac-3",userId:"u-teach",fullName:"Sneha Reddy",email:"sneha@firefly.school",expertise:["Physical Education","Social Skills","Team Building"],type:"TEACHER",bio:"Physical education teacher with a passion for social-emotional learning through movement.",createdAt:new Date(NOW-300*D).toISOString(),updatedAt:new Date(NOW-300*D).toISOString() },
+  { id:"fac-4",userId:"u-principal",fullName:"Dr. Suresh Iyengar",email:"suresh@firefly.school",expertise:["Leadership","School Culture","Policy"],type:"PRINCIPAL",bio:"School principal with 20 years of experience in education leadership.",createdAt:new Date(NOW-365*D).toISOString(),updatedAt:new Date(NOW-365*D).toISOString() },
+  { id:"fac-5",userId:null,fullName:"Meera Joshi",email:"meera.joshi@external.com",expertise:["Career Guidance","Adolescent Development","Parent Education"],type:"EXTERNAL_EXPERT",bio:"Career guidance counsellor and parent educator with 15 years of experience.",createdAt:new Date(NOW-200*D).toISOString(),updatedAt:new Date(NOW-200*D).toISOString() },
+  { id:"fac-6",userId:"u-couns2",fullName:"Lakshmi Nair",email:"lakshmi@firefly.school",expertise:["Bullying Prevention","Social Skills","Peer Mediation"],type:"SCHOOL_COUNSELLOR",bio:"Counsellor specializing in bullying prevention and peer mediation programs.",createdAt:new Date(NOW-250*D).toISOString(),updatedAt:new Date(NOW-250*D).toISOString() },
+  { id:"fac-7",userId:null,fullName:"Ravi Deshmukh",email:"ravi.deshmukh@external.com",expertise:["Digital Safety","Cyber Wellness","Technology Ethics"],type:"EXTERNAL_EXPERT",bio:"Digital safety expert and cyber wellness counsellor for adolescents.",createdAt:new Date(NOW-150*D).toISOString(),updatedAt:new Date(NOW-150*D).toISOString() },
+  { id:"fac-8",userId:"u-teach2",fullName:"Deepa Menon",email:"deepa@firefly.school",expertise:["Computer Science","Digital Citizenship","Ethical Technology Use"],type:"TEACHER",bio:"Computer science teacher focused on digital citizenship and online safety.",createdAt:new Date(NOW-280*D).toISOString(),updatedAt:new Date(NOW-280*D).toISOString() },
+  { id:"fac-9",userId:null,fullName:"Dr. Sanjay Gupta",email:"sanjay.gupta@external.com",expertise:["Mental Health Awareness","Stress Management","Adolescent Psychology"],type:"EXTERNAL_EXPERT",bio:"Psychiatrist specializing in adolescent mental health awareness and stress management.",createdAt:new Date(NOW-180*D).toISOString(),updatedAt:new Date(NOW-180*D).toISOString() },
+  { id:"fac-10",userId:"u-vp",fullName:"Lakshmi Nair",email:"lakshmi.nair@firefly.school",expertise:["Teacher Wellness","Professional Development","Work-Life Balance"],type:"TEACHER",bio:"Vice principal focused on teacher wellness and professional development programs.",createdAt:new Date(NOW-320*D).toISOString(),updatedAt:new Date(NOW-320*D).toISOString() },
+];
+
+const WORKSHOP_TEMPLATES = [
+  { id:"wtpl-1",title:"Bullying Prevention Workshop",description:"Interactive workshop helping students identify, prevent, and respond to bullying behaviours including cyberbullying.",category:"BULLYING_PREVENTION",audience:"Grades 5-8",durationMins:90,materials:["Scenario cards","Role-play scripts","Bullying prevention handbook","Digital citizenship guide"],createdById:"u-couns",createdAt:new Date(NOW-60*D).toISOString(),updatedAt:new Date(NOW-60*D).toISOString() },
+  { id:"wtpl-2",title:"Career Discovery Workshop",description:"Help students explore career paths, understand labour market trends, and develop career planning skills.",category:"CAREER_GUIDANCE",audience:"Grades 8-10",durationMins:120,materials:["Career interest inventory","Labour market fact sheets","Goal setting worksheets","Industry guest speaker guide"],createdById:"u-couns",createdAt:new Date(NOW-55*D).toISOString(),updatedAt:new Date(NOW-55*D).toISOString() },
+  { id:"wtpl-3",title:"Mental Health Awareness Workshop",description:"Break the stigma around mental health. Students learn to recognize signs, offer support, and access resources.",category:"MENTAL_HEALTH_AWARENESS",audience:"Grades 6-10",durationMins:90,materials:["Mental health awareness booklet","Support resource cards","First aid for mental health guide","Peer support manual"],createdById:"u-couns",createdAt:new Date(NOW-50*D).toISOString(),updatedAt:new Date(NOW-50*D).toISOString() },
+  { id:"wtpl-4",title:"Digital Safety & Online Wellness",description:"Equip students with skills to navigate the digital world safely, recognize online risks, and maintain digital wellbeing.",category:"DIGITAL_SAFETY",audience:"Grades 5-10",durationMins:90,materials:["Digital footprint worksheet","Privacy settings guide","Online safety checklist","Social media impact report"],createdById:"u-couns",createdAt:new Date(NOW-45*D).toISOString(),updatedAt:new Date(NOW-45*D).toISOString() },
+  { id:"wtpl-5",title:"Stress Management for Students",description:"Practical stress management techniques including mindfulness, time management, and healthy coping strategies.",category:"STRESS_MANAGEMENT",audience:"Grades 7-10",durationMins:90,materials:["Stress trigger diary","Mindfulness audio guide","Time management planner","Coping strategies card deck"],createdById:"u-couns",createdAt:new Date(NOW-40*D).toISOString(),updatedAt:new Date(NOW-40*D).toISOString() },
+  { id:"wtpl-6",title:"Parent Awareness Workshop",description:"Equipping parents with tools to support their child's mental health, academics, and social development at home.",category:"PARENT_AWARENESS",audience:"Parents of Grades 5-10",durationMins:120,materials:["Parent handbook","Communication guide","Screen time agreement template","Support resources list"],createdById:"u-couns",createdAt:new Date(NOW-35*D).toISOString(),updatedAt:new Date(NOW-35*D).toISOString() },
+  { id:"wtpl-7",title:"Teacher Wellness & Burnout Prevention",description:"Supporting teachers' mental health with practical self-care strategies, workload management, and resilience building.",category:"TEACHER_WELLNESS",audience:"All School Staff",durationMins:90,materials:["Wellness self-assessment","Burnout prevention guide","Self-care action plan","Peer support protocol"],createdById:"u-couns",createdAt:new Date(NOW-30*D).toISOString(),updatedAt:new Date(NOW-30*D).toISOString() },
+  { id:"wtpl-8",title:"Building Emotional Resilience",description:"Help students develop emotional resilience through cognitive behavioural techniques and practical exercises.",category:"MENTAL_HEALTH_AWARENESS",audience:"Grades 6-10",durationMins:90,materials:["Resilience journal","CBT thought records","Coping strategy cards","Resilience building activities"],createdById:"u-couns",createdAt:new Date(NOW-25*D).toISOString(),updatedAt:new Date(NOW-25*D).toISOString() },
+  { id:"wtpl-9",title:"Study Skills & Academic Confidence",description:"Build academic confidence with proven study techniques, test preparation strategies, and learning mindset training.",category:"STRESS_MANAGEMENT",audience:"Grades 6-10",durationMins:90,materials:["Study schedule template","Active recall guide","Spaced repetition worksheet","Exam preparation checklist"],createdById:"u-couns",createdAt:new Date(NOW-20*D).toISOString(),updatedAt:new Date(NOW-20*D).toISOString() },
+  { id:"wtpl-10",title:"Peer Conflict Resolution Skills",description:"Teach students effective peer conflict resolution through communication skills, empathy building, and mediation practice.",category:"BULLYING_PREVENTION",audience:"Grades 5-8",durationMins:90,materials:["Conflict resolution scenarios","Mediation scripts","I-statements practice worksheets","Peer mediation manual"],createdById:"u-couns",createdAt:new Date(NOW-15*D).toISOString(),updatedAt:new Date(NOW-15*D).toISOString() },
+];
+
+const WORKSHOPS = [
+  { id:"ws-1",templateId:"wtpl-5",title:"Stress Management Workshop",description:"Practical stress management techniques for board exam preparation.",category:"STRESS_MANAGEMENT",audience:"Grade 10 Students",venue:"Main Hall",date:new Date(NOW+3*D).toISOString(),durationMins:90,facilitatorId:"fac-9",materials:["Stress diary","Mindfulness guide"],status:"SCHEDULED",createdById:"u-couns",createdAt:new Date(NOW-10*D).toISOString(),updatedAt:new Date(NOW-10*D).toISOString() },
+  { id:"ws-2",templateId:"wtpl-1",title:"Bullying Prevention Workshop",description:"Interactive session on identifying and preventing bullying.",category:"BULLYING_PREVENTION",audience:"Grades 6-7",venue:"Room 201",date:new Date(NOW+5*D).toISOString(),durationMins:90,facilitatorId:"fac-6",materials:["Scenario cards","Handbook"],status:"SCHEDULED",createdById:"u-couns",createdAt:new Date(NOW-8*D).toISOString(),updatedAt:new Date(NOW-8*D).toISOString() },
+  { id:"ws-3",templateId:"wtpl-3",title:"Mental Health Awareness",description:"Breaking the stigma around mental health for adolescents.",category:"MENTAL_HEALTH_AWARENESS",audience:"Grades 8-10",venue:"Auditorium",date:new Date(NOW-5*D).toISOString(),durationMins:90,facilitatorId:"fac-9",materials:["Awareness booklet","Resource cards"],status:"COMPLETED",feedbackScore:4.7,createdById:"u-couns",createdAt:new Date(NOW-15*D).toISOString(),updatedAt:new Date(NOW-5*D).toISOString() },
+  { id:"ws-4",templateId:"wtpl-2",title:"Career Discovery Workshop",description:"Career exploration and planning for future success.",category:"CAREER_GUIDANCE",audience:"Grade 9 Students",venue:"Career Centre",date:new Date(NOW-10*D).toISOString(),durationMins:120,facilitatorId:"fac-5",materials:["Career inventory","Fact sheets"],status:"COMPLETED",feedbackScore:4.5,createdById:"u-couns",createdAt:new Date(NOW-20*D).toISOString(),updatedAt:new Date(NOW-10*D).toISOString() },
+  { id:"ws-5",templateId:"wtpl-4",title:"Digital Safety Workshop",description:"Online safety and digital citizenship for the digital age.",category:"DIGITAL_SAFETY",audience:"Grades 7-8",venue:"Computer Lab",date:new Date(NOW+7*D).toISOString(),durationMins:90,facilitatorId:"fac-7",materials:["Digital footprint worksheet","Safety checklist"],status:"SCHEDULED",createdById:"u-couns",createdAt:new Date(NOW-5*D).toISOString(),updatedAt:new Date(NOW-5*D).toISOString() },
+  { id:"ws-6",templateId:"wtpl-6",title:"Parent Awareness Session",description:"Equipping parents to support child's wellbeing at home.",category:"PARENT_AWARENESS",audience:"Parents Grade 7",venue:"Main Hall",date:new Date(NOW+10*D).toISOString(),durationMins:120,facilitatorId:"fac-5",materials:["Parent handbook","Communication guide"],status:"SCHEDULED",createdById:"u-couns",createdAt:new Date(NOW-3*D).toISOString(),updatedAt:new Date(NOW-3*D).toISOString() },
+  { id:"ws-7",templateId:"wtpl-7",title:"Teacher Wellness Workshop",description:"Self-care and burnout prevention for teaching staff.",category:"TEACHER_WELLNESS",audience:"All Staff",venue:"Staff Room",date:new Date(NOW-15*D).toISOString(),durationMins:90,facilitatorId:"fac-10",materials:["Wellness assessment","Self-care plan"],status:"COMPLETED",feedbackScore:4.8,createdById:"u-admin",createdAt:new Date(NOW-25*D).toISOString(),updatedAt:new Date(NOW-15*D).toISOString() },
+  { id:"ws-8",templateId:"wtpl-8",title:"Building Emotional Resilience",description:"CBT-based resilience building for adolescents.",category:"MENTAL_HEALTH_AWARENESS",audience:"Grades 8-9",venue:"Room 105",date:new Date(NOW-20*D).toISOString(),durationMins:90,facilitatorId:"fac-2",materials:["Resilience journal","CBT records"],status:"COMPLETED",feedbackScore:4.6,createdById:"u-couns",createdAt:new Date(NOW-30*D).toISOString(),updatedAt:new Date(NOW-20*D).toISOString() },
+  { id:"ws-9",templateId:"wtpl-9",title:"Study Skills Workshop",description:"Proven study techniques and exam preparation strategies.",category:"STRESS_MANAGEMENT",audience:"Grades 9-10",venue:"Main Hall",date:new Date(NOW+14*D).toISOString(),durationMins:90,facilitatorId:"fac-2",materials:["Study schedule","Active recall guide"],status:"SCHEDULED",createdById:"u-couns",createdAt:new Date(NOW-2*D).toISOString(),updatedAt:new Date(NOW-2*D).toISOString() },
+  { id:"ws-10",templateId:"wtpl-10",title:"Peer Conflict Resolution",description:"Effective communication and mediation skills for students.",category:"BULLYING_PREVENTION",audience:"Grades 5-6",venue:"Room 203",date:new Date(NOW-8*D).toISOString(),durationMins:90,facilitatorId:"fac-6",materials:["Scenario cards","Mediation scripts"],status:"COMPLETED",feedbackScore:4.4,createdById:"u-couns",createdAt:new Date(NOW-18*D).toISOString(),updatedAt:new Date(NOW-8*D).toISOString() },
+  { id:"ws-11",templateId:"wtpl-1",title:"Bullying Prevention - Grade 8",description:"Bullying awareness for Grade 8 students.",category:"BULLYING_PREVENTION",audience:"Grade 8",venue:"Room 301",date:new Date(NOW+12*D).toISOString(),durationMins:90,facilitatorId:"fac-6",materials:["Scenario cards","Handbook"],status:"SCHEDULED",createdById:"u-couns",createdAt:new Date(NOW-1*D).toISOString(),updatedAt:new Date(NOW-1*D).toISOString() },
+  { id:"ws-12",templateId:"wtpl-3",title:"Mental Health - Grade 6",description:"Mental health basics for younger students.",category:"MENTAL_HEALTH_AWARENESS",audience:"Grade 6",venue:"Room 102",date:new Date(NOW-12*D).toISOString(),durationMins:90,facilitatorId:"fac-1",materials:["Awareness booklet"],status:"COMPLETED",feedbackScore:4.3,createdById:"u-couns",createdAt:new Date(NOW-22*D).toISOString(),updatedAt:new Date(NOW-12*D).toISOString() },
+  { id:"ws-13",templateId:"wtpl-2",title:"Career Guidance - Grade 8",description:"Introduction to career planning for Grade 8.",category:"CAREER_GUIDANCE",audience:"Grade 8",venue:"Career Centre",date:new Date(NOW+20*D).toISOString(),durationMins:120,facilitatorId:"fac-5",materials:["Career inventory"],status:"SCHEDULED",createdById:"u-couns",createdAt:new Date(NOW-1*D).toISOString(),updatedAt:new Date(NOW-1*D).toISOString() },
+  { id:"ws-14",templateId:"wtpl-4",title:"Digital Wellness - Grade 9",description:"Digital safety for Grade 9 students.",category:"DIGITAL_SAFETY",audience:"Grade 9",venue:"Computer Lab",date:new Date(NOW-18*D).toISOString(),durationMins:90,facilitatorId:"fac-8",materials:["Digital footprint worksheet"],status:"COMPLETED",feedbackScore:4.5,createdById:"u-couns",createdAt:new Date(NOW-28*D).toISOString(),updatedAt:new Date(NOW-18*D).toISOString() },
+  { id:"ws-15",templateId:"wtpl-5",title:"Stress Management - Grade 7",description:"Stress relief techniques for Grade 7 students.",category:"STRESS_MANAGEMENT",audience:"Grade 7",venue:"Room 204",date:new Date(NOW+8*D).toISOString(),durationMins:90,facilitatorId:"fac-2",materials:["Stress diary","Mindfulness guide"],status:"SCHEDULED",createdById:"u-couns",createdAt:new Date(NOW-4*D).toISOString(),updatedAt:new Date(NOW-4*D).toISOString() },
+];
+
+// Generate 50 SEL sessions across classrooms
+const sessionTopics = ["Managing Emotions","Building Empathy","Self-Awareness","Conflict Resolution","Mindfulness & Focus","Stress Management","Anger Management","Social Skills","Communication","Resilience"];
+const SEL_SESSIONS_M4: Array<{id:string;lessonId:string;classroomId:string;title:string;topic:string;scheduledAt:string;durationMins:number;facilitatorId:string;status:string;feedbackScore?:number}> = [];
+SEED_CLASSROOMS.forEach((classroomName, classIdx) => {
+  const grade = classroomName.replace(/[A-Z]/g, "");
+  for (let i = 0; i < 4; i++) {
+    const topic = sessionTopics[(classIdx + i) % sessionTopics.length];
+    const status = i < 2 ? "COMPLETED" : (i === 2 && classIdx % 3 === 0 ? "NO_SHOW" : "SCHEDULED");
+    const daysOffset = i * 7 - 10 + classIdx;
+    const feedbackScore = status === "COMPLETED" ? 3.5 + Math.random() * 1.5 : undefined;
+    SEL_SESSIONS_M4.push({
+      id:`sel-m4-${classroomName}-${i}`,
+      lessonId:`les-${(classIdx % 12) + 1}`,
+      classroomId:`class-${classroomName}`,
+      title:`${topic} - ${classroomName}`,
+      topic,
+      scheduledAt: new Date(NOW + daysOffset * D).toISOString(),
+      durationMins: 45,
+      facilitatorId: FACILITATORS[classIdx % FACILITATORS.length].id,
+      status,
+      feedbackScore,
+    });
+  }
+});
+
+// Generate feedback for completed sessions (100+ responses)
+const SEL_FEEDBACK_M4: Array<{id:string;sessionId:string;respondentName:string;usefulnessScore:number;learnedNew:boolean;wouldRecommend:boolean;rating:number;comments:string;submittedAt:string}> = [];
+let fbId = 1;
+SEL_SESSIONS_M4.filter(s => s.status === "COMPLETED").forEach(session => {
+  const numFeedback = 5 + Math.floor(Math.random() * 10);
+  for (let i = 0; i < numFeedback; i++) {
+    const firstName = FIRST_NAMES_M[(fbId * 7) % FIRST_NAMES_M.length];
+    const lastName = LAST_NAMES[(fbId * 11) % LAST_NAMES.length];
+    SEL_FEEDBACK_M4.push({
+      id:`fb-sel-${fbId}`,
+      sessionId:session.id,
+      respondentName:`${firstName} ${lastName}`,
+      usefulnessScore:3 + Math.floor(Math.random() * 3),
+      learnedNew:Math.random() > 0.2,
+      wouldRecommend:Math.random() > 0.15,
+      rating:3 + Math.floor(Math.random() * 3),
+      comments:fbId % 3 === 0 ? "Very helpful session!" : fbId % 3 === 1 ? "Learned some useful techniques." : "Could be more interactive.",
+      submittedAt:new Date(NOW + (fbId % 30) * H).toISOString(),
+    });
+    fbId++;
+  }
+});
+
+// Workshop feedback
+const WORKSHOP_FEEDBACK_M4: Array<{id:string;workshopId:string;respondentName:string;usefulnessScore:number;learnedNew:boolean;wouldRecommend:boolean;rating:number;comments:string;submittedAt:string}> = [];
+let wfbId = 1;
+WORKSHOPS.filter(w => w.status === "COMPLETED").forEach(workshop => {
+  const numFeedback = 8 + Math.floor(Math.random() * 15);
+  for (let i = 0; i < numFeedback; i++) {
+    const firstName = FIRST_NAMES_M[(wfbId * 13) % FIRST_NAMES_M.length];
+    const lastName = LAST_NAMES[(wfbId * 17) % LAST_NAMES.length];
+    WORKSHOP_FEEDBACK_M4.push({
+      id:`fb-ws-${wfbId}`,
+      workshopId:workshop.id,
+      respondentName:`${firstName} ${lastName}`,
+      usefulnessScore:3 + Math.floor(Math.random() * 3),
+      learnedNew:Math.random() > 0.15,
+      wouldRecommend:Math.random() > 0.1,
+      rating:3 + Math.floor(Math.random() * 3),
+      comments:wfbId % 4 === 0 ? "Excellent workshop!" : wfbId % 4 === 1 ? "Very informative." : wfbId % 4 === 2 ? "Good practical tips." : "Helpful but could be longer.",
+      submittedAt:new Date(NOW + (wfbId % 20) * H).toISOString(),
+    });
+    wfbId++;
+  }
+});
+
+// Calendar events
+const CALENDAR_EVENTS = [
+  ...SEL_SESSIONS_M4.filter(s => s.status === "SCHEDULED").map(s => ({
+    id:s.id,title:s.title,type:"SEL_SESSION" as const,date:s.scheduledAt.slice(0,10),time:s.scheduledAt.slice(11,16),grade:s.classroomId.replace("class-","").replace(/[A-Z]/g,""),classroom:s.classroomId.replace("class-",""),facilitatorName:FACILITATORS.find(f => f.id === s.facilitatorId)?.fullName,
+  })),
+  ...WORKSHOPS.filter(w => w.status === "SCHEDULED").map(w => ({
+    id:w.id,title:w.title,type:"WORKSHOP" as const,date:w.date.slice(0,10),time:w.date.slice(11,16),venue:w.venue,facilitatorName:FACILITATORS.find(f => f.id === w.facilitatorId)?.fullName,
+  })),
+  {id:"ev-ac-1",title:"Anti-Bullying Awareness Week",type:"AWARENESS_CAMPAIGN" as const,date:new Date(NOW+14*D).toISOString().slice(0,10),time:"09:00",venue:"School Campus"},
+  {id:"ev-ac-2",title:"World Mental Health Day",type:"AWARENESS_CAMPAIGN" as const,date:new Date(NOW+30*D).toISOString().slice(0,10),time:"10:00",venue:"Main Hall"},
+  {id:"ev-ps-1",title:"Grade 7 Parent-Teacher Meeting",type:"PARENT_SESSION" as const,date:new Date(NOW+7*D).toISOString().slice(0,10),time:"15:00",venue:"Room 101"},
+  {id:"ev-ps-2",title:"Grade 10 PTM - Board Prep",type:"PARENT_SESSION" as const,date:new Date(NOW+12*D).toISOString().slice(0,10),time:"16:00",venue:"Main Hall"},
+];
+
+// ======================== MODULE 1: HOME DASHBOARD & COMMAND CENTER ========================
+const M1_HIGH_RISK_STUDENTS: Module1HighRiskStudent[] = [
+  { id: "m1-h1", name: "Ananya Reddy", grade: "9", classroom: "9C", riskLevel: "CRITICAL", openCases: 2, lastActivity: new Date(NOW - 1 * D).toISOString() },
+  { id: "m1-h2", name: "Arjun Patel", grade: "8", classroom: "8A", riskLevel: "HIGH", openCases: 1, lastActivity: new Date(NOW - 2 * D).toISOString() },
+  { id: "m1-h3", name: "Aryan Joshi", grade: "8", classroom: "8B", riskLevel: "HIGH", openCases: 1, lastActivity: new Date(NOW - 1 * D).toISOString() },
+  { id: "m1-h4", name: "Karan Mehta", grade: "8", classroom: "8A", riskLevel: "HIGH", openCases: 1, lastActivity: new Date(NOW - 3 * D).toISOString() },
+  { id: "m1-h5", name: "Rohan Verma", grade: "7", classroom: "7A", riskLevel: "MODERATE", openCases: 1, lastActivity: new Date(NOW - 4 * D).toISOString() },
+];
+
+const M1_FOLLOWUPS: { dueToday: FollowUpItem[]; dueThisWeek: FollowUpItem[]; overdue: FollowUpItem[] } = {
+  dueToday: [
+    { id: "fu-d1", studentName: "Ananya Reddy", caseId: "c1", scheduledAt: new Date(NOW + 4 * H).toISOString(), bucket: "DUE_TODAY", notes: "Crisis check-in" },
+    { id: "fu-d2", studentName: "Priya Sharma", caseId: "c3", scheduledAt: new Date(NOW + 6 * H).toISOString(), bucket: "DUE_TODAY", notes: "Anxiety follow-up" },
+    { id: "fu-d3", studentName: "Isha Kapoor", caseId: "c2", scheduledAt: new Date(NOW + 2 * H).toISOString(), bucket: "DUE_TODAY" },
+  ],
+  dueThisWeek: [
+    { id: "fu-w1", studentName: "Aryan Joshi", caseId: "c4", scheduledAt: new Date(NOW + 1 * D).toISOString(), bucket: "DUE_THIS_WEEK", notes: "Behavioural review" },
+    { id: "fu-w2", studentName: "Vikram Singh", caseId: "c6", scheduledAt: new Date(NOW + 2 * D).toISOString(), bucket: "DUE_THIS_WEEK" },
+    { id: "fu-w3", studentName: "Sanya Khanna", caseId: "c5", scheduledAt: new Date(NOW + 3 * D).toISOString(), bucket: "DUE_THIS_WEEK" },
+    { id: "fu-w4", studentName: "Neha Gupta", caseId: "c8", scheduledAt: new Date(NOW + 4 * D).toISOString(), bucket: "DUE_THIS_WEEK" },
+  ],
+  overdue: [
+    { id: "fu-o1", studentName: "Rohan Verma", caseId: "c2", scheduledAt: new Date(NOW - 1 * D).toISOString(), bucket: "OVERDUE", notes: "Student absent" },
+    { id: "fu-o2", studentName: "Aditya Mishra", caseId: "c8", scheduledAt: new Date(NOW - 2 * D).toISOString(), bucket: "OVERDUE" },
+  ],
+};
+
+const M1_TEAM_PERF: Module1Overview["teamPerformance"] = {
+  counsellors: [
+    { id: "tp-c1", name: "Priya Sharma", role: "COUNSELLOR", metric: "Cases managed", value: 38, target: 40 },
+    { id: "tp-c2", name: "Dr. Anil Kumar", role: "COUNSELLOR", metric: "Cases managed", value: 32, target: 40 },
+    { id: "tp-c3", name: "Sneha Reddy", role: "COUNSELLOR", metric: "Cases managed", value: 28, target: 40 },
+    { id: "tp-c4", name: "Dr. Sanjay Gupta", role: "COUNSELLOR", metric: "Cases managed", value: 26, target: 40 },
+  ],
+  coordinators: [
+    { id: "tp-co1", name: "Deepa Menon", role: "COORDINATOR", metric: "Programs led", value: 8, target: 10 },
+    { id: "tp-co2", name: "Anita Verma", role: "COORDINATOR", metric: "Follow-ups done", value: 92, target: 100 },
+  ],
+  leadership: [
+    { id: "tp-l1", name: "Aarav Mehta", role: "LEADERSHIP", metric: "Resolution rate", value: 78, target: 85 },
+    { id: "tp-l2", name: "Neha Kapoor", role: "LEADERSHIP", metric: "Compliance rate", value: 91, target: 95 },
+  ],
+};
+
+const M1_AI_INSIGHTS: AIInsight[] = [
+  {
+    id: "ai-1", severity: "ALERT", insight: "Grade 8 has increased stress indicators",
+    description: "Stress-related flags rose 32% in Grade 8 over the past 14 days, primarily clustered in classroom 8A.",
+    suggestedActions: ["Schedule SEL Workshop", "Assign Counsellor to 8A", "Review 3 Active Cases"]
+  },
+  {
+    id: "ai-2", severity: "WARNING", insight: "Attendance decline detected in Grade 6",
+    description: "Average attendance dropped from 94% to 86% across Grade 6 cohorts this month.",
+    suggestedActions: ["Open Attendance Review", "Notify Class Teacher", "Schedule Parent Outreach"]
+  },
+  {
+    id: "ai-3", severity: "INFO", insight: "Referral volume increased by 15%",
+    description: "External referrals are up across the term, driven by anxiety and academic-stress categories.",
+    suggestedActions: ["View Referrals", "Allocate Hub Expert"]
+  },
+  {
+    id: "ai-4", severity: "WARNING", insight: "Bullying reports trending upward",
+    description: "Three new bullying-related cases opened this week, up from one weekly average.",
+    suggestedActions: ["Open Bullying Cases", "Schedule Awareness Workshop"]
+  },
+];
+
+const M1_CALENDAR_NEXT: CalendarEvent[] = [
+  { id: "m1-ev-1", type: "SEL_SESSION", title: "Self-Awareness — Grade 7A", date: new Date(NOW + 1 * D).toISOString().slice(0, 10), time: "09:30", venue: "Room 204", facilitatorName: "Priya Sharma", grade: "7", classroom: "7A" },
+  { id: "m1-ev-2", type: "WORKSHOP", title: "Bullying Prevention", date: new Date(NOW + 2 * D).toISOString().slice(0, 10), time: "11:00", venue: "Auditorium", facilitatorName: "Sneha Reddy" },
+  { id: "m1-ev-3", type: "PARENT_SESSION", title: "Grade 7 PTM", date: new Date(NOW + 3 * D).toISOString().slice(0, 10), time: "15:00", venue: "Main Hall" },
+  { id: "m1-ev-4", type: "SEL_SESSION", title: "Emotional Regulation — Grade 9C", date: new Date(NOW + 4 * D).toISOString().slice(0, 10), time: "10:00", venue: "Room 105", facilitatorName: "Dr. Anil Kumar", grade: "9", classroom: "9C" },
+  { id: "m1-ev-5", type: "AWARENESS_CAMPAIGN", title: "Mental Health Awareness Week", date: new Date(NOW + 7 * D).toISOString().slice(0, 10), time: "All day", venue: "Campus" },
+  { id: "m1-ev-6", type: "WORKSHOP", title: "Stress Management — Grade 10", date: new Date(NOW + 5 * D).toISOString().slice(0, 10), time: "14:00", venue: "Room 110", facilitatorName: "Deepa Menon" },
+  { id: "m1-ev-7", type: "PARENT_SESSION", title: "Anxious Learners — Parent Talk", date: new Date(NOW + 6 * D).toISOString().slice(0, 10), time: "16:30", venue: "Room 201" },
+];
+
+const M1_TRENDS: Record<TrendRange, Module1Trends> = {
+  "7d": {
+    range: "7d",
+    flags: [{label:"Mon",value:8},{label:"Tue",value:12},{label:"Wed",value:15},{label:"Thu",value:9},{label:"Fri",value:18},{label:"Sat",value:4},{label:"Sun",value:3}],
+    cases: [{label:"Mon",value:3},{label:"Tue",value:5},{label:"Wed",value:7},{label:"Thu",value:4},{label:"Fri",value:6},{label:"Sat",value:1},{label:"Sun",value:0}],
+    referrals: [{label:"Mon",value:1},{label:"Tue",value:2},{label:"Wed",value:3},{label:"Thu",value:2},{label:"Fri",value:4},{label:"Sat",value:0},{label:"Sun",value:0}],
+    crisis: [{label:"Mon",value:0},{label:"Tue",value:1},{label:"Wed",value:0},{label:"Thu",value:1},{label:"Fri",value:2},{label:"Sat",value:0},{label:"Sun",value:0}],
+  },
+  "30d": {
+    range: "30d",
+    flags: Array.from({length: 30}, (_, i) => ({label: `D${i+1}`, value: 8 + Math.round(Math.sin(i / 3) * 4) + (i % 5)})),
+    cases: Array.from({length: 30}, (_, i) => ({label: `D${i+1}`, value: 3 + Math.round(Math.cos(i / 4) * 2) + (i % 3)})),
+    referrals: Array.from({length: 30}, (_, i) => ({label: `D${i+1}`, value: 1 + (i % 4)})),
+    crisis: Array.from({length: 30}, (_, i) => ({label: `D${i+1}`, value: i % 7 === 0 ? 1 : 0})),
+  },
+  "Q": {
+    range: "Q",
+    flags: [{label:"W1",value:42},{label:"W2",value:55},{label:"W3",value:48},{label:"W4",value:61},{label:"W5",value:58},{label:"W6",value:67},{label:"W7",value:72},{label:"W8",value:65},{label:"W9",value:78},{label:"W10",value:81},{label:"W11",value:74},{label:"W12",value:88}],
+    cases: [{label:"W1",value:18},{label:"W2",value:22},{label:"W3",value:19},{label:"W4",value:25},{label:"W5",value:24},{label:"W6",value:28},{label:"W7",value:30},{label:"W8",value:27},{label:"W9",value:31},{label:"W10",value:33},{label:"W11",value:29},{label:"W12",value:35}],
+    referrals: [{label:"W1",value:8},{label:"W2",value:10},{label:"W3",value:9},{label:"W4",value:12},{label:"W5",value:11},{label:"W6",value:14},{label:"W7",value:13},{label:"W8",value:12},{label:"W9",value:15},{label:"W10",value:17},{label:"W11",value:16},{label:"W12",value:18}],
+    crisis: [{label:"W1",value:1},{label:"W2",value:2},{label:"W3",value:1},{label:"W4",value:3},{label:"W5",value:2},{label:"W6",value:2},{label:"W7",value:3},{label:"W8",value:2},{label:"W9",value:4},{label:"W10",value:3},{label:"W11",value:2},{label:"W12",value:4}],
+  },
+  "Y": {
+    range: "Y",
+    flags: [{label:"Jan",value:120},{label:"Feb",value:135},{label:"Mar",value:148},{label:"Apr",value:132},{label:"May",value:155},{label:"Jun",value:142},{label:"Jul",value:118},{label:"Aug",value:128},{label:"Sep",value:168},{label:"Oct",value:172},{label:"Nov",value:165},{label:"Dec",value:158}],
+    cases: [{label:"Jan",value:48},{label:"Feb",value:55},{label:"Mar",value:62},{label:"Apr",value:54},{label:"May",value:65},{label:"Jun",value:58},{label:"Jul",value:42},{label:"Aug",value:46},{label:"Sep",value:71},{label:"Oct",value:74},{label:"Nov",value:68},{label:"Dec",value:62}],
+    referrals: [{label:"Jan",value:22},{label:"Feb",value:25},{label:"Mar",value:28},{label:"Apr",value:24},{label:"May",value:30},{label:"Jun",value:27},{label:"Jul",value:18},{label:"Aug",value:21},{label:"Sep",value:32},{label:"Oct",value:34},{label:"Nov",value:30},{label:"Dec",value:28}],
+    crisis: [{label:"Jan",value:4},{label:"Feb",value:5},{label:"Mar",value:6},{label:"Apr",value:5},{label:"May",value:7},{label:"Jun",value:6},{label:"Jul",value:3},{label:"Aug",value:4},{label:"Sep",value:8},{label:"Oct",value:7},{label:"Nov",value:6},{label:"Dec",value:5}],
+  },
+};
+
+const M1_HEATMAP: HeatmapRow[] = [
+  { grade: "5", low: 18, medium: 8, high: 4, critical: 1 },
+  { grade: "6", low: 22, medium: 12, high: 5, critical: 2 },
+  { grade: "7", low: 25, medium: 15, high: 7, critical: 3 },
+  { grade: "8", low: 19, medium: 18, high: 11, critical: 5 },
+  { grade: "9", low: 16, medium: 14, high: 9, critical: 4 },
+  { grade: "10", low: 14, medium: 10, high: 6, critical: 2 },
+];
+
+function buildModule1Overview(role: string): Module1Overview {
+  const isLeadership = role === "ADMIN" || role === "PRINCIPAL" || role === "SCHOOL_ADMIN" || role === "SUPER_ADMIN" || role === "FIREFLY_REPRESENTATIVE" || role === "VICE_PRINCIPAL";
+  const firstNameMap: Record<string, string> = {
+    ADMIN: "Aarav", COUNSELLOR: "Priya", TEACHER: "Rajesh", PARENT: "Anita", STUDENT: "Arjun",
+    SYSTEM_ADMIN: "Karan", SUPER_ADMIN: "Aarav", SCHOOL_ADMIN: "Neha", PRINCIPAL: "Suresh",
+    VICE_PRINCIPAL: "Lakshmi", CLASS_TEACHER: "Rajesh", SWT_TEAM: "Anita", SEL_TEAM: "Deepa",
+    CLINICAL_SPECIALIST: "Sanjay", CAREER_SPECIALIST: "Meera", EXTERNAL_PARTNER: "Ravi",
+    FIREFLY_REPRESENTATIVE: "Vikram", FIREFLY_SPECIALIST: "Sneha",
+  };
+
+  const greeting: Module1Greeting = {
+    firstName: firstNameMap[role] ?? "User",
+    schoolName: "Green Valley International School",
+    role,
+    date: new Date().toISOString(),
+    healthScoreCategory: "NEEDS_ATTENTION",
+  };
+
+  return {
+    greeting,
+    schoolHealthScore: { score: 74, category: "NEEDS_ATTENTION", delta: 3 },
+    kpis: {
+      students: { total: 847, active: 832, newEnrollments: 24 },
+      wellbeing: { activeCases: 124, openReferrals: 40, crisisIncidents: 10, studentsAtRisk: 53, pendingAssistance: 30, completedCases: 18 },
+      sel: { activePrograms: 20, completionRate: 78, sessionsConducted: 142, participationRate: 86 },
+      compliance: { policyCompliance: 91, staffAcknowledgementRate: 88, trainingCompletion: 73, reviewsDue: 4 },
+    },
+    trends: M1_TRENDS,
+    activeCases: [
+      { id: "m1-c1", studentName: "Ananya Reddy", studentGrade: "9", riskLevel: "CRITICAL", counsellor: "Priya Sharma", status: "IN_PROGRESS", openedAt: new Date(NOW - 3 * D).toISOString(), tier: "TIER_3" },
+      { id: "m1-c2", studentName: "Arjun Patel", studentGrade: "8", riskLevel: "HIGH", counsellor: "Priya Sharma", status: "IN_PROGRESS", openedAt: new Date(NOW - 5 * D).toISOString(), tier: "TIER_3" },
+      { id: "m1-c3", studentName: "Aryan Joshi", studentGrade: "8", riskLevel: "HIGH", counsellor: "Dr. Anil Kumar", status: "OPEN", openedAt: new Date(NOW - 4 * D).toISOString(), tier: "TIER_3" },
+      { id: "m1-c4", studentName: "Karan Mehta", studentGrade: "8", riskLevel: "HIGH", counsellor: "Dr. Anil Kumar", status: "IN_PROGRESS", openedAt: new Date(NOW - 10 * D).toISOString(), tier: "TIER_3" },
+      { id: "m1-c5", studentName: "Rohan Verma", studentGrade: "7", riskLevel: "MEDIUM", counsellor: "Sneha Reddy", status: "IN_PROGRESS", openedAt: new Date(NOW - 6 * D).toISOString(), tier: "TIER_2" },
+    ],
+    crisisAlerts: [
+      { id: "m1-a1", type: "SELF_HARM_RISK", severity: "CRITICAL", title: "Self-harm indicator detected", description: "Arjun Patel's check-in indicates self-harm ideation", studentName: "Arjun Patel", actionTaken: "Crisis team activated", createdAt: new Date(NOW - 30 * 60 * 1000).toISOString() },
+      { id: "m1-a2", type: "EMOTIONAL_DISTRESS", severity: "HIGH", title: "Suicidal ideation reported", description: "Ananya Reddy disclosed ideation during session", studentName: "Ananya Reddy", actionTaken: "Parents contacted, crisis protocol", createdAt: new Date(NOW - 2 * H).toISOString() },
+      { id: "m1-a3", type: "BULLYING", severity: "HIGH", title: "Peer conflict escalation", description: "Bullying reports involving Rohan Verma", studentName: "Rohan Verma", actionTaken: "Mediation scheduled", createdAt: new Date(NOW - 4 * H).toISOString() },
+      { id: "m1-a4", type: "VIOLENCE", severity: "HIGH", title: "Behavioural incident", description: "Aryan Joshi — physical altercation", studentName: "Aryan Joshi", actionTaken: "Referred to counselling", createdAt: new Date(NOW - 6 * H).toISOString() },
+      { id: "m1-a5", type: "EMOTIONAL_DISTRESS", severity: "MODERATE", title: "Missed session (3rd occurrence)", description: "Priya Sharma missed 3rd consecutive session", studentName: "Priya Sharma", actionTaken: "Guardian contacted", createdAt: new Date(NOW - 8 * H).toISOString() },
+    ],
+    sel: {
+      activePrograms: 20,
+      sessionsConducted: 142,
+      participationRate: 86,
+      completionRate: 78,
+      byCategory: [
+        { category: "Self-Awareness", completion: 84, target: 90 },
+        { category: "Emotional Reg.", completion: 72, target: 80 },
+        { category: "Empathy", completion: 88, target: 85 },
+        { category: "Communication", completion: 76, target: 80 },
+        { category: "Conflict Res.", completion: 68, target: 75 },
+        { category: "Resilience", completion: 81, target: 85 },
+      ],
+      donut: [
+        { label: "Completed", value: 78 },
+        { label: "In Progress", value: 14 },
+        { label: "Not Started", value: 8 },
+      ],
+    },
+    referrals: { active: 18, pending: 12, assistance: 30, resolved: 86 },
+    calendar: M1_CALENDAR_NEXT,
+    recentActivity: [
+      { id: "m1-af-1", createdAt: new Date(NOW - 15 * 60 * 1000).toISOString(), type: "OBSERVATION_ADDED", title: "Observation added", subtitle: "Class teacher noted withdrawal in 8A" },
+      { id: "m1-af-2", createdAt: new Date(NOW - 45 * 60 * 1000).toISOString(), type: "CASE_CREATED", title: "Case created", subtitle: "New Tier 3 case opened for Ananya Reddy" },
+      { id: "m1-af-3", createdAt: new Date(NOW - 2 * H).toISOString(), type: "REFERRAL_SUBMITTED", title: "Referral submitted", subtitle: "Aditya Mishra referred to child psychologist" },
+      { id: "m1-af-4", createdAt: new Date(NOW - 3 * H).toISOString(), type: "CRISIS_REPORTED", title: "Crisis reported", subtitle: "Self-harm indicator raised for Arjun Patel" },
+      { id: "m1-af-5", createdAt: new Date(NOW - 5 * H).toISOString(), type: "WORKSHOP_COMPLETED", title: "Workshop completed", subtitle: "Bullying Prevention — Grade 8 cohort" },
+      { id: "m1-af-6", createdAt: new Date(NOW - 8 * H).toISOString(), type: "POLICY_PUBLISHED", title: "Policy published", subtitle: "Updated safeguarding policy v2.1" },
+    ],
+    highRiskStudents: M1_HIGH_RISK_STUDENTS,
+    followUps: M1_FOLLOWUPS,
+    teamPerformance: M1_TEAM_PERF,
+    compliance: {
+      policyCompliance: 91,
+      trainingCompletion: 73,
+      acknowledgementsPending: 14,
+      reviewsDue: 4,
+      byCategory: [
+        { category: "Safeguarding", rate: 96 },
+        { category: "Crisis Mgmt", rate: 88 },
+        { category: "SEL Frameworks", rate: 84 },
+        { category: "Parent Comm.", rate: 79 },
+      ],
+    },
+    heatmap: M1_HEATMAP,
+    aiInsights: M1_AI_INSIGHTS,
+    executiveAnalytics: {
+      resolutionRate: 78,
+      referralOutcomes: 72,
+      crisisResponseTime: "12 min",
+      selEffectiveness: 84,
+      trendPoints: [
+        { label: "Jan", value: 68 },
+        { label: "Feb", value: 71 },
+        { label: "Mar", value: 73 },
+        { label: "Apr", value: 70 },
+        { label: "May", value: 75 },
+        { label: "Jun", value: 74 },
+      ],
+    },
+    // expose isLeadership via parent route filter, not payload
+  };
+  // suppress unused-var
+  void isLeadership;
+}
 
 // ======================== DASHBOARDS ========================
 const DASHBOARDS: Record<string, DashboardOverview> = {
@@ -158,7 +1109,491 @@ const DASHBOARDS: Record<string, DashboardOverview> = {
   }
 };
 
+// =============== MODULE 6: HUB & SPOKE ASSISTANCE ===============
+
+const EXPERTS: Array<{ id: string; fullName: string; email: string; expertType: string; specializations: string[]; yearsOfExperience: number; isAvailable: boolean; rating: number; requestsHandled: number; avgResponseTime: string }> = [
+  { id:"exp-1", fullName:"Dr. Meera Kapoor", email:"meera.kapoor@firefly.local", expertType:"CLINICAL_PSYCHOLOGIST", specializations:["Child Trauma","Anxiety Disorders","PTSD"], yearsOfExperience:12, isAvailable:true, rating:4.9, requestsHandled:45, avgResponseTime:"2h" },
+  { id:"exp-2", fullName:"Arun Sharma", email:"arun.sharma@firefly.local", expertType:"SCHOOL_COUNSELLOR", specializations:["Behavioral Issues","Attention Issues","Parent Coaching"], yearsOfExperience:8, isAvailable:true, rating:4.7, requestsHandled:62, avgResponseTime:"4h" },
+  { id:"exp-3", fullName:"Priya Nair", email:"priya.nair@firefly.local", expertType:"BEHAVIORAL_SPECIALIST", specializations:["Aggression Management","Social Skills","Executive Functioning"], yearsOfExperience:10, isAvailable:false, rating:4.8, requestsHandled:38, avgResponseTime:"6h" },
+  { id:"exp-4", fullName:"Vikram Singh", email:"vikram.singh@firefly.local", expertType:"LEARNING_SUPPORT_EXPERT", specializations:["Dyslexia","ADHD","Individualized Education Plans"], yearsOfExperience:7, isAvailable:true, rating:4.6, requestsHandled:29, avgResponseTime:"3h" },
+  { id:"exp-5", fullName:"Sunita Rao", email:"sunita.rao@firefly.local", expertType:"FAMILY_COUNSELLOR", specializations:["Family Dynamics","Parent Engagement","Communication Barriers"], yearsOfExperience:15, isAvailable:true, rating:4.9, requestsHandled:51, avgResponseTime:"5h" },
+  { id:"exp-6", fullName:"Dr. Anil Verma", email:"anil.verma@firefly.local", expertType:"CLINICAL_PSYCHOLOGIST", specializations:["Depression","Self-harm","Crisis Intervention"], yearsOfExperience:18, isAvailable:true, rating:5.0, requestsHandled:73, avgResponseTime:"1h" },
+  { id:"exp-7", fullName:"Kavya Reddy", email:"kavya.reddy@firefly.local", expertType:"SCHOOL_COUNSELLOR", specializations:["Bullying","Social Isolation","Cyber Safety"], yearsOfExperience:6, isAvailable:true, rating:4.5, requestsHandled:22, avgResponseTime:"8h" },
+  { id:"exp-8", fullName:"Mohammed Faiz", email:"faiz.mohammed@firefly.local", expertType:"BEHAVIORAL_SPECIALIST", specializations:["Autism Spectrum","Sensory Processing","Behavioral Analysis"], yearsOfExperience:9, isAvailable:false, rating:4.7, requestsHandled:34, avgResponseTime:"4h" },
+];
+
+const ASSISTANCE_REQUESTS: Array<{
+  id: string; requestId: string; studentName: string; studentGrade: string; studentClassroom: string; schoolName: string;
+  concernCategory: string; priority: string; status: string; summary: string; supportingNotes: string;
+  assignedExpert?: { id: string; fullName: string; expertType: string } | null;
+  submittedBy: string; createdAt: string; updatedAt: string;
+  _count: { recommendations: number; actionItems: number; timelineEvents: number };
+}> = [
+  { id:"ar-1", requestId:"AR-2024-001", studentName:"Aarav Mehta", studentGrade:"8", studentClassroom:"8A", schoolName:"Firefly Public School",
+    concernCategory:"EMOTIONAL_WELLBEING", priority:"HIGH", status:"IN_PROGRESS", summary:"Student showing signs of anxiety and academic pressure", supportingNotes:"Parent reported declining grades and sleep issues for past 2 weeks.",
+    assignedExpert:{ id:"exp-1", fullName:"Dr. Meera Kapoor", expertType:"CLINICAL_PSYCHOLOGIST" },
+    submittedBy:"Rajesh Kumar", createdAt:new Date(NOW-3*D).toISOString(), updatedAt:new Date(NOW-D).toISOString(), _count:{recommendations:3,actionItems:2,timelineEvents:5} },
+  { id:"ar-2", requestId:"AR-2024-002", studentName:"Saanvi Patel", studentGrade:"6", studentClassroom:"6B", schoolName:"Green Valley International",
+    concernCategory:"BEHAVIORAL_CHALLENGES", priority:"MEDIUM", status:"OPEN", summary:"Repeated incidents of verbal aggression toward classmates", supportingNotes:"Teacher reports name-calling and occasional physical altercations.",
+    assignedExpert:null, submittedBy:"Lakshmi Iyer", createdAt:new Date(NOW-2*D).toISOString(), updatedAt:new Date(NOW-2*D).toISOString(), _count:{recommendations:0,actionItems:0,timelineEvents:2} },
+  { id:"ar-3", requestId:"AR-2024-003", studentName:"Vihaan Sharma", studentGrade:"9", studentClassroom:"9A", schoolName:"Delhi Public School",
+    concernCategory:"ATTENDANCE_ISSUES", priority:"HIGH", status:"ESCALATED", summary:"Significant attendance drop — missing 3 days per week", supportingNotes:"Family relocation suspected; student appears disengaged.",
+    assignedExpert:{ id:"exp-5", fullName:"Sunita Rao", expertType:"FAMILY_COUNSELLOR" },
+    submittedBy:"Priya Sharma", createdAt:new Date(NOW-5*D).toISOString(), updatedAt:new Date(NOW-H).toISOString(), _count:{recommendations:2,actionItems:4,timelineEvents:8} },
+  { id:"ar-4", requestId:"AR-2024-004", studentName:"Ananya Iyer", studentGrade:"7", studentClassroom:"7C", schoolName:"Firefly Public School",
+    concernCategory:"ACADEMIC_CONCERNS", priority:"LOW", status:"RESOLVED", summary:"Struggling with mathematics concepts; requests tutoring support", supportingNotes:"Student is motivated but needs differentiated instruction.",
+    assignedExpert:{ id:"exp-4", fullName:"Vikram Singh", expertType:"LEARNING_SUPPORT_EXPERT" },
+    submittedBy:"Rajesh Kumar", createdAt:new Date(NOW-10*D).toISOString(), updatedAt:new Date(NOW-7*D).toISOString(), _count:{recommendations:4,actionItems:3,timelineEvents:6} },
+  { id:"ar-5", requestId:"AR-2024-005", studentName:"Arjun Reddy", studentGrade:"10", studentClassroom:"10B", schoolName:"National High School",
+    concernCategory:"CRISIS_RISK", priority:"CRITICAL", status:"ESCALATED", summary:"Self-harm ideation expressed during class", supportingNotes:"Immediate crisis protocol activated; parent notification done.",
+    assignedExpert:{ id:"exp-6", fullName:"Dr. Anil Verma", expertType:"CLINICAL_PSYCHOLOGIST" },
+    submittedBy:"Neha Kapoor", createdAt:new Date(NOW-H).toISOString(), updatedAt:new Date(NOW-30*60*1000).toISOString(), _count:{recommendations:1,actionItems:2,timelineEvents:3} },
+  { id:"ar-6", requestId:"AR-2024-006", studentName:"Aadhya Nair", studentGrade:"5", studentClassroom:"5A", schoolName:"St. Mary's Academy",
+    concernCategory:"PARENT_ENGAGEMENT", priority:"MEDIUM", status:"ASSIGNED", summary:"Parent not responding to school communications for 3 weeks", supportingNotes:"Multiple attempts via email and phone unsuccessful.",
+    assignedExpert:{ id:"exp-5", fullName:"Sunita Rao", expertType:"FAMILY_COUNSELLOR" },
+    submittedBy:"Anita Desai", createdAt:new Date(NOW-4*D).toISOString(), updatedAt:new Date(NOW-2*D).toISOString(), _count:{recommendations:1,actionItems:1,timelineEvents:3} },
+  { id:"ar-7", requestId:"AR-2024-007", studentName:"Reyansh Kumar", studentGrade:"8", studentClassroom:"8C", schoolName:"Firefly Public School",
+    concernCategory:"LEARNING_DIFFICULTIES", priority:"MEDIUM", status:"IN_PROGRESS", summary:"Possible dyslexia; reading fluency significantly below grade level", supportingNotes:"Screening recommended; parent consent pending.",
+    assignedExpert:{ id:"exp-4", fullName:"Vikram Singh", expertType:"LEARNING_SUPPORT_EXPERT" },
+    submittedBy:"Rajesh Kumar", createdAt:new Date(NOW-6*D).toISOString(), updatedAt:new Date(NOW-2*D).toISOString(), _count:{recommendations:2,actionItems:2,timelineEvents:4} },
+  { id:"ar-8", requestId:"AR-2024-008", studentName:"Myra Singh", studentGrade:"6", studentClassroom:"6A", schoolName:"Green Valley International",
+    concernCategory:"EMOTIONAL_WELLBEING", priority:"HIGH", status:"OPEN", summary:"Student experiencing bullying; low mood and withdrawal", supportingNotes:"Peer conflict escalated; social isolation observed.",
+    assignedExpert:null, submittedBy:"Lakshmi Iyer", createdAt:new Date(NOW-D).toISOString(), updatedAt:new Date(NOW-D).toISOString(), _count:{recommendations:0,actionItems:0,timelineEvents:1} },
+  { id:"ar-9", requestId:"AR-2024-009", studentName:"Kabir Joshi", studentGrade:"9", studentClassroom:"9B", schoolName:"Delhi Public School",
+    concernCategory:"BEHAVIORAL_CHALLENGES", priority:"LOW", status:"CLOSED", summary:"Classroom disruption and defiance — improved after intervention", supportingNotes:"Behavior plan implemented; significant improvement noted.",
+    assignedExpert:{ id:"exp-3", fullName:"Priya Nair", expertType:"BEHAVIORAL_SPECIALIST" },
+    submittedBy:"Priya Sharma", createdAt:new Date(NOW-15*D).toISOString(), updatedAt:new Date(NOW-12*D).toISOString(), _count:{recommendations:3,actionItems:5,timelineEvents:7} },
+  { id:"ar-10", requestId:"AR-2024-010", studentName:"Anika Verma", studentGrade:"7", studentClassroom:"7A", schoolName:"National High School",
+    concernCategory:"ATTENDANCE_ISSUES", priority:"MEDIUM", status:"IN_PROGRESS", summary:"Frequent late arrivals affecting academic performance", supportingNotes:"Family issues suspected; home visit completed.",
+    assignedExpert:{ id:"exp-2", fullName:"Arun Sharma", expertType:"SCHOOL_COUNSELLOR" },
+    submittedBy:"Neha Kapoor", createdAt:new Date(NOW-7*D).toISOString(), updatedAt:new Date(NOW-3*D).toISOString(), _count:{recommendations:2,actionItems:3,timelineEvents:5} },
+];
+
+const ASSISTANCE_RECOMMENDATIONS: Array<{
+  id: string; requestId: string; recommendationType: string; title: string; description: string; priority: string;
+  status: string; dueDate?: string; createdAt: string;
+  createdBy: { id: string; fullName: string; expertType: string };
+}> = [
+  { id:"rec-1", requestId:"ar-1", recommendationType:"COUNSELLING_PLAN", title:"Weekly Counseling Sessions", description:"6-week anxiety management program with bi-weekly check-ins", priority:"HIGH", status:"ACCEPTED", dueDate:new Date(NOW+14*D).toISOString(), createdAt:new Date(NOW-2*D).toISOString(), createdBy:{id:"exp-1",fullName:"Dr. Meera Kapoor",expertType:"CLINICAL_PSYCHOLOGIST"} },
+  { id:"rec-2", requestId:"ar-1", recommendationType:"CLASSROOM_SUPPORT_PLAN", title:"Academic Accommodations", description:"Allow extended time on tests and reduced homework load during treatment", priority:"MEDIUM", status:"IMPLEMENTED", createdAt:new Date(NOW-D).toISOString(), createdBy:{id:"exp-1",fullName:"Dr. Meera Kapoor",expertType:"CLINICAL_PSYCHOLOGIST"} },
+  { id:"rec-3", requestId:"ar-3", recommendationType:"PARENT_ENGAGEMENT_STRATEGY", title:"Home Visit & Family Counseling", description:"Schedule home visit to understand attendance barriers", priority:"HIGH", status:"PENDING", dueDate:new Date(NOW+7*D).toISOString(), createdAt:new Date(NOW-3*D).toISOString(), createdBy:{id:"exp-5",fullName:"Sunita Rao",expertType:"FAMILY_COUNSELLOR"} },
+  { id:"rec-4", requestId:"ar-5", recommendationType:"EXTERNAL_REFERRAL_RECOMMENDATION", title:"Psychiatric Evaluation", description:"Urgent referral to child psychiatrist for medication evaluation", priority:"CRITICAL", status:"ACCEPTED", dueDate:new Date(NOW+3*D).toISOString(), createdAt:new Date(NOW-H/2).toISOString(), createdBy:{id:"exp-6",fullName:"Dr. Anil Verma",expertType:"CLINICAL_PSYCHOLOGIST"} },
+  { id:"rec-5", requestId:"ar-7", recommendationType:"MONITORING_PLAN", title:"Reading Intervention Program", description:"Daily 30-min reading intervention using Orton-Gillingham approach", priority:"MEDIUM", status:"IMPLEMENTED", createdAt:new Date(NOW-4*D).toISOString(), createdBy:{id:"exp-4",fullName:"Vikram Singh",expertType:"LEARNING_SUPPORT_EXPERT"} },
+];
+
+const ASSISTANCE_ACTION_ITEMS: Array<{
+  id: string; requestId: string; taskName: string; description: string;
+  assignedTo: { id: string; fullName: string; role: string }; dueDate: string; status: string; completedAt?: string; createdAt: string;
+  createdBy: { id: string; fullName: string };
+}> = [
+  { id:"ai-1", requestId:"ar-1", taskName:"Complete intake assessment", description:"Conduct initial anxiety assessment using SCARED scale", assignedTo:{id:"exp-1",fullName:"Dr. Meera Kapoor",role:"Clinical Psychologist"}, dueDate:new Date(NOW+2*D).toISOString(), status:"COMPLETED", completedAt:new Date(NOW-D).toISOString(), createdAt:new Date(NOW-2*D).toISOString(), createdBy:{id:"exp-1",fullName:"Dr. Meera Kapoor"} },
+  { id:"ai-2", requestId:"ar-1", taskName:"Share resources with parent", description:"Send anxiety management parent guide via email", assignedTo:{id:"exp-1",fullName:"Dr. Meera Kapoor",role:"Clinical Psychologist"}, dueDate:new Date(NOW+D).toISOString(), status:"IN_PROGRESS", createdAt:new Date(NOW-D).toISOString(), createdBy:{id:"exp-1",fullName:"Dr. Meera Kapoor"} },
+  { id:"ai-3", requestId:"ar-3", taskName:"Schedule home visit", description:"Coordinate with family for home visit this week", assignedTo:{id:"exp-5",fullName:"Sunita Rao",role:"Family Counsellor"}, dueDate:new Date(NOW+3*D).toISOString(), status:"PENDING", createdAt:new Date(NOW-2*D).toISOString(), createdBy:{id:"exp-5",fullName:"Sunita Rao"} },
+  { id:"ai-4", requestId:"ar-5", taskName:"Activate crisis protocol", description:"Ensure 24/7 crisis support contact provided to family", assignedTo:{id:"exp-6",fullName:"Dr. Anil Verma",role:"Clinical Psychologist"}, dueDate:new Date(NOW).toISOString(), status:"COMPLETED", completedAt:new Date(NOW-30*60*1000).toISOString(), createdAt:new Date(NOW-H/2).toISOString(), createdBy:{id:"exp-6",fullName:"Dr. Anil Verma"} },
+  { id:"ai-5", requestId:"ar-5", taskName:"Coordinate psychiatric referral", description:"Prepare referral letter and contact Dr. Gupta at Sunshine Mental Health", assignedTo:{id:"exp-6",fullName:"Dr. Anil Verma",role:"Clinical Psychologist"}, dueDate:new Date(NOW+2*D).toISOString(), status:"IN_PROGRESS", createdAt:new Date(NOW-H/2).toISOString(), createdBy:{id:"exp-6",fullName:"Dr. Anil Verma"} },
+];
+
+const ASSISTANCE_DISCUSSIONS: Array<{
+  id: string; requestId: string; authorName: string; authorRole: string; authorType: string;
+  message: string; attachmentUrl?: string; mentions?: string[]; createdAt: string;
+}> = [
+  { id:"ad-1", requestId:"ar-1", authorName:"Dr. Meera Kapoor", authorRole:"Clinical Psychologist", authorType:"HUB_EXPERT", message:"Initial assessment complete. Aarav shows moderate anxiety symptoms consistent with academic pressure. Recommending 6-week CBT program.", createdAt:new Date(NOW-2*D).toISOString() },
+  { id:"ad-2", requestId:"ar-1", authorName:"Rajesh Kumar", authorRole:"Class Teacher", authorType:"SCHOOL_COUNSELLOR", message:"Thank you Dr. Kapoor. I'll coordinate with the parent for consent.", mentions:["Dr. Meera Kapoor"], createdAt:new Date(NOW-2*D+H).toISOString() },
+  { id:"ad-3", requestId:"ar-1", authorName:"Anita Desai", authorRole:"School Counsellor", authorType:"SCHOOL_COUNSELLOR", message:"Parent meeting scheduled for tomorrow 3 PM. Will share update after.", createdAt:new Date(NOW-D).toISOString() },
+  { id:"ad-4", requestId:"ar-3", authorName:"Sunita Rao", authorRole:"Family Counsellor", authorType:"HUB_EXPERT", message:"Home visit needed urgently. The attendance pattern suggests deeper family issues.", createdAt:new Date(NOW-3*D).toISOString() },
+  { id:"ad-5", requestId:"ar-3", authorName:"Priya Sharma", authorRole:"School Counsellor", authorType:"COORDINATOR", message:"I've attempted phone contact 5 times without success. Should we consider alternative contact methods?", createdAt:new Date(NOW-2*D).toISOString() },
+  { id:"ad-6", requestId:"ar-5", authorName:"Dr. Anil Verma", authorRole:"Clinical Psychologist", authorType:"HUB_EXPERT", message:"CRISIS ALERT: Arjun expressed self-harm ideation. Immediate psychiatric evaluation required. Crisis protocol activated.", createdAt:new Date(NOW-H/2).toISOString() },
+  { id:"ad-7", requestId:"ar-5", authorName:"Neha Kapoor", authorRole:"School Administrator", authorType:"PRINCIPAL", message:"Crisis protocol confirmed. Parent notified. Dr. Verma please proceed with referral.", createdAt:new Date(NOW-H/3).toISOString() },
+];
+
+const ASSISTANCE_TIMELINE_EVENTS: Array<{
+  id: string; requestId: string; eventType: string; title: string; description: string; createdAt: string;
+  createdBy?: { id: string; fullName: string; role: string };
+}> = [
+  { id:"ate-1", requestId:"ar-1", eventType:"REQUEST_SUBMITTED", title:"Request Submitted", description:"Assistance request created by Rajesh Kumar", createdAt:new Date(NOW-3*D).toISOString(), createdBy:{id:"u-teacher",fullName:"Rajesh Kumar",role:"Class Teacher"} },
+  { id:"ate-2", requestId:"ar-1", eventType:"EXPERT_ASSIGNED", title:"Expert Assigned", description:"Dr. Meera Kapoor assigned to this case", createdAt:new Date(NOW-3*D+H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"} },
+  { id:"ate-3", requestId:"ar-1", eventType:"RECOMMENDATION_ADDED", title:"Recommendation Added", description:"Dr. Meera Kapoor added a counseling plan recommendation", createdAt:new Date(NOW-2*D).toISOString(), createdBy:{id:"exp-1",fullName:"Dr. Meera Kapoor",role:"Clinical Psychologist"} },
+  { id:"ate-4", requestId:"ar-1", eventType:"STATUS_UPDATED", title:"Status Updated", description:"Request moved to In Progress", createdAt:new Date(NOW-D).toISOString(), createdBy:{id:"exp-1",fullName:"Dr. Meera Kapoor",role:"Clinical Psychologist"} },
+  { id:"ate-5", requestId:"ar-3", eventType:"REQUEST_SUBMITTED", title:"Request Submitted", description:"Assistance request created by Priya Sharma", createdAt:new Date(NOW-5*D).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"} },
+  { id:"ate-6", requestId:"ar-3", eventType:"EXPERT_ASSIGNED", title:"Expert Assigned", description:"Sunita Rao assigned as Family Counsellor", createdAt:new Date(NOW-4*D).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"} },
+  { id:"ate-7", requestId:"ar-3", eventType:"ESCALATED", title:"Case Escalated", description:"Escalated to Senior Specialist due to unresponsive family", createdAt:new Date(NOW-2*D).toISOString(), createdBy:{id:"exp-5",fullName:"Sunita Rao",role:"Family Counsellor"} },
+  { id:"ate-8", requestId:"ar-5", eventType:"REQUEST_SUBMITTED", title:"Request Submitted", description:"Crisis assistance request created", createdAt:new Date(NOW-H).toISOString(), createdBy:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"} },
+  { id:"ate-9", requestId:"ar-5", eventType:"EXPERT_ASSIGNED", title:"Expert Assigned", description:"Dr. Anil Verma assigned for crisis intervention", createdAt:new Date(NOW-H/2).toISOString(), createdBy:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"} },
+  { id:"ate-10", requestId:"ar-5", eventType:"ESCALATED", title:"Case Escalated", description:"Escalated to Leadership Team", createdAt:new Date(NOW-H/3).toISOString(), createdBy:{id:"exp-6",fullName:"Dr. Anil Verma",role:"Clinical Psychologist"} },
+];
+
+const ASSISTANCE_ESCALATIONS: Array<{
+  id: string; requestId: string; escalatedTo: string; reason: string; escalatedAt: string;
+  escalatedBy: { id: string; fullName: string }; status: string; resolvedAt?: string;
+}> = [
+  { id:"esc-1", requestId:"ar-3", escalatedTo:"SENIOR_SPECIALIST", reason:"Family unresponsive after 5+ contact attempts", escalatedAt:new Date(NOW-2*D).toISOString(), escalatedBy:{id:"exp-5",fullName:"Sunita Rao"}, status:"PENDING" },
+  { id:"esc-2", requestId:"ar-5", escalatedTo:"LEADERSHIP", reason:"Critical self-harm ideation — requires leadership oversight", escalatedAt:new Date(NOW-H/3).toISOString(), escalatedBy:{id:"exp-6",fullName:"Dr. Anil Verma"}, status:"ACKNOWLEDGED" },
+];
+
+const ASSISTANCE_DASHBOARD_STATS = {
+  totalRequests: 48, openRequests: 12, inProgressRequests: 18, resolvedRequests: 14, highPriorityRequests: 8,
+  avgResponseTime: "4.2h",
+  requestsByStatus: [
+    { status:"OPEN", count:12 },{ status:"ASSIGNED", count:6 },{ status:"IN_PROGRESS", count:18 },{ status:"ESCALATED", count:4 },{ status:"RESOLVED", count:12 },{ status:"CLOSED", count:2 }
+  ],
+  requestsByPriority: [
+    { priority:"LOW", count:8 },{ priority:"MEDIUM", count:22 },{ priority:"HIGH", count:12 },{ priority:"CRITICAL", count:6 }
+  ],
+  requestsByCategory: [
+    { category:"EMOTIONAL_WELLBEING", count:14 },{ category:"BEHAVIORAL_CHALLENGES", count:10 },{ category:"ATTENDANCE_ISSUES", count:8 },
+    { category:"ACADEMIC_CONCERNS", count:6 },{ category:"PARENT_ENGAGEMENT", count:5 },{ category:"CRISIS_RISK", count:3 },{ category:"LEARNING_DIFFICULTIES", count:4 }
+  ],
+  monthlyTrends: [
+    { month:"Jan", submitted:22, resolved:18 },{ month:"Feb", submitted:28, resolved:24 },{ month:"Mar", submitted:35, resolved:30 },
+    { month:"Apr", submitted:30, resolved:28 },{ month:"May", submitted:38, resolved:32 },{ month:"Jun", submitted:42, resolved:36 }
+  ],
+};
+
+const EXPERT_PERFORMANCE: Array<{ expertId: string; expertName: string; expertType: string; requestsHandled: number; activeRequests: number; avgResponseTime: string; resolutionRate: number; satisfactionScore: number }> = [
+  { expertId:"exp-1", expertName:"Dr. Meera Kapoor", expertType:"CLINICAL_PSYCHOLOGIST", requestsHandled:45, activeRequests:6, avgResponseTime:"2h", resolutionRate:92, satisfactionScore:4.9 },
+  { expertId:"exp-2", expertName:"Arun Sharma", expertType:"SCHOOL_COUNSELLOR", requestsHandled:62, activeRequests:8, avgResponseTime:"4h", resolutionRate:88, satisfactionScore:4.7 },
+  { expertId:"exp-3", expertName:"Priya Nair", expertType:"BEHAVIORAL_SPECIALIST", requestsHandled:38, activeRequests:5, avgResponseTime:"6h", resolutionRate:85, satisfactionScore:4.8 },
+  { expertId:"exp-4", expertName:"Vikram Singh", expertType:"LEARNING_SUPPORT_EXPERT", requestsHandled:29, activeRequests:4, avgResponseTime:"3h", resolutionRate:90, satisfactionScore:4.6 },
+  { expertId:"exp-5", expertName:"Sunita Rao", expertType:"FAMILY_COUNSELLOR", requestsHandled:51, activeRequests:7, avgResponseTime:"5h", resolutionRate:87, satisfactionScore:4.9 },
+  { expertId:"exp-6", expertName:"Dr. Anil Verma", expertType:"CLINICAL_PSYCHOLOGIST", requestsHandled:73, activeRequests:10, avgResponseTime:"1h", resolutionRate:95, satisfactionScore:5.0 },
+];
+
+const ASSISTANCE_ANALYTICS = {
+  requestsByCategory: [
+    { name:"Emotional Wellbeing", value:14 },{ name:"Behavioral Challenges", value:10 },{ name:"Attendance Issues", value:8 },
+    { name:"Academic Concerns", value:6 },{ name:"Parent Engagement", value:5 },{ name:"Crisis Risk", value:3 },{ name:"Learning Difficulties", value:4 }
+  ],
+  requestsBySchool: [
+    { name:"Firefly Public School", value:18 },{ name:"Green Valley International", value:10 },{ name:"Delhi Public School", value:8 },
+    { name:"National High School", value:6 },{ name:"St. Mary's Academy", value:4 },{ name:"Others", value:4 }
+  ],
+  escalationTrends: [
+    { month:"Jan", escalations:3 },{ month:"Feb", escalations:4 },{ month:"Mar", escalations:6 },
+    { month:"Apr", escalations:5 },{ month:"May", escalations:7 },{ month:"Jun", escalations:8 }
+  ],
+  resolutionTimes: [
+    { month:"Jan", avgDays:5.2 },{ month:"Feb", avgDays:4.8 },{ month:"Mar", avgDays:6.1 },
+    { month:"Apr", avgDays:5.5 },{ month:"May", avgDays:4.2 },{ month:"Jun", avgDays:3.8 }
+  ],
+  expertUtilization: [
+    { expertName:"Dr. Anil Verma", requests:73 },{ expertName:"Arun Sharma", requests:62 },{ expertName:"Sunita Rao", requests:51 },
+    { expertName:"Dr. Meera Kapoor", requests:45 },{ expertName:"Priya Nair", requests:38 },{ expertName:"Vikram Singh", requests:29 }
+  ],
+};
+
+// =============== MODULE 8: CRISIS REPORTING & ESCALATIONS ===============
+
+const CRISIS_INCIDENTS: Array<{
+  id: string; incidentId: string; studentName: string; studentGrade: string; studentClassroom: string; schoolName: string;
+  incidentCategory: string; severity: string; status: string; description: string; location: string;
+  reportedBy: string; createdAt: string; updatedAt: string;
+  _count: { actions: number; communications: number; timelineEvents: number; escalations: number };
+}> = [
+  { id:"ci-1", incidentId:"CI-2024-001", studentName:"Ananya Reddy", studentGrade:"9", studentClassroom:"9A", schoolName:"Firefly Public School",
+    incidentCategory:"SELF_HARM_RISK", severity:"CRITICAL", status:"INVESTIGATING", description:"Student found with self-harm marks on forearm. Reports feeling overwhelmed by exams.", location:"Classroom 9A", reportedBy:"Rajesh Kumar", createdAt:new Date(NOW-2*H).toISOString(), updatedAt:new Date(NOW-H/2).toISOString(), _count:{actions:4,communications:2,timelineEvents:6,escalations:1} },
+  { id:"ci-2", incidentId:"CI-2024-002", studentName:"Vikram Singh", studentGrade:"10", studentClassroom:"10B", schoolName:"Delhi Public School",
+    incidentCategory:"SUICIDE_IDEATION", severity:"EMERGENCY", status:"ESCALATED", description:"Student expressed suicidal thoughts during class. Immediate safety assessment required.", location:"School Grounds", reportedBy:"Priya Sharma", createdAt:new Date(NOW-H).toISOString(), updatedAt:new Date(NOW-30*60*1000).toISOString(), _count:{actions:5,communications:3,timelineEvents:8,escalations:2} },
+  { id:"ci-3", incidentId:"CI-2024-003", studentName:"Aarav Mehta", studentGrade:"8", studentClassroom:"8C", schoolName:"Green Valley International",
+    incidentCategory:"BULLYING_ESCALATION", severity:"HIGH", status:"ACKNOWLEDGED", description:"Reports of severe bullying including physical aggression. Victim showing signs of anxiety and withdrawal.", location:"Playground", reportedBy:"Lakshmi Iyer", createdAt:new Date(NOW-4*H).toISOString(), updatedAt:new Date(NOW-2*H).toISOString(), _count:{actions:3,communications:1,timelineEvents:4,escalations:0} },
+  { id:"ci-4", incidentId:"CI-2024-004", studentName:"Saanvi Patel", studentGrade:"7", studentClassroom:"7A", schoolName:"National High School",
+    incidentCategory:"VIOLENCE_THREAT", severity:"CRITICAL", status:"INVESTIGATING", description:"Student made explicit threat of violence against classmates. Confiscated written manifesto.", location:"Classroom 7A", reportedBy:"Neha Kapoor", createdAt:new Date(NOW-6*H).toISOString(), updatedAt:new Date(NOW-3*H).toISOString(), _count:{actions:4,communications:2,timelineEvents:5,escalations:1} },
+  { id:"ci-5", incidentId:"CI-2024-005", studentName:"Arjun Reddy", studentGrade:"6", studentClassroom:"6B", schoolName:"St. Mary's Academy",
+    incidentCategory:"ABUSE_CONCERNS", severity:"CRITICAL", status:"ESCALATED", description:"Student disclosed physical abuse at home during counselling session. Visible marks on arms.", location:"Counselling Room", reportedBy:"Dr. Anil Kumar", createdAt:new Date(NOW-8*H).toISOString(), updatedAt:new Date(NOW-4*H).toISOString(), _count:{actions:6,communications:4,timelineEvents:9,escalations:2} },
+  { id:"ci-6", incidentId:"CI-2024-006", studentName:"Myra Nair", studentGrade:"5", studentClassroom:"5A", schoolName:"Firefly Public School",
+    incidentCategory:"SEVERE_EMOTIONAL_DISTREESS", severity:"HIGH", status:"MONITORING", description:"Student experiencing severe panic attacks. History of anxiety disorder. Parent requests immediate support.", location:"School Reception", reportedBy:"Anita Desai", createdAt:new Date(NOW-12*H).toISOString(), updatedAt:new Date(NOW-6*H).toISOString(), _count:{actions:2,communications:1,timelineEvents:3,escalations:0} },
+  { id:"ci-7", incidentId:"CI-2024-007", studentName:"Kabir Joshi", studentGrade:"9", studentClassroom:"9B", schoolName:"Delhi Public School",
+    incidentCategory:"SUBSTANCE_CONCERN", severity:"HIGH", status:"REPORTED", description:"Teacher found student with suspected alcohol on school premises. Student appears intoxicated.", location:"School Canteen", reportedBy:"Rajesh Kumar", createdAt:new Date(NOW-H*2).toISOString(), updatedAt:new Date(NOW-H*2).toISOString(), _count:{actions:2,communications:0,timelineEvents:2,escalations:0} },
+  { id:"ci-8", incidentId:"CI-2024-008", studentName:"Anika Sharma", studentGrade:"8", studentClassroom:"8A", schoolName:"Green Valley International",
+    incidentCategory:"SAFETY_CONCERN", severity:"HIGH", status:"REPORTED", description:"Student reported seeing a stranger photographing students near school entrance.", location:"School Entrance", reportedBy:"Lakshmi Iyer", createdAt:new Date(NOW-H*3).toISOString(), updatedAt:new Date(NOW-H*3).toISOString(), _count:{actions:1,communications:0,timelineEvents:1,escalations:0} },
+  { id:"ci-9", incidentId:"CI-2024-009", studentName:"Reyansh Kumar", studentGrade:"10", studentClassroom:"10A", schoolName:"National High School",
+    incidentCategory:"MISSING_STUDENT", severity:"EMERGENCY", status:"ESCALATED", description:"Student did not return home after school. Last seen at school at 3 PM. Parents report missing since 5 PM.", location:"School Exit", reportedBy:"Neha Kapoor", createdAt:new Date(NOW-H/4).toISOString(), updatedAt:new Date(NOW-H/6).toISOString(), _count:{actions:5,communications:4,timelineEvents:7,escalations:3} },
+  { id:"ci-10", incidentId:"CI-2024-010", studentName:"Aadhya Verma", studentGrade:"7", studentClassroom:"7C", schoolName:"St. Mary's Academy",
+    incidentCategory:"BULLYING_ESCALATION", severity:"MEDIUM", status:"RESOLVED", description:"Persistent cyberbullying via Instagram. Evidence collected. Perpetrator identified.", location:"Online", reportedBy:"Dr. Anil Kumar", createdAt:new Date(NOW-3*D).toISOString(), updatedAt:new Date(NOW-2*D).toISOString(), _count:{actions:4,communications:3,timelineEvents:6,escalations:0} },
+  { id:"ci-11", incidentId:"CI-2024-011", studentName:"Vihaan Singh", studentGrade:"6", studentClassroom:"6A", schoolName:"Firefly Public School",
+    incidentCategory:"SELF_HARM_RISK", severity:"HIGH", status:"MONITORING", description:"Student recently added to high-risk list. Multiple counselors tracking. Self-harm ideation resurfacing.", location:"Counselling Room", reportedBy:"Priya Sharma", createdAt:new Date(NOW-5*D).toISOString(), updatedAt:new Date(NOW-D).toISOString(), _count:{actions:3,communications:2,timelineEvents:5,escalations:1} },
+  { id:"ci-12", incidentId:"CI-2024-012", studentName:"Ira Patel", studentGrade:"9", studentClassroom:"9C", schoolName:"Delhi Public School",
+    incidentCategory:"SEVERE_EMOTIONAL_DISTREESS", severity:"MEDIUM", status:"INVESTIGATING", description:"Student found crying in bathroom. Reports feeling worthless and having difficulty sleeping.", location:"Girls Bathroom", reportedBy:"Rajesh Kumar", createdAt:new Date(NOW-H*5).toISOString(), updatedAt:new Date(NOW-H*4).toISOString(), _count:{actions:2,communications:1,timelineEvents:3,escalations:0} },
+  { id:"ci-13", incidentId:"CI-2024-013", studentName:"Karan Mehta", studentGrade:"8", studentClassroom:"8B", schoolName:"Green Valley International",
+    incidentCategory:"VIOLENCE_THREAT", severity:"CRITICAL", status:"ESCALATED", description:"Written threat found in student's notebook. School resource officer notified.", location:"Classroom 8B", reportedBy:"Lakshmi Iyer", createdAt:new Date(NOW-H*0.5).toISOString(), updatedAt:new Date(NOW-H/3).toISOString(), _count:{actions:4,communications:2,timelineEvents:6,escalations:2} },
+  { id:"ci-14", incidentId:"CI-2024-014", studentName:"Navya Nair", studentGrade:"5", studentClassroom:"5B", schoolName:"National High School",
+    incidentCategory:"SAFETY_CONCERN", severity:"MEDIUM", status:"REPORTED", description:"Student reports being followed by an unknown adult near school.", location:"Near School", reportedBy:"Anita Desai", createdAt:new Date(NOW-H*6).toISOString(), updatedAt:new Date(NOW-H*6).toISOString(), _count:{actions:1,communications:0,timelineEvents:1,escalations:0} },
+  { id:"ci-15", incidentId:"CI-2024-015", studentName:"Aditya Iyer", studentGrade:"10", studentClassroom:"10C", schoolName:"St. Mary's Academy",
+    incidentCategory:"SUBSTANCE_CONCERN", severity:"HIGH", status:"INVESTIGATING", description:"Multiple students seen vaping in school bathroom. Repeated offense.", location:"Boys Bathroom", reportedBy:"Neha Kapoor", createdAt:new Date(NOW-H*4).toISOString(), updatedAt:new Date(NOW-H*2).toISOString(), _count:{actions:2,communications:1,timelineEvents:3,escalations:0} },
+  // Historical resolved incidents
+  { id:"ci-16", incidentId:"CI-2024-016", studentName:"Rohan Sharma", studentGrade:"8", studentClassroom:"8D", schoolName:"Firefly Public School",
+    incidentCategory:"SELF_HARM_RISK", severity:"HIGH", status:"CLOSED", description:"Self-harm incident. Family counselling arranged. Student now stable.", location:"Hostel", reportedBy:"Priya Sharma", createdAt:new Date(NOW-10*D).toISOString(), updatedAt:new Date(NOW-7*D).toISOString(), _count:{actions:5,communications:3,timelineEvents:8,escalations:1} },
+  { id:"ci-17", incidentId:"CI-2024-017", studentName:"Ananya Gupta", studentGrade:"9", studentClassroom:"9B", schoolName:"Delhi Public School",
+    incidentCategory:"BULLYING_ESCALATION", severity:"MEDIUM", status:"CLOSED", description:"Bullying resolved through peer mediation. Both parties reconciled.", location:"Classroom", reportedBy:"Rajesh Kumar", createdAt:new Date(NOW-14*D).toISOString(), updatedAt:new Date(NOW-10*D).toISOString(), _count:{actions:3,communications:2,timelineEvents:5,escalations:0} },
+  { id:"ci-18", incidentId:"CI-2024-018", studentName:"Ishaan Patel", studentGrade:"7", studentClassroom:"7B", schoolName:"Green Valley International",
+    incidentCategory:"ABUSE_CONCERNS", severity:"CRITICAL", status:"CLOSED", description:"Child protection services notified. Case transferred to external agency.", location:"Home", reportedBy:"Dr. Anil Kumar", createdAt:new Date(NOW-20*D).toISOString(), updatedAt:new Date(NOW-15*D).toISOString(), _count:{actions:8,communications:6,timelineEvents:12,escalations:3} },
+  { id:"ci-19", incidentId:"CI-2024-019", studentName:"Priya Desai", studentGrade:"6", studentClassroom:"6C", schoolName:"National High School",
+    incidentCategory:"SEVERE_EMOTIONAL_DISTREESS", severity:"MEDIUM", status:"CLOSED", description:"Panic attacks managed through therapy. Student returned to normal routine.", location:"School", reportedBy:"Anita Desai", createdAt:new Date(NOW-12*D).toISOString(), updatedAt:new Date(NOW-8*D).toISOString(), _count:{actions:3,communications:2,timelineEvents:4,escalations:0} },
+  { id:"ci-20", incidentId:"CI-2024-020", studentName:"Arjun Nair", studentGrade:"10", studentClassroom:"10D", schoolName:"St. Mary's Academy",
+    incidentCategory:"VIOLENCE_THREAT", severity:"HIGH", status:"CLOSED", description:"Threat assessed as not credible. Student received counselling. Case closed.", location:"School", reportedBy:"Neha Kapoor", createdAt:new Date(NOW-18*D).toISOString(), updatedAt:new Date(NOW-14*D).toISOString(), _count:{actions:4,communications:2,timelineEvents:6,escalations:1} },
+];
+
+const CRISIS_TEAM_MEMBERS: Record<string, Array<{ id: string; fullName: string; role: string; roleType: string; isAvailable: boolean; addedAt: string }>> = {
+  "ci-1": [
+    { id:"u-couns", fullName:"Priya Sharma", role:"School Counsellor", roleType:"OWNER", isAvailable:true, addedAt:new Date(NOW-2*H).toISOString() },
+    { id:"u-admin", fullName:"Neha Kapoor", role:"School Administrator", roleType:"SUPPORTING", isAvailable:true, addedAt:new Date(NOW-2*H).toISOString() },
+    { id:"u-principal", fullName:"Dr. Suresh Iyengar", role:"Principal", roleType:"OBSERVER", isAvailable:true, addedAt:new Date(NOW-H).toISOString() },
+  ],
+  "ci-2": [
+    { id:"u-couns", fullName:"Priya Sharma", role:"School Counsellor", roleType:"OWNER", isAvailable:true, addedAt:new Date(NOW-H).toISOString() },
+    { id:"exp-6", fullName:"Dr. Anil Verma", role:"Clinical Psychologist", roleType:"SUPPORTING", isAvailable:true, addedAt:new Date(NOW-H/2).toISOString() },
+    { id:"u-admin", fullName:"Neha Kapoor", role:"School Administrator", roleType:"SUPPORTING", isAvailable:true, addedAt:new Date(NOW-H/2).toISOString() },
+    { id:"u-principal", fullName:"Dr. Suresh Iyengar", role:"Principal", roleType:"OBSERVER", isAvailable:true, addedAt:new Date(NOW-H/3).toISOString() },
+  ],
+  "ci-5": [
+    { id:"u-couns", fullName:"Priya Sharma", role:"School Counsellor", roleType:"OWNER", isAvailable:true, addedAt:new Date(NOW-8*H).toISOString() },
+    { id:"exp-6", fullName:"Dr. Anil Verma", role:"Clinical Psychologist", roleType:"SUPPORTING", isAvailable:true, addedAt:new Date(NOW-6*H).toISOString() },
+    { id:"u-admin", fullName:"Neha Kapoor", role:"School Administrator", roleType:"SUPPORTING", isAvailable:true, addedAt:new Date(NOW-4*H).toISOString() },
+  ],
+};
+
+const CRISIS_ACTIONS: Array<{
+  id: string; incidentId: string; actionType: string; taskName: string; description: string;
+  assignedTo: { id: string; fullName: string; role: string }; dueTime: string; status: string; completedAt?: string; createdAt: string;
+  createdBy: { id: string; fullName: string };
+}> = [
+  { id:"ca-1", incidentId:"ci-1", actionType:"CONDUCT_SAFETY_CHECK", taskName:"Immediate Safety Assessment", description:"Conduct危机 safety assessment for Ananya Reddy", assignedTo:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, dueTime:new Date(NOW).toISOString(), status:"COMPLETED", completedAt:new Date(NOW-H).toISOString(), createdAt:new Date(NOW-2*H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma"} },
+  { id:"ca-2", incidentId:"ci-1", actionType:"CONTACT_PARENT", taskName:"Parent Notification", description:"Inform parents about the incident and arrange meeting", assignedTo:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, dueTime:new Date(NOW+H).toISOString(), status:"IN_PROGRESS", createdAt:new Date(NOW-2*H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma"} },
+  { id:"ca-3", incidentId:"ci-1", actionType:"SCHEDULE_ASSESSMENT", taskName:"Psychological Assessment", description:"Schedule comprehensive psychological assessment", assignedTo:{id:"exp-6",fullName:"Dr. Anil Verma",role:"Clinical Psychologist"}, dueTime:new Date(NOW+2*D).toISOString(), status:"PENDING", createdAt:new Date(NOW-H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma"} },
+  { id:"ca-4", incidentId:"ci-1", actionType:"ARRANGE_COUNSELLING", taskName:"Crisis Counselling Sessions", description:"Arrange daily counselling sessions for next two weeks", assignedTo:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, dueTime:new Date(NOW+14*D).toISOString(), status:"PENDING", createdAt:new Date(NOW-H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma"} },
+  { id:"ca-5", incidentId:"ci-2", actionType:"CONDUCT_SAFETY_CHECK", taskName:"Emergency Safety Assessment", description:"Immediate safety assessment - student expressed suicidal ideation", assignedTo:{id:"exp-6",fullName:"Dr. Anil Verma",role:"Clinical Psychologist"}, dueTime:new Date(NOW).toISOString(), status:"COMPLETED", completedAt:new Date(NOW-H/2).toISOString(), createdAt:new Date(NOW-H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma"} },
+  { id:"ca-6", incidentId:"ci-2", actionType:"NOTIFY_LEADERSHIP", taskName:"Principal Notification", description:"Notify principal about emergency crisis situation", assignedTo:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"}, dueTime:new Date(NOW).toISOString(), status:"COMPLETED", completedAt:new Date(NOW-H/2).toISOString(), createdAt:new Date(NOW-H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma"} },
+  { id:"ca-7", incidentId:"ci-2", actionType:"ESCALATE_EXTERNALLY", taskName:"Crisis Helpline Contact", description:"Contact emergency crisis helpline for guidance", assignedTo:{id:"exp-6",fullName:"Dr. Anil Verma",role:"Clinical Psychologist"}, dueTime:new Date(NOW).toISOString(), status:"IN_PROGRESS", createdAt:new Date(NOW-H/2).toISOString(), createdBy:{id:"exp-6",fullName:"Dr. Anil Verma"} },
+  { id:"ca-8", incidentId:"ci-2", actionType:"CONTACT_PARENT", taskName:"Emergency Parent Contact", description:"Contact parents immediately - student requires immediate support at home", assignedTo:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, dueTime:new Date(NOW+H/2).toISOString(), status:"PENDING", createdAt:new Date(NOW-H/2).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma"} },
+];
+
+const CRISIS_COMMUNICATIONS: Array<{
+  id: string; incidentId: string; communicationType: string; contactPerson: string; relationship: string;
+  dateTime: string; outcome: string; notes?: string; createdAt: string;
+  createdBy: { id: string; fullName: string };
+}> = [
+  { id:"cc-1", incidentId:"ci-1", communicationType:"PHONE_CALL", contactPerson:"Mrs. Sunita Reddy", relationship:"Mother", dateTime:new Date(NOW-H).toISOString(), outcome:"Mother informed. Will come to school immediately.", createdAt:new Date(NOW-H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma"} },
+  { id:"cc-2", incidentId:"ci-1", communicationType:"MEETING", contactPerson:"Mrs. Sunita Reddy", relationship:"Mother", dateTime:new Date(NOW+H).toISOString(), outcome:"Scheduled for 4 PM", createdAt:new Date(NOW-H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma"} },
+  { id:"cc-3", incidentId:"ci-2", communicationType:"PHONE_CALL", contactPerson:"Mr. Rajesh Singh", relationship:"Father", dateTime:new Date(NOW-H/2).toISOString(), outcome:"Father rushing to school. Crisis protocol explained.", createdAt:new Date(NOW-H/2).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma"} },
+  { id:"cc-4", incidentId:"ci-2", communicationType:"PHONE_CALL", contactPerson:"Emergency Services", relationship:"Crisis Helpline", dateTime:new Date(NOW-H/3).toISOString(), outcome:"Consultation completed. Recommended immediate psychiatric evaluation.", notes:"Contact number: 9152987000", createdAt:new Date(NOW-H/3).toISOString(), createdBy:{id:"exp-6",fullName:"Dr. Anil Verma"} },
+  { id:"cc-5", incidentId:"ci-2", communicationType:"EMAIL", contactPerson:"School Board", relationship:"Safeguarding Lead", dateTime:new Date(NOW-H/4).toISOString(), outcome:"Mandatory safeguarding report submitted.", createdAt:new Date(NOW-H/4).toISOString(), createdBy:{id:"u-admin",fullName:"Neha Kapoor"} },
+];
+
+const CRISIS_TIMELINE_EVENTS: Array<{
+  id: string; incidentId: string; eventType: string; title: string; description: string; createdAt: string;
+  createdBy?: { id: string; fullName: string; role: string };
+}> = [
+  { id:"cte-1", incidentId:"ci-1", eventType:"INCIDENT_REPORTED", title:"Incident Reported", description:"Teacher Rajesh Kumar reported self-harm incident", createdAt:new Date(NOW-2*H).toISOString(), createdBy:{id:"u-teacher",fullName:"Rajesh Kumar",role:"Class Teacher"} },
+  { id:"cte-2", incidentId:"ci-1", eventType:"ESCALATION_TRIGGERED", title:"Escalation Triggered", description:"Case escalated to Principal due to critical severity", createdAt:new Date(NOW-2*H+H/2).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"} },
+  { id:"cte-3", incidentId:"ci-1", eventType:"TEAM_ASSIGNED", title:"Response Team Assigned", description:"Priya Sharma assigned as case owner", createdAt:new Date(NOW-2*H+H/2).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"} },
+  { id:"cte-4", incidentId:"ci-1", eventType:"ASSESSMENT_COMPLETED", title:"Safety Assessment", description:"Initial safety assessment completed - student is safe currently", createdAt:new Date(NOW-H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"} },
+  { id:"cte-5", incidentId:"ci-1", eventType:"PARENT_CONTACTED", title:"Parent Contacted", description:"Mother informed about incident", createdAt:new Date(NOW-H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"} },
+  { id:"cte-6", incidentId:"ci-1", eventType:"ACTION_COMPLETED", title:"Safety Plan Created", description:"Immediate safety plan created and documented", createdAt:new Date(NOW-H/2).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"} },
+  { id:"cte-7", incidentId:"ci-2", eventType:"INCIDENT_REPORTED", title:"Emergency Incident Reported", description:"Student expressed suicidal ideation - immediate response required", createdAt:new Date(NOW-H).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"} },
+  { id:"cte-8", incidentId:"ci-2", eventType:"ESCALATION_TRIGGERED", title:"Emergency Escalation", description:"Escalated to Principal and External Authorities", createdAt:new Date(NOW-H/2).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"} },
+  { id:"cte-9", incidentId:"ci-2", eventType:"TEAM_ASSIGNED", title:"Crisis Team Activated", description:"Full crisis response team assembled including external psychologist", createdAt:new Date(NOW-H/2).toISOString(), createdBy:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"} },
+  { id:"cte-10", incidentId:"ci-2", eventType:"ASSESSMENT_COMPLETED", title:"Emergency Assessment", description:"Dr. Anil Verma conducted emergency psychological assessment", createdAt:new Date(NOW-H/3).toISOString(), createdBy:{id:"exp-6",fullName:"Dr. Anil Verma",role:"Clinical Psychologist"} },
+];
+
+const CRISIS_ESCALATIONS: Array<{
+  id: string; incidentId: string; escalatedTo: string; reason: string; triggeredBy: string; escalatedAt: string;
+  escalatedBy: { id: string; fullName: string; role: string }; status: string; acknowledgedAt?: string; resolvedAt?: string;
+}> = [
+  { id:"ce-1", incidentId:"ci-1", escalatedTo:"PRINCIPAL", reason:"Critical severity - self-harm incident", triggeredBy:"CRITICAL", escalatedAt:new Date(NOW-2*H+H/2).toISOString(), escalatedBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, status:"ACKNOWLEDGED", acknowledgedAt:new Date(NOW-2*H+H/2+10*60*1000).toISOString() },
+  { id:"ce-2", incidentId:"ci-2", escalatedTo:"SAFEGUARDING_TEAM", reason:"Emergency - student expressed suicidal ideation", triggeredBy:"EMERGENCY", escalatedAt:new Date(NOW-H/2).toISOString(), escalatedBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, status:"ACKNOWLEDGED", acknowledgedAt:new Date(NOW-H/3).toISOString() },
+  { id:"ce-3", incidentId:"ci-2", escalatedTo:"EXTERNAL_AUTHORITIES", reason:"Immediate external support required for student safety", triggeredBy:"EMERGENCY", escalatedAt:new Date(NOW-H/3).toISOString(), escalatedBy:{id:"exp-6",fullName:"Dr. Anil Verma",role:"Clinical Psychologist"}, status:"PENDING" },
+  { id:"ce-4", incidentId:"ci-5", escalatedTo:"EXTERNAL_AUTHORITIES", reason:"Suspected child abuse - mandatory reporting required", triggeredBy:"CRITICAL", escalatedAt:new Date(NOW-6*H).toISOString(), escalatedBy:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, status:"ACKNOWLEDGED", acknowledgedAt:new Date(NOW-5*H).toISOString() },
+];
+
+const CRISIS_DASHBOARD_STATS = {
+  activeCrisisCases: 8, criticalIncidents: 4, escalatedCases: 3, openInvestigations: 5,
+  avgResponseTime: "18 min", resolvedIncidents: 12, highRiskStudents: 6, pendingActions: 14,
+  incidentsByStatus: [
+    { status:"REPORTED", count:3 },{ status:"ACKNOWLEDGED", count:2 },{ status:"INVESTIGATING", count:5 },
+    { status:"ESCALATED", count:3 },{ status:"MONITORING", count:2 },{ status:"RESOLVED", count:8 },{ status:"CLOSED", count:4 }
+  ],
+  incidentsBySeverity: [
+    { severity:"HIGH", count:5 },{ severity:"CRITICAL", count:4 },{ severity:"EMERGENCY", count:3 }
+  ],
+  incidentsByCategory: [
+    { category:"SELF_HARM_RISK", count:4 },{ category:"SUICIDE_IDEATION", count:2 },{ category:"BULLYING_ESCALATION", count:3 },
+    { category:"VIOLENCE_THREAT", count:2 },{ category:"ABUSE_CONCERNS", count:2 },{ category:"SEVERE_EMOTIONAL_DISTREESS", count:2 },
+    { category:"SAFETY_CONCERN", count:2 },{ category:"SUBSTANCE_CONCERN", count:2 },{ category:"MISSING_STUDENT", count:1 }
+  ],
+  monthlyTrends: [
+    { month:"Jan", incidents:12, resolved:10 },{ month:"Feb", incidents:15, resolved:12 },{ month:"Mar", incidents:18, resolved:15 },
+    { month:"Apr", incidents:14, resolved:13 },{ month:"May", incidents:16, resolved:14 },{ month:"Jun", incidents:20, resolved:18 }
+  ],
+  responseTimeTrend: [
+    { month:"Jan", avgHours:2.5 },{ month:"Feb", avgHours:2.2 },{ month:"Mar", avgHours:1.8 },
+    { month:"Apr", avgHours:1.5 },{ month:"May", avgHours:1.3 },{ month:"Jun", avgHours:0.8 }
+  ],
+};
+
+const CRISIS_ANALYTICS = {
+  incidentsByCategory: [
+    { name:"Self-Harm Risk", value:4 },{ name:"Suicide Ideation", value:2 },{ name:"Bullying Escalation", value:3 },
+    { name:"Violence Threat", value:2 },{ name:"Abuse Concerns", value:2 },{ name:"Emotional Distress", value:2 },
+    { name:"Safety Concern", value:2 },{ name:"Substance Concern", value:2 },{ name:"Missing Student", value:1 }
+  ],
+  incidentsByGrade: [
+    { name:"Grade 5", value:2 },{ name:"Grade 6", value:3 },{ name:"Grade 7", value:4 },
+    { name:"Grade 8", value:5 },{ name:"Grade 9", value:4 },{ name:"Grade 10", value:2 }
+  ],
+  responseTimeDistribution: [
+    { range:"< 15 min", count:12 },{ range:"15-30 min", count:8 },{ range:"30-60 min", count:5 },{ range:"> 60 min", count:3 }
+  ],
+  escalationTrends: [
+    { month:"Jan", escalations:2 },{ month:"Feb", escalations:3 },{ month:"Mar", escalations:4 },
+    { month:"Apr", escalations:3 },{ month:"May", escalations:5 },{ month:"Jun", escalations:6 }
+  ],
+  resolutionRates: [
+    { month:"Jan", rate:85 },{ month:"Feb", rate:82 },{ month:"Mar", rate:88 },
+    { month:"Apr", rate:90 },{ month:"May", rate:92 },{ month:"Jun", rate:95 }
+  ],
+  repeatIncidents: [
+    { studentName:"Vihaan Singh", count:3, lastIncident:new Date(NOW-5*D).toISOString() },
+    { studentName:"Ananya Reddy", count:2, lastIncident:new Date(NOW-2*H).toISOString() },
+    { studentName:"Kabir Joshi", count:2, lastIncident:new Date(NOW-H*2).toISOString() },
+  ],
+  topEscalationReasons: [
+    { reason:"Critical Severity", count:6 },{ reason:"Student Safety Risk", count:4 },
+    { reason:"Legal Requirement", count:3 },{ reason:"Repeated Incident", count:2 }
+  ],
+};
+
+const HIGH_RISK_STUDENTS: Array<{ studentId: string; studentName: string; studentGrade: string; riskScore: number; openIncidents: number; lastIncident: string; monitoringStatus: string }> = [
+  { studentId:"s-hr-1", studentName:"Vihaan Singh", studentGrade:"9", riskScore:92, openIncidents:2, lastIncident:new Date(NOW-5*D).toISOString(), monitoringStatus:"ACTIVE" },
+  { studentId:"s-hr-2", studentName:"Ananya Reddy", studentGrade:"9", riskScore:88, openIncidents:1, lastIncident:new Date(NOW-2*H).toISOString(), monitoringStatus:"ACTIVE" },
+  { studentId:"s-hr-3", studentName:"Kabir Joshi", studentGrade:"8", riskScore:85, openIncidents:1, lastIncident:new Date(NOW-H*2).toISOString(), monitoringStatus:"ACTIVE" },
+  { studentId:"s-hr-4", studentName:"Arjun Reddy", studentGrade:"6", riskScore:82, openIncidents:1, lastIncident:new Date(NOW-8*H).toISOString(), monitoringStatus:"PENDING_REVIEW" },
+  { studentId:"s-hr-5", studentName:"Saanvi Patel", studentGrade:"7", riskScore:78, openIncidents:1, lastIncident:new Date(NOW-4*H).toISOString(), monitoringStatus:"STABLE" },
+];
+
+// =============== MODULE 10: POLICY & DOCUMENTATION HUB ===============
+
+const POLICIES: Array<{
+  id: string; policyId: string; title: string; description: string; category: string; status: string;
+  version: string; accessLevel: string; effectiveDate: string; reviewDate: string;
+  author: { id: string; fullName: string; role: string }; approvedBy?: { id: string; fullName: string; role: string };
+  approvedAt?: string; publishedAt?: string; fileUrl?: string;
+  _count: { acknowledgements: number; versions: number; views: number };
+}> = [
+  { id:"pol-1", policyId:"POL-001", title:"Student Wellbeing Policy 2024", description:"Comprehensive policy outlining student wellbeing frameworks, support systems, and monitoring mechanisms.", category:"STUDENT_WELLBEING", status:"PUBLISHED", version:"2.1", accessLevel:"PUBLIC", effectiveDate:new Date(NOW-180*D).toISOString(), reviewDate:new Date(NOW+60*D).toISOString(), author:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"}, approvedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar",role:"Principal"}, approvedAt:new Date(NOW-185*D).toISOString(), publishedAt:new Date(NOW-180*D).toISOString(), _count:{acknowledgements:42,versions:3,views:156} },
+  { id:"pol-2", policyId:"POL-002", title:"Child Safeguarding Policy", description:"Policy defining safeguarding procedures, reporting mechanisms, and protective measures for students.", category:"SAFEGUARDING", status:"PUBLISHED", version:"3.0", accessLevel:"PUBLIC", effectiveDate:new Date(NOW-365*D).toISOString(), reviewDate:new Date(NOW+30*D).toISOString(), author:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, approvedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar",role:"Principal"}, approvedAt:new Date(NOW-370*D).toISOString(), publishedAt:new Date(NOW-365*D).toISOString(), _count:{acknowledgements:58,versions:4,views:234} },
+  { id:"pol-3", policyId:"POL-003", title:"Crisis Management SOP", description:"Standard operating procedures for managing crisis situations including self-harm, abuse, and emergencies.", category:"CRISIS_MANAGEMENT", status:"PUBLISHED", version:"1.5", accessLevel:"STAFF_ONLY", effectiveDate:new Date(NOW-90*D).toISOString(), reviewDate:new Date(NOW+90*D).toISOString(), author:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, approvedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar",role:"Principal"}, approvedAt:new Date(NOW-95*D).toISOString(), publishedAt:new Date(NOW-90*D).toISOString(), _count:{acknowledgements:38,versions:2,views:89} },
+  { id:"pol-4", policyId:"POL-004", title:"Referral Management Guidelines", description:"Guidelines for internal and external referrals, including assessment criteria and跟踪 mechanisms.", category:"REFERRAL_GUIDELINES", status:"PUBLISHED", version:"1.2", accessLevel:"STAFF_ONLY", effectiveDate:new Date(NOW-120*D).toISOString(), reviewDate:new Date(NOW+60*D).toISOString(), author:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"}, approvedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar",role:"Principal"}, approvedAt:new Date(NOW-125*D).toISOString(), publishedAt:new Date(NOW-120*D).toISOString(), _count:{acknowledgements:35,versions:2,views:67} },
+  { id:"pol-5", policyId:"POL-005", title:"Parent Communication Protocol", description:"Standardized approach for communicating with parents about student wellbeing concerns.", category:"PARENT_COMMUNICATION", status:"PUBLISHED", version:"1.0", accessLevel:"PUBLIC", effectiveDate:new Date(NOW-60*D).toISOString(), reviewDate:new Date(NOW+120*D).toISOString(), author:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, approvedBy:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"}, approvedAt:new Date(NOW-65*D).toISOString(), publishedAt:new Date(NOW-60*D).toISOString(), _count:{acknowledgements:45,versions:1,views:98} },
+  { id:"pol-6", policyId:"POL-006", title:"SEL Curriculum Framework", description:"Structured approach to social-emotional learning across all grades.", category:"SEL_FRAMEWORKS", status:"PUBLISHED", version:"2.0", accessLevel:"PUBLIC", effectiveDate:new Date(NOW-200*D).toISOString(), reviewDate:new Date(NOW+30*D).toISOString(), author:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, approvedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar",role:"Principal"}, approvedAt:new Date(NOW-205*D).toISOString(), publishedAt:new Date(NOW-200*D).toISOString(), _count:{acknowledgements:50,versions:2,views:178} },
+  { id:"pol-7", policyId:"POL-007", title:"Attendance Monitoring Policy", description:"Procedures for monitoring and responding to attendance patterns indicating student wellbeing concerns.", category:"STUDENT_WELLBEING", status:"UNDER_REVIEW", version:"1.0", accessLevel:"STAFF_ONLY", effectiveDate:new Date(NOW+30*D).toISOString(), reviewDate:new Date(NOW+120*D).toISOString(), author:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"}, _count:{acknowledgements:0,versions:1,views:12} },
+  { id:"pol-8", policyId:"POL-008", title:"Anti-Bullying Policy", description:"Comprehensive policy addressing bullying prevention, reporting, and intervention.", category:"SAFEGUARDING", status:"PUBLISHED", version:"2.2", accessLevel:"PUBLIC", effectiveDate:new Date(NOW-150*D).toISOString(), reviewDate:new Date(NOW-15*D).toISOString(), author:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, approvedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar",role:"Principal"}, approvedAt:new Date(NOW-155*D).toISOString(), publishedAt:new Date(NOW-150*D).toISOString(), _count:{acknowledgements:55,versions:3,views:201} },
+  { id:"pol-9", policyId:"POL-009", title:"Staff Handbook - Wellbeing", description:"Staff guidelines for identifying and responding to student wellbeing concerns.", category:"STAFF_HANDBOOK", status:"PUBLISHED", version:"1.3", accessLevel:"STAFF_ONLY", effectiveDate:new Date(NOW-100*D).toISOString(), reviewDate:new Date(NOW+90*D).toISOString(), author:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"}, approvedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar",role:"Principal"}, approvedAt:new Date(NOW-105*D).toISOString(), publishedAt:new Date(NOW-100*D).toISOString(), _count:{acknowledgements:65,versions:2,views:145} },
+  { id:"pol-10", policyId:"POL-010", title:"Counselling Sessions Protocol", description:"Procedures for scheduling, conducting, and documenting counselling sessions.", category:"SCHOOL_PROCEDURES", status:"DRAFT", version:"0.1", accessLevel:"COUNSELLORS_ONLY", effectiveDate:new Date(NOW+60*D).toISOString(), reviewDate:new Date(NOW+180*D).toISOString(), author:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, _count:{acknowledgements:0,versions:1,views:5} },
+  { id:"pol-11", policyId:"POL-011", title:"Mental Health Emergency Response", description:"Immediate response protocols for mental health emergencies including self-harm and suicidal ideation.", category:"CRISIS_MANAGEMENT", status:"PUBLISHED", version:"2.0", accessLevel:"STAFF_ONLY", effectiveDate:new Date(NOW-45*D).toISOString(), reviewDate:new Date(NOW+45*D).toISOString(), author:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, approvedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar",role:"Principal"}, approvedAt:new Date(NOW-50*D).toISOString(), publishedAt:new Date(NOW-45*D).toISOString(), _count:{acknowledgements:40,versions:2,views:112} },
+  { id:"pol-12", policyId:"POL-012", title:"Data Privacy & Confidentiality", description:"Guidelines for handling sensitive student wellbeing data and maintaining confidentiality.", category:"SAFEGUARDING", status:"ARCHIVED", version:"1.0", accessLevel:"LEADERSHIP_ONLY", effectiveDate:new Date(NOW-400*D).toISOString(), reviewDate:new Date(NOW-200*D).toISOString(), author:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"}, approvedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar",role:"Principal"}, approvedAt:new Date(NOW-405*D).toISOString(), publishedAt:new Date(NOW-400*D).toISOString(), _count:{acknowledgements:20,versions:1,views:45} },
+  { id:"pol-13", policyId:"POL-013", title:"Student Risk Assessment Framework", description:"Structured approach to identifying and assessing student wellbeing risks.", category:"STUDENT_WELLBEING", status:"UNDER_REVIEW", version:"1.0", accessLevel:"COUNSELLORS_ONLY", effectiveDate:new Date(NOW+45*D).toISOString(), reviewDate:new Date(NOW+135*D).toISOString(), author:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, _count:{acknowledgements:0,versions:1,views:8} },
+  { id:"pol-14", policyId:"POL-014", title:"External Support Services Referral", description:"Procedures for referring students to external mental health professionals.", category:"REFERRAL_GUIDELINES", status:"PUBLISHED", version:"1.1", accessLevel:"STAFF_ONLY", effectiveDate:new Date(NOW-80*D).toISOString(), reviewDate:new Date(NOW+100*D).toISOString(), author:{id:"u-couns",fullName:"Priya Sharma",role:"School Counsellor"}, approvedBy:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"}, approvedAt:new Date(NOW-85*D).toISOString(), publishedAt:new Date(NOW-80*D).toISOString(), _count:{acknowledgements:30,versions:2,views:72} },
+  { id:"pol-15", policyId:"POL-015", title:"Incident Reporting & Documentation", description:"Standards for documenting and reporting student wellbeing incidents.", category:"SCHOOL_PROCEDURES", status:"PUBLISHED", version:"1.4", accessLevel:"STAFF_ONLY", effectiveDate:new Date(NOW-110*D).toISOString(), reviewDate:new Date(NOW+80*D).toISOString(), author:{id:"u-admin",fullName:"Neha Kapoor",role:"School Administrator"}, approvedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar",role:"Principal"}, approvedAt:new Date(NOW-115*D).toISOString(), publishedAt:new Date(NOW-110*D).toISOString(), _count:{acknowledgements:48,versions:2,views:134} },
+];
+
+const SOPS: Array<{
+  id: string; sopId: string; title: string; description: string; category: string;
+  steps: Array<{ step: number; title: string; description: string; duration?: string }>;
+  responsibleRole: string; version: string; lastUpdated: string; isActive: boolean;
+  _count: { views: number; downloads: number };
+}> = [
+  { id:"sop-1", sopId:"SOP-001", title:"Crisis Response Protocol", description:"Immediate response steps for crisis situations including self-harm or suicidal ideation.", category:"CRISIS_RESPONSE", steps:[{step:1,title:"Ensure Immediate Safety",description:"Ensure the immediate safety of the student and others. Remove any harmful objects from the area.",duration:"5 min"},{step:2,title:"Notify Counsellor",description:"Immediately contact the school counsellor or designated wellbeing staff.",duration:"2 min"},{step:3,title:"Contact Parents",description:"Notify parents/guardians about the situation.",duration:"10 min"},{step:4,title:"Document Incident",description:"Record all details of the incident in the official log.",duration:"15 min"},{step:5,title:"Follow-up Assessment",description:"Schedule a follow-up assessment within 24 hours.",duration:"30 min"}], responsibleRole:"School Counsellor", version:"2.0", lastUpdated:new Date(NOW-30*D).toISOString(), isActive:true, _count:{views:89,downloads:34} },
+  { id:"sop-2", sopId:"SOP-002", title:"Bullying Incident Response", description:"Step-by-step process for handling reported bullying incidents.", category:"CRISIS_RESPONSE", steps:[{step:1,title:"Receive Report",description:"Listen carefully to the student reporting bullying without judgment.",duration:"15 min"},{step:2,title:"Document Details",description:"Record specific details including dates, witnesses, and nature of bullying.",duration:"10 min"},{step:3,title:"Interview Parties",description:"Separately interview the victim, perpetrator, and witnesses.",duration:"30 min each"},{step:4,title:"Notify Parents",description:"Inform parents of all involved parties about the incident.",duration:"20 min"},{step:5,title:"Implement Action Plan",description:"Apply appropriate disciplinary measures and support.",duration:"Ongoing"},{step:6,title:"Monitor & Follow-up",description:"Schedule follow-up meetings to ensure no recurrence.",duration:"Weekly"}], responsibleRole:"School Counsellor", version:"1.5", lastUpdated:new Date(NOW-60*D).toISOString(), isActive:true, _count:{views:67,downloads:28} },
+  { id:"sop-3", sopId:"SOP-003", title:"Referral to External Services", description:"Procedures for referring students to external mental health professionals.", category:"REFERRAL_MANAGEMENT", steps:[{step:1,title:"Assessment Completion",description:"Complete internal assessment to determine if external referral is needed.",duration:"45 min"},{step:2,title:"Parent Consultation",description:"Discuss referral recommendation with parents/guardians.",duration:"30 min"},{step:3,title:"Prepare Documentation",description:"Compile relevant case notes and assessment reports.",duration:"20 min"},{step:4,title:"Submit Referral",description:"Send referral to selected external service provider.",duration:"15 min"},{step:5,title:"Coordinate Care",description:"Maintain communication between school and external provider.",duration:"Ongoing"}], responsibleRole:"School Counsellor", version:"1.2", lastUpdated:new Date(NOW-45*D).toISOString(), isActive:true, _count:{views:45,downloads:19} },
+  { id:"sop-4", sopId:"SOP-004", title:"Student Escalation Process", description:"Guidelines for escalating student concerns through the care tier system.", category:"STUDENT_ESCALATION", steps:[{step:1,title:"Identify Concern",description:"Teacher or staff identifies potential wellbeing concern.",duration:"Ongoing"},{step:2,title:"Initial Screening",description:"Conduct initial screening using approved tools.",duration:"20 min"},{step:3,title:"Tier Determination",description:"Determine appropriate tier based on assessment.",duration:"15 min"},{step:4,title:"Case Assignment",description:"Assign case to appropriate wellbeing staff.",duration:"10 min"},{step:5,title:"Intervention Planning",description:"Develop and implement intervention plan.",duration:"30 min"}], responsibleRole:"Class Teacher", version:"2.1", lastUpdated:new Date(NOW-20*D).toISOString(), isActive:true, _count:{views:78,downloads:32} },
+  { id:"sop-5", sopId:"SOP-005", title:"Parent Communication Guidelines", description:"Standards for communicating wellbeing concerns to parents.", category:"PARENT_COMMUNICATION", steps:[{step:1,title:"Prepare Discussion Points",description:"Outline key points to discuss and supporting evidence.",duration:"15 min"},{step:2,title:"Schedule Meeting",description:"Arrange appropriate time for private discussion.",duration:"5 min"},{step:3,title:"Conduct Meeting",description:"Discuss concerns professionally while maintaining confidentiality.",duration:"30 min"},{step:4,title:"Document Conversation",description:"Record key points discussed and agreed actions.",duration:"10 min"},{step:5,title:"Follow-up Plan",description:"Establish follow-up schedule and contact plan.",duration:"10 min"}], responsibleRole:"School Counsellor", version:"1.0", lastUpdated:new Date(NOW-90*D).toISOString(), isActive:true, _count:{views:56,downloads:22} },
+  { id:"sop-6", sopId:"SOP-006", title:"Counselling Session Procedures", description:"Standard procedures for conducting and documenting counselling sessions.", category:"COUNSELLING_PROCEDURES", steps:[{step:1,title:"Session Preparation",description:"Review case notes and prepare session plan.",duration:"10 min"},{step:2,title:"Confidentiality Reminder",description:"Remind student of confidentiality boundaries.",duration:"2 min"},{step:3,title:"Session Conduct",description:"Engage in therapeutic conversation using approved methods.",duration:"45 min"},{step:4,title:"Session Documentation",description:"Record session notes within 24 hours.",duration:"15 min"},{step:5,title:"Follow-up Scheduling",description:"Schedule next session and any required actions.",duration:"5 min"}], responsibleRole:"School Counsellor", version:"1.3", lastUpdated:new Date(NOW-15*D).toISOString(), isActive:true, _count:{views:92,downloads:41} },
+  { id:"sop-7", sopId:"SOP-007", title:"Safeguarding Disclosure Response", description:"Response procedures when a student discloses abuse or safeguarding concerns.", category:"SAFEGUARDING_PROCEDURES", steps:[{step:1,title:"Listen & Reassure",description:"Listen without pressing for details. Reassure the student they did the right thing.",duration:"As needed"},{step:2,title:"Don't Promise Secrecy",description:"Explain you need to help them but cannot keep it secret.",duration:"2 min"},{step:3,title:"Record Immediately",description:"Write down exactly what the student said as soon as possible.",duration:"15 min"},{step:4,title:"Report to Designated Safeguarding Lead",description:"Immediately inform the designated safeguarding lead.",duration:"5 min"},{step:5,title:"Support Student",description:"Continue to support the student throughout the process.",duration:"Ongoing"}], responsibleRole:"Designated Safeguarding Lead", version:"3.0", lastUpdated:new Date(NOW-10*D).toISOString(), isActive:true, _count:{views:134,downloads:56} },
+  { id:"sop-8", sopId:"SOP-008", title:"Mental Health Screening", description:"Procedures for conducting mental health screening assessments.", category:"COUNSELLING_PROCEDURES", steps:[{step:1,title:"Obtain Consent",description:"Ensure appropriate consent is obtained from parent/guardian.",duration:"10 min"},{step:2,title:"Create Safe Environment",description:"Ensure private, comfortable setting for screening.",duration:"5 min"},{step:3,title:"Administer Screening",description:"Use approved screening tools to assess student.",duration:"30 min"},{step:4,title:"Score & Interpret",description:"Score results and interpret in context.",duration:"15 min"},{step:5,title:"Develop Action Plan",description:"Create appropriate action plan based on results.",duration:"20 min"}], responsibleRole:"School Counsellor", version:"1.1", lastUpdated:new Date(NOW-40*D).toISOString(), isActive:true, _count:{views:43,downloads:18} },
+];
+
+const KNOWLEDGE_ARTICLES: Array<{
+  id: string; articleId: string; title: string; summary: string; content: string; category: string;
+  tags: string[]; author: { id: string; fullName: string }; isPublished: boolean;
+  createdAt: string; updatedAt: string; _count: { views: number; bookmarks: number };
+}> = [
+  { id:"kb-1", articleId:"KB-001", title:"Understanding Anxiety in Students", summary:"A comprehensive guide to recognizing and supporting students experiencing anxiety.", content:"Anxiety disorders are among the most common mental health concerns in children and adolescents...", category:"MENTAL_HEALTH_RESOURCES", tags:["anxiety","students","mental health","signs"], author:{id:"u-couns",fullName:"Priya Sharma"}, isPublished:true, createdAt:new Date(NOW-180*D).toISOString(), updatedAt:new Date(NOW-30*D).toISOString(), _count:{views:234,bookmarks:45} },
+  { id:"kb-2", articleId:"KB-002", title:"Social-Emotional Learning Fundamentals", summary:"Introduction to SEL frameworks and their implementation in schools.", content:"Social-emotional learning (SEL) is the process through which children and adults...", category:"SEL_RESOURCES", tags:["SEL","social-emotional","learning","framework"], author:{id:"u-couns",fullName:"Priya Sharma"}, isPublished:true, createdAt:new Date(NOW-200*D).toISOString(), updatedAt:new Date(NOW-60*D).toISOString(), _count:{views:189,bookmarks:38} },
+  { id:"kb-3", articleId:"KB-003", title:"Effective Parent Communication Strategies", summary:"Best practices for communicating with parents about sensitive wellbeing topics.", content:"Effective communication with parents is crucial for student wellbeing...", category:"PARENT_ENGAGEMENT_GUIDES", tags:["parents","communication","engagement","wellbeing"], author:{id:"u-admin",fullName:"Neha Kapoor"}, isPublished:true, createdAt:new Date(NOW-150*D).toISOString(), updatedAt:new Date(NOW-45*D).toISOString(), _count:{views:156,bookmarks:29} },
+  { id:"kb-4", articleId:"KB-004", title:"Recognizing Signs of Bullying", summary:"Guide to identifying bullying behavior and its effects on students.", content:"Bullying can take many forms and recognizing it early is essential...", category:"SAFEGUARDING_PROCEDURES", tags:["bullying","signs","students","prevention"], author:{id:"u-couns",fullName:"Priya Sharma"}, isPublished:true, createdAt:new Date(NOW-120*D).toISOString(), updatedAt:new Date(NOW-20*D).toISOString(), _count:{views:178,bookmarks:34} },
+  { id:"kb-5", articleId:"KB-005", title:"Supporting Students Through Loss", summary:"Guidelines for helping students cope with grief and loss.", content:"Students experience loss in many forms and need compassionate support...", category:"MENTAL_HEALTH_RESOURCES", tags:["grief","loss","students","support"], author:{id:"u-couns",fullName:"Priya Sharma"}, isPublished:true, createdAt:new Date(NOW-90*D).toISOString(), updatedAt:new Date(NOW-15*D).toISOString(), _count:{views:145,bookmarks:41} },
+  { id:"kb-6", articleId:"KB-006", title:"Trauma-Informed Teaching Practices", summary:"How to create trauma-sensitive learning environments.", content:"Trauma-informed teaching recognizes the impact of trauma on student learning...", category:"TEACHER_SUPPORT", tags:["trauma","teaching","students","practices"], author:{id:"u-admin",fullName:"Neha Kapoor"}, isPublished:true, createdAt:new Date(NOW-100*D).toISOString(), updatedAt:new Date(NOW-25*D).toISOString(), _count:{views:201,bookmarks:52} },
+  { id:"kb-7", articleId:"KB-007", title:"Implementing SEL in Classroom", summary:"Practical strategies for integrating SEL into daily classroom activities.", content:"Social-emotional skills can be developed through deliberate practice...", category:"SEL_RESOURCES", tags:["SEL","classroom","implementation","strategies"], author:{id:"u-couns",fullName:"Priya Sharma"}, isPublished:true, createdAt:new Date(NOW-80*D).toISOString(), updatedAt:new Date(NOW-10*D).toISOString(), _count:{views:167,bookmarks:43} },
+  { id:"kb-8", articleId:"KB-008", title:"Research: Impact of Parental Engagement", summary:"Evidence-based findings on parental involvement in student wellbeing.", content:"Research consistently shows that parental engagement positively impacts...", category:"RESEARCH_ARTICLES", tags:["research","parents","engagement","wellbeing"], author:{id:"u-couns",fullName:"Priya Sharma"}, isPublished:true, createdAt:new Date(NOW-60*D).toISOString(), updatedAt:new Date(NOW-5*D).toISOString(), _count:{views:98,bookmarks:21} },
+  { id:"kb-9", articleId:"KB-009", title:"Self-Harm: Identification & Response", summary:"Critical guide for identifying self-harm and appropriate intervention.", content:"Self-harm can be a sign of underlying distress and requires sensitive response...", category:"MENTAL_HEALTH_RESOURCES", tags:["self-harm","identification","response","crisis"], author:{id:"u-couns",fullName:"Priya Sharma"}, isPublished:true, createdAt:new Date(NOW-30*D).toISOString(), updatedAt:new Date(NOW-2*D).toISOString(), _count:{views:312,bookmarks:78} },
+  { id:"kb-10", articleId:"KB-010", title:"Creating Supportive Classroom Environments", summary:"Strategies for building emotionally safe learning spaces.", content:"The classroom environment significantly impacts student wellbeing and learning...", category:"TEACHER_SUPPORT", tags:["classroom","environment","support","teachers"], author:{id:"u-admin",fullName:"Neha Kapoor"}, isPublished:true, createdAt:new Date(NOW-70*D).toISOString(), updatedAt:new Date(NOW-8*D).toISOString(), _count:{views:143,bookmarks:36} },
+];
+
+const POLICY_DASHBOARD_STATS = {
+  totalPolicies: 45, activePolicies: 12, underReview: 3, expiringPolicies: 2,
+  complianceRate: 87, pendingAcknowledgements: 28, totalAcknowledged: 156, totalOverdue: 5,
+  policiesByStatus: [
+    { status:"PUBLISHED", count:12 },{ status:"UNDER_REVIEW", count:3 },{ status:"DRAFT", count:8 },
+    { status:"ARCHIVED", count:5 },{ status:"EXPIRED", count:2 }
+  ],
+  policiesByCategory: [
+    { category:"STUDENT_WELLBEING", count:12 },{ category:"SAFEGUARDING", count:8 },{ category:"CRISIS_MANAGEMENT", count:6 },
+    { category:"SCHOOL_PROCEDURES", count:7 },{ category:"SEL_FRAMEWORKS", count:4 },{ category:"REFERRAL_GUIDELINES", count:5 },
+    { category:"PARENT_COMMUNICATION", count:2 },{ category:"STAFF_HANDBOOK", count:1 }
+  ],
+  recentPolicies: [
+    { id:"pol-1", title:"Student Wellbeing Policy 2024", reviewDate:new Date(NOW+60*D).toISOString() },
+    { id:"pol-2", title:"Child Safeguarding Policy", reviewDate:new Date(NOW+30*D).toISOString() },
+    { id:"pol-6", title:"SEL Curriculum Framework", reviewDate:new Date(NOW+30*D).toISOString() },
+  ],
+  upcomingReviews: [
+    { id:"pol-2", title:"Child Safeguarding Policy", reviewDate:new Date(NOW+30*D).toISOString() },
+    { id:"pol-8", title:"Anti-Bullying Policy", reviewDate:new Date(NOW-15*D).toISOString() },
+    { id:"pol-1", title:"Student Wellbeing Policy 2024", reviewDate:new Date(NOW+60*D).toISOString() },
+    { id:"pol-6", title:"SEL Curriculum Framework", reviewDate:new Date(NOW+30*D).toISOString() },
+  ],
+};
+
+const COMPLIANCE_STATS = {
+  overallCompliance: 87, policyAdoptionRate: 92, staffAcknowledgementRate: 78,
+  overdueReviews: 5, totalDocuments: 156, activePolicies: 12,
+  departmentCompliance: [
+    { department:"Teaching Staff", complianceRate:92 },{ department:"Administration", complianceRate:95 },
+    { department:"Counselling", complianceRate:98 },{ department:"Support Staff", complianceRate:85 }
+  ],
+  monthlyTrends: [
+    { month:"Jan", complianceScore:78 },{ month:"Feb", complianceScore:81 },{ month:"Mar", complianceScore:83 },
+    { month:"Apr", complianceScore:85 },{ month:"May", complianceScore:87 },{ month:"Jun", complianceScore:89 }
+  ],
+  policyEngagement: [
+    { month:"Jan", views:450,downloads:120 },{ month:"Feb", views:520,downloads:145 },
+    { month:"Mar", views:580,downloads:168 },{ month:"Apr", views:620,downloads:178 },
+    { month:"May", views:710,downloads:195 },{ month:"Jun", views:780,downloads:220 }
+  ],
+};
+
+const AUDIT_EVENTS: Array<{
+  id: string; action: string; userId: string; userName: string; userRole: string;
+  resourceType: string; resourceId: string; resourceName: string; details?: string; timestamp: string;
+}> = [
+  { id:"ae-1", action:"POLICY_PUBLISHED", userId:"u-principal", userName:"Dr. Suresh Iyengar", userRole:"Principal", resourceType:"POLICY", resourceId:"pol-1", resourceName:"Student Wellbeing Policy 2024", details:"Version 2.1 published", timestamp:new Date(NOW-180*D).toISOString() },
+  { id:"ae-2", action:"POLICY_ACKNOWLEDGED", userId:"u-teacher", userName:"Rajesh Kumar", userRole:"Class Teacher", resourceType:"POLICY", resourceId:"pol-2", resourceName:"Child Safeguarding Policy", details:"Policy acknowledged by teacher", timestamp:new Date(NOW-175*D).toISOString() },
+  { id:"ae-3", action:"POLICY_EDITED", userId:"u-couns", userName:"Priya Sharma", userRole:"School Counsellor", resourceType:"POLICY", resourceId:"pol-3", resourceName:"Crisis Management SOP", details:"Updated escalation procedures", timestamp:new Date(NOW-50*D).toISOString() },
+  { id:"ae-4", action:"SOP_VIEWED", userId:"u-teacher", userName:"Lakshmi Iyer", userRole:"Class Teacher", resourceType:"SOP", resourceId:"sop-1", resourceName:"Crisis Response Protocol", timestamp:new Date(NOW-2*H).toISOString() },
+  { id:"ae-5", action:"TRAINING_COMPLETED", userId:"u-admin", userName:"Neha Kapoor", userRole:"School Administrator", resourceType:"KNOWLEDGE_BASE", resourceId:"kb-6", resourceName:"Trauma-Informed Teaching Practices", details:"Training module completed", timestamp:new Date(NOW-D).toISOString() },
+  { id:"ae-6", action:"POLICY_APPROVED", userId:"u-principal", userName:"Dr. Suresh Iyengar", userRole:"Principal", resourceType:"POLICY", resourceId:"pol-11", resourceName:"Mental Health Emergency Response", timestamp:new Date(NOW-50*D).toISOString() },
+];
+
 // ======================== MAIN HANDLER ========================
+function parseBody(init: RequestInit | undefined): Record<string, unknown> {
+  if (!init?.body) return {};
+  const raw = typeof init.body === "string" ? init.body : String(init.body);
+  try { return JSON.parse(raw); } catch { return {}; }
+}
+
+function isPost(init: RequestInit | undefined): boolean {
+  return init?.method === "POST";
+}
+
 export async function mockRequest<T>(url: string, _init?: RequestInit, user?: AuthUser | null): Promise<T> {
   await new Promise(r => setTimeout(r, 200 + Math.random() * 180));
   const role = user?.role ?? "ADMIN";
@@ -189,15 +1624,51 @@ export async function mockRequest<T>(url: string, _init?: RequestInit, user?: Au
       return { data: filtered.slice(start, start+pageSize), pagination: { page, pageSize, total: filtered.length, totalPages: Math.ceil(filtered.length/pageSize) } } as T;
     }
     const sid = basePath.replace("/students/", "");
-    const s = STUDENTS.find(x => x.id === sid);
+
+    // POST IEP feedback: /students/{id}/iep-feedback
+    if (basePath.endsWith("/iep-feedback") && isPost(_init)) {
+      const body = parseBody(_init);
+      const iep = IEPS[sid];
+      if (!iep) throw new Error("No IEP found for this student");
+      const fb: IEPFeedback = {
+        id: `fb-${Date.now()}`,
+        iepId: iep.id,
+        goalId: body.goalId as string,
+        progress: body.progress as IEPFeedbackProgress,
+        comment: (body.comment as string) || "",
+        submittedAt: new Date().toISOString(),
+        submittedBy: user?.fullName || ROLE_NAMES.COUNSELLOR,
+      };
+      iep.feedback.unshift(fb);
+      const goal = iep.goals.find((g) => g.id === body.goalId);
+      if (goal) goal.status = body.progress as IEPGoalStatus;
+      return fb as T;
+    }
+
+    const s = ALL_STUDENTS.find(x => x.id === sid);
     if (s) return {
       ...s,
+      academic: ACADEMIC_DATA[s.id] ?? {
+        attendancePercent: 70 + (parseInt(s.id.replace(/\D/g, "") || "0") % 30),
+        assignmentCompletionPercent: 60 + (parseInt(s.id.replace(/\D/g, "") || "0") % 35),
+        recentPerformance: "Stable — average performance",
+      },
+      wellbeing: WELLBEING_DATA[s.id] ?? { selParticipation: 70, emotionalWellnessScore: 65 },
+      selProgress: SEL_PROGRESS[s.id] ?? { assigned: 5, completed: 3, pending: 1 },
       counsellor: { id:"couns-1", fullName:"Priya Sharma", email:"counsellor@firefly.local" },
+      demographics: DEMOGRAPHICS[s.id] ?? null,
+      iep: IEPS[s.id] ?? null,
+      iepFeedback: IEPS[s.id]?.feedback ?? [],
       assessments: [],
       assessmentTrend: [{ id:"as-1", score: s.riskScore, riskLevel: s.riskScore>=70?"HIGH":s.riskScore>=40?"MEDIUM":"LOW", createdAt: new Date(NOW-D).toISOString() }],
       cases: CASES.filter(c => c.student.id === sid),
       sessions: SESSIONS.filter(x => x.student.firstName === s.firstName),
-      incidents: INCIDENTS.filter(x => x.student?.firstName === s.firstName)
+      incidents: INCIDENTS.filter(x => x.student?.firstName === s.firstName),
+      recentActivity: {
+        observations: OBSERVATIONS_RICH.filter(o => o.studentId === sid).slice(0, 5),
+        flags: FLAGS_HISTORY.filter(f => f.studentId === sid),
+        workshops: ["Stress Management", "Building Empathy", "Mindfulness & Focus"].slice(0, 2),
+      },
     } as T;
     throw new Error("Student not found");
   }
@@ -217,19 +1688,70 @@ export async function mockRequest<T>(url: string, _init?: RequestInit, user?: Au
       const start = (page-1)*pageSize;
       return { data: filtered.slice(start, start+pageSize), pagination: { page, pageSize, total: filtered.length, totalPages: Math.ceil(filtered.length/pageSize) } } as T;
     }
+
+    // Case Dashboard Stats
+    if (basePath === "/cases/dashboard/stats") {
+      return CASE_DASHBOARD_STATS as T;
+    }
+
+    // High Risk Cases
+    if (basePath === "/cases/high-risk") {
+      return { data: HIGH_RISK_CASES } as T;
+    }
+
+    // Case Analytics
+    if (basePath === "/cases/analytics") {
+      return CASE_ANALYTICS as T;
+    }
+
+    // Student Journey Timeline
+    if (basePath.startsWith("/cases/journey/")) {
+      const studentId = basePath.replace("/cases/journey/", "");
+      const events = STUDENT_JOURNEY_EVENTS[studentId] || [];
+      return { data: events } as T;
+    }
+
+    // Enhanced case detail with all Module 5 data
     const cid = basePath.replace("/cases/", "");
     const c = CASES.find(x => x.id === cid);
-    if (c) return {
-      ...c,
-      summary: "Case being actively managed with counselling sessions and risk monitoring",
-      timelineEvents: [
-        { id:"te-1", eventType:"case_opened", title:"Case Opened", description:"Case initiated after screening", createdAt:new Date(NOW-3*D).toISOString(), createdBy:{fullName:"Priya Sharma",role:"COUNSELLOR"} },
-        { id:"te-2", eventType:"assessment", title:"Assessment", description:"Risk assessment completed", createdAt:new Date(NOW-2*D).toISOString(), createdBy:{fullName:"Priya Sharma",role:"COUNSELLOR"} },
-        { id:"te-3", eventType:"session", title:"First session", description:"Counselling session completed", createdAt:new Date(NOW-D).toISOString(), createdBy:{fullName:"Priya Sharma",role:"COUNSELLOR"} },
-      ],
-      sessions: SESSIONS.filter(x => c.student.firstName.includes(x.student.firstName.split(" ")[0])).slice(0,3),
-      incidents: INCIDENTS.filter(x => x.student?.firstName === c.student.firstName)
-    } as T;
+    if (c) {
+      const interventions = CASE_INTERVENTIONS.filter(i => i.caseId === cid);
+      const followUps = CASE_FOLLOW_UPS.filter(f => f.caseId === cid);
+      const notes = CASE_NOTES.filter(n => n.caseId === cid);
+      const parentInteractions = PARENT_INTERACTIONS.filter(p => p.caseId === cid);
+      const riskAssessment = RISK_ASSESSMENTS.find(r => r.caseId === cid) || null;
+      const escalationEvents = ESCALATION_EVENTS.filter(e => e.caseId === cid);
+      const outcomeMeasurement = OUTCOME_MEASUREMENTS[cid] || null;
+      return {
+        ...c,
+        summary: "Case being actively managed with counselling sessions and risk monitoring",
+        description: `Comprehensive case for ${c.student.firstName} ${c.student.lastName} - ${c.type.toLowerCase()} support`,
+        concernCategory: c.type === "CRISIS" ? "EMOTIONAL_WELLBEING" : c.type === "SEL" ? "SOCIAL_ISOLATION" : "EMOTIONAL_WELLBEING",
+        priority: c.riskLevel === "CRITICAL" ? "CRITICAL" : c.riskLevel === "HIGH" ? "HIGH" : c.riskLevel === "MEDIUM" ? "MEDIUM" : "LOW",
+        riskLevel: c.riskLevel === "CRITICAL" ? "CRITICAL_RISK" : c.riskLevel === "HIGH" ? "HIGH_RISK" : c.riskLevel === "MEDIUM" ? "MODERATE_RISK" : "LOW_RISK",
+        assignedCounsellor: { id: "u-couns", fullName: "Priya Sharma", email: "priya@firefly.local" },
+        student: {
+          ...c.student,
+          tier: c.tier,
+          riskScore: c.student.id === "s4" ? 91 : c.student.id === "s1" ? 78 : c.student.id === "s7" ? 72 : 55,
+        },
+        timelineEvents: [
+          { id:"te-1", eventType:"case_opened", title:"Case Opened", description:"Case initiated after screening", createdAt:new Date(NOW-3*D).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"COUNSELLOR"} },
+          { id:"te-2", eventType:"assessment", title:"Assessment", description:"Risk assessment completed", createdAt:new Date(NOW-2*D).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"COUNSELLOR"} },
+          { id:"te-3", eventType:"session", title:"First session", description:"Counselling session completed", createdAt:new Date(NOW-D).toISOString(), createdBy:{id:"u-couns",fullName:"Priya Sharma",role:"COUNSELLOR"} },
+          ...(notes.slice(0, 3).map((n, i) => ({ id: `te-${i + 4}`, eventType: "note_added", title: n.title, description: n.content, createdAt: n.createdAt, createdBy: n.createdBy })))
+        ],
+        sessions: SESSIONS.filter(x => c.student.firstName.includes(x.student.firstName.split(" ")[0])).slice(0, 3).map(s => ({ ...s, durationMins: 45, counsellor: { fullName: s.counsellor.fullName } })),
+        incidents: INCIDENTS.filter(x => x.student?.firstName === c.student.firstName),
+        interventions,
+        followUps,
+        notes,
+        parentInteractions,
+        riskAssessment,
+        escalationEvents,
+        outcomeMeasurement,
+      } as T;
+    }
     throw new Error("Case not found");
   }
 
@@ -256,6 +1778,9 @@ export async function mockRequest<T>(url: string, _init?: RequestInit, user?: Au
   // =========== DASHBOARD ===========
   if (basePath === "/dashboard/overview") return (DASHBOARDS[role] ?? DASHBOARDS.ADMIN) as T;
 
+  // =========== MODULE 1: HOME DASHBOARD & COMMAND CENTER ===========
+  if (basePath === "/module-1/overview") return buildModule1Overview(role) as T;
+
   // =========== OTHER MODULES ===========
   if (basePath === "/analytics/overview") return {
     studentStatus:[{name:"Stable",value:532},{name:"Needs Support",value:215},{name:"Needs Intervention",value:100}],
@@ -278,16 +1803,17 @@ export async function mockRequest<T>(url: string, _init?: RequestInit, user?: Au
 
   // =========== CLASSROOMS ==========
   if (basePath === "/classrooms") {
-    const unique = Array.from(new Set(STUDENTS.map(s => s.classroom))).sort();
+    const unique = Array.from(new Set(ALL_STUDENTS.map(s => s.classroom))).sort();
     const data = unique.map(name => {
-      const students = STUDENTS.filter(s => s.classroom === name);
+      const students = ALL_STUDENTS.filter(s => s.classroom === name);
       const tierCounts: Record<string, number> = {};
       students.forEach(s => { tierCounts[s.tier] = (tierCounts[s.tier] || 0) + 1; });
+      const ct = TEACHERS_BY_CLASSROOM[name]?.find(t => t.isClassTeacher);
       return {
         id: `class-${name}`,
         name,
         grade: students[0]?.grade ?? "",
-        teacher: { id: `t-${name}`, fullName: ROLE_NAMES.CLASS_TEACHER ?? ROLE_NAMES.TEACHER },
+        teacher: ct ? { id: ct.id, fullName: ct.fullName } : { id: `t-${name}`, fullName: ROLE_NAMES.CLASS_TEACHER ?? ROLE_NAMES.TEACHER },
         studentsCount: students.length,
         tierDistribution: Object.entries(tierCounts).map(([tier,count])=>({ tier, count }))
       };
@@ -301,54 +1827,250 @@ export async function mockRequest<T>(url: string, _init?: RequestInit, user?: Au
     if (tail.endsWith("/students")) {
       const id = tail.replace("/students", "").replace(/^\//, "");
       const classroomName = id.startsWith("class-") ? id.replace("class-", "") : id;
-      const students = STUDENTS.filter(s => s.classroom === classroomName);
+      const students = ALL_STUDENTS.filter(s => s.classroom === classroomName);
       return { data: students } as T;
     }
 
     // flags for a classroom or create flag
-    if (tail.endsWith("/flags")) {
+    if (tail.endsWith("/flags") && !tail.includes("/resolve")) {
       const id = tail.replace("/flags", "").replace(/^\//, "");
       const classroomName = id.startsWith("class-") ? id.replace("class-", "") : id;
-      if ((_init as any)?.method === "POST") {
+      if (isPost(_init)) {
         try {
-          const body = typeof (_init as any).body === "string" ? JSON.parse(( _init as any).body) : ( _init as any).body;
-          const newFlag = { id: `f-${Date.now()}`, classroom: classroomName, studentId: body.studentId, raisedBy: (body.raisedBy||ROLE_NAMES.TEACHER), reason: body.reason||"", createdAt: new Date().toISOString() };
-          FLAGS.unshift(newFlag);
+          const body = parseBody(_init);
+          const newFlag: FlagEntry = {
+            id: `f-${Date.now()}`,
+            classroom: classroomName,
+            studentId: body.studentId as string,
+            category: body.category as FlagCategory,
+            priority: body.priority as FlagPriority,
+            notes: (body.reason as string) || (body.notes as string) || "",
+            status: "OPEN",
+            createdBy: (body.raisedBy as string) || ROLE_NAMES.TEACHER,
+            createdAt: new Date().toISOString(),
+          };
+          FLAGS_HISTORY.unshift(newFlag);
           return newFlag as T;
-        } catch (e) {
+        } catch {
           throw new Error("Invalid flag payload");
         }
       }
-      return { data: FLAGS.filter(f => f.classroom === classroomName) } as T;
+      // Surface full flag history (5 active / 3 resolved demo data)
+      return { data: FLAGS_HISTORY.filter(f => f.classroom === classroomName) } as T;
+    }
+
+    // resolve flag
+    if (tail.includes("/flags/") && tail.endsWith("/resolve")) {
+      const flagId = tail.split("/flags/")[1].split("/")[0];
+      if (isPost(_init)) {
+        const body = parseBody(_init);
+        const flag = FLAGS_HISTORY.find(f => f.id === flagId);
+        if (!flag) throw new Error("Flag not found");
+        flag.status = "RESOLVED";
+        flag.resolvedAt = new Date().toISOString();
+        flag.resolutionNote = (body?.resolutionNote as string) || "";
+        return flag as T;
+      }
+      throw new Error("Method not allowed");
     }
 
     // observations for a classroom or create observation
     if (tail.endsWith("/observations")) {
       const id = tail.replace("/observations", "").replace(/^\//, "");
       const classroomName = id.startsWith("class-") ? id.replace("class-", "") : id;
-      if ((_init as any)?.method === "POST") {
+      if (isPost(_init)) {
         try {
-          const body = typeof (_init as any).body === "string" ? JSON.parse(( _init as any).body) : ( _init as any).body;
-          const newObs = { id: `o-${Date.now()}`, classroom: classroomName, studentId: body.studentId, observedBy: (body.observedBy||ROLE_NAMES.TEACHER), notes: body.notes||"", createdAt: new Date().toISOString() };
+          const body = parseBody(_init);
+          const newObs: ObservationEntry = {
+            id: `o-${Date.now()}`,
+            classroom: classroomName,
+            studentId: body.studentId as string,
+            type: (body.type as ObservationType) || "BEHAVIOURAL",
+            severity: (body.severity as "LOW" | "MEDIUM" | "HIGH" | "CRITICAL") || "MEDIUM",
+            notes: (body.notes as string) || "",
+            createdAt: new Date().toISOString(),
+            createdBy: (body.observedBy as string) || ROLE_NAMES.TEACHER,
+          };
           OBSERVATIONS.unshift(newObs);
+          OBSERVATIONS_RICH.unshift(newObs);
           return newObs as T;
-        } catch (e) {
+        } catch {
           throw new Error("Invalid observation payload");
         }
       }
-      return { data: OBSERVATIONS.filter(o => o.classroom === classroomName) } as T;
+      // Use rich observations so timeline has all entries
+      return { data: OBSERVATIONS_RICH.filter(o => o.classroom === classroomName) } as T;
+    }
+
+    // teachers list
+    if (tail.endsWith("/teachers")) {
+      const id = tail.replace("/teachers", "").replace(/^\//, "");
+      const classroomName = id.startsWith("class-") ? id.replace("class-", "") : id;
+      return { data: TEACHERS_BY_CLASSROOM[classroomName] ?? [] } as T;
+    }
+
+    // timetable
+    if (tail.endsWith("/timetable")) {
+      const id = tail.replace("/timetable", "").replace(/^\//, "");
+      const classroomName = id.startsWith("class-") ? id.replace("class-", "") : id;
+      return { data: CLASSROOM_TIMETABLES[classroomName] ?? [] } as T;
+    }
+
+    // SEL request (from timetable free period)
+    if (tail.endsWith("/sel-request")) {
+      if (isPost(_init)) {
+        const body = parseBody(_init);
+        return { id: `sel-req-${Date.now()}`, status: "PENDING", day: body?.day, period: body?.period, requestedBy: user?.fullName || ROLE_NAMES.TEACHER, createdAt: new Date().toISOString() } as T;
+      }
+      throw new Error("Method not allowed");
+    }
+
+    // SEL sessions
+    if (tail.endsWith("/sessions") && !tail.includes("/feedback")) {
+      const id = tail.replace("/sessions", "").replace(/^\//, "");
+      const classroomName = id.startsWith("class-") ? id.replace("class-", "") : id;
+      return { data: SEL_SESSIONS[classroomName] ?? [] } as T;
+    }
+
+    // session feedback
+    if (tail.includes("/sessions/") && tail.endsWith("/feedback")) {
+      const id = tail.replace("/sessions/", "").split("/")[0].replace(/^\//, "");
+      const classroomName = id.startsWith("class-") ? id.replace("class-", "") : id;
+      const sessionId = tail.split("/sessions/")[1].split("/")[0];
+      if (isPost(_init)) {
+        const body = parseBody(_init);
+        const session = (SEL_SESSIONS[classroomName] ?? []).find((s) => s.id === sessionId);
+        if (!session) throw new Error("Session not found");
+        session.status = "COMPLETED";
+        session.feedback = {
+          studentEngagement: body.studentEngagement as SessionFeedback["studentEngagement"],
+          learningUnderstanding: body.learningUnderstanding as SessionFeedback["learningUnderstanding"],
+          emotionalClimate: body.emotionalClimate as SessionFeedback["emotionalClimate"],
+          followUpNeed: body.followUpNeed as SessionFeedback["followUpNeed"],
+          planCompletion: body.planCompletion as SessionFeedback["planCompletion"],
+          activityCompletion: body.activityCompletion as SessionFeedback["activityCompletion"],
+          activityQuality: body.activityQuality as SessionFeedback["activityQuality"],
+          notes: body.notes as string | undefined,
+          submittedAt: new Date().toISOString(),
+          submittedBy: user?.fullName || ROLE_NAMES.COUNSELLOR,
+        };
+        return session as T;
+      }
+      throw new Error("Method not allowed");
+    }
+
+    // class analytics
+    if (tail.endsWith("/analytics")) {
+      const id = tail.replace("/analytics", "").replace(/^\//, "");
+      const classroomName = id.startsWith("class-") ? id.replace("class-", "") : id;
+      const classroomStudents = ALL_STUDENTS.filter(st => st.classroom === classroomName);
+      const tierCounts: Record<string, number> = {};
+      classroomStudents.forEach(st => { tierCounts[st.tier] = (tierCounts[st.tier] || 0) + 1; });
+      const flags = FLAGS_HISTORY.filter(f => f.classroom === classroomName);
+      const obs = OBSERVATIONS_RICH.filter(o => o.classroom === classroomName);
+      let assigned = 0, completed = 0;
+      classroomStudents.forEach(st => {
+        const p = SEL_PROGRESS[st.id] ?? { assigned: 5, completed: 3, pending: 1 };
+        assigned += p.assigned; completed += p.completed;
+      });
+      const trend = [
+        { day: "Mon", count: 2 + (classroomStudents.length % 4) },
+        { day: "Tue", count: 1 + (classroomStudents.length % 5) },
+        { day: "Wed", count: 3 + (classroomStudents.length % 3) },
+        { day: "Thu", count: 0 + (classroomStudents.length % 2) },
+        { day: "Fri", count: 2 + (classroomStudents.length % 4) },
+      ];
+      return {
+        classroomId: `class-${classroomName}`,
+        totalStudents: classroomStudents.length,
+        tierDistribution: Object.entries(tierCounts).map(([tier, count]) => ({ tier, count })),
+        flagCount: { open: flags.filter(f => f.status === "OPEN").length, resolved: flags.filter(f => f.status === "RESOLVED").length },
+        selCompletionRate: assigned > 0 ? Math.round((completed / assigned) * 100) : 0,
+        observationCount: obs.length,
+        trend,
+      } as T;
     }
 
     // classroom detail
     const id = tail.replace(/^\//, "");
     const classroomName = id.startsWith("class-") ? id.replace("class-", "") : id;
-    const students = STUDENTS.filter(s => s.classroom === classroomName);
+    const students = ALL_STUDENTS.filter(s => s.classroom === classroomName);
     if (students.length === 0) throw new Error("Classroom not found");
-    const timetable = [
-      { day: "Mon", slots: [ { time: "09:00", subject: "Math" }, { time: "10:00", subject: "Science" } ] },
-      { day: "Tue", slots: [ { time: "09:00", subject: "English" }, { time: "10:00", subject: "Social Studies" } ] },
-    ];
-    return { id: `class-${classroomName}`, name: classroomName, grade: students[0].grade, teacher: { id:`t-${classroomName}`, fullName: ROLE_NAMES.CLASS_TEACHER ?? ROLE_NAMES.TEACHER }, students, timetable, flags: FLAGS.filter(f => f.classroom === classroomName), observations: OBSERVATIONS.filter(o=>o.classroom===classroomName) } as T;
+    const ct = TEACHERS_BY_CLASSROOM[classroomName]?.find(t => t.isClassTeacher);
+    return {
+      id: `class-${classroomName}`,
+      name: classroomName,
+      grade: students[0].grade,
+      section: classroomName.replace(/[0-9]/g, ""),
+      teacher: ct ? { id: ct.id, fullName: ct.fullName } : { id:`t-${classroomName}`, fullName: ROLE_NAMES.CLASS_TEACHER ?? ROLE_NAMES.TEACHER },
+      students,
+      teachers: TEACHERS_BY_CLASSROOM[classroomName] ?? [],
+      timetable: CLASSROOM_TIMETABLES[classroomName] ?? [],
+      sessions: SEL_SESSIONS[classroomName] ?? [],
+      flags: FLAGS_HISTORY.filter(f => f.classroom === classroomName),
+      observations: OBSERVATIONS_RICH.filter(o => o.classroom === classroomName),
+    } as T;
+  }
+
+  // =========== STUDENT FULL PROFILE ===========
+  if (basePath.startsWith("/students/") && basePath.endsWith("/full")) {
+    const sid = basePath.replace("/students/", "").replace("/full", "");
+    const s = STUDENTS.find(x => x.id === sid);
+    if (!s) throw new Error("Student not found");
+    return {
+      ...s,
+      academic: ACADEMIC_DATA[s.id] ?? { attendancePercent: 85, assignmentCompletionPercent: 80, recentPerformance: "Average" },
+      wellbeing: WELLBEING_DATA[s.id] ?? { selParticipation: 70, emotionalWellnessScore: 65 },
+      selProgress: SEL_PROGRESS[s.id] ?? { assigned: 5, completed: 3, pending: 1 },
+      recentActivity: {
+        observations: OBSERVATIONS_RICH.filter(o => o.studentId === sid).slice(0, 5),
+        flags: FLAGS_HISTORY.filter(f => f.studentId === sid),
+        workshops: ["Stress Management", "Building Empathy", "Mindfulness & Focus"].slice(0, Math.floor(Math.random() * 3)),
+      },
+    } as T;
+  }
+
+  // =========== STUDENT SEL PROGRESS ===========
+  if (basePath.startsWith("/students/") && basePath.endsWith("/sel-progress")) {
+    const sid = basePath.replace("/students/", "").replace("/sel-progress", "");
+    return (SEL_PROGRESS[sid] ?? { assigned: 5, completed: 3, pending: 1 }) as T;
+  }
+
+  // =========== CLASSROOM SEL PROGRESS ===========
+  if (basePath.startsWith("/classrooms/") && basePath.endsWith("/sel-progress")) {
+    const tail = basePath.replace("/classrooms/", "").replace("/sel-progress", "");
+    const classroomName = tail.startsWith("class-") ? tail.replace("class-", "") : tail;
+    const classroomStudents = STUDENTS.filter(st => st.classroom === classroomName);
+    let assigned = 0, completed = 0, pending = 0, participationSum = 0;
+    classroomStudents.forEach(st => {
+      const p = SEL_PROGRESS[st.id] ?? { assigned: 5, completed: 3, pending: 1 };
+      assigned += p.assigned; completed += p.completed; pending += p.pending;
+      participationSum += WELLBEING_DATA[st.id]?.selParticipation ?? 70;
+    });
+    const total = classroomStudents.length;
+    return {
+      classroomId: `class-${classroomName}`,
+      totalStudents: total,
+      assigned, completed, pending,
+      completionRate: assigned > 0 ? Math.round((completed / assigned) * 100) : 0,
+      participationRate: total > 0 ? Math.round(participationSum / total) : 0,
+    } as T;
+  }
+
+  // =========== CLASSROOM ACTIVITY FEED ===========
+  if (basePath.startsWith("/classrooms/") && basePath.endsWith("/activity")) {
+    const tail = basePath.replace("/classrooms/", "").replace("/activity", "");
+    const classroomName = tail.startsWith("class-") ? tail.replace("class-", "") : tail;
+    return { data: CLASSROOM_ACTIVITY[classroomName] ?? [] } as T;
+  }
+
+  // =========== FLAG/OBSERVATION HISTORY FOR STUDENT ===========
+  if (basePath.startsWith("/students/") && basePath.endsWith("/history")) {
+    const sid = basePath.replace("/students/", "").replace("/history", "");
+    return {
+      observations: OBSERVATIONS_RICH.filter(o => o.studentId === sid),
+      flags: FLAGS_HISTORY.filter(f => f.studentId === sid),
+    } as T;
   }
 
   if (basePath === "/referrals") return [
@@ -419,6 +2141,671 @@ export async function mockRequest<T>(url: string, _init?: RequestInit, user?: Au
     { id:"a-7", action:"Referral Created", actor:"Rajesh Kumar", target:"Aditya Mishra", category:"case", severity:"info", details:"Referred for anxiety concerns", timestamp:Date.now()-14400000, ipAddress:"192.168.1.50" },
     { id:"a-8", action:"Data Export", actor:"Aarav Mehta", target:"Q4 Analytics", category:"config", severity:"warning", details:"Exported 124 case records", timestamp:Date.now()-86400000, ipAddress:"203.0.113.100" },
   ] as T;
+
+  // =========== MODULE 4: SEL TEMPLATES ===========
+  if (basePath === "/sel/templates") {
+    const category = params.get("category");
+    const grade = params.get("grade");
+    let filtered = [...SEL_LESSON_TEMPLATES];
+    if (category) filtered = filtered.filter(t => t.category === category);
+    if (grade) filtered = filtered.filter(t => t.grade === grade || t.grade.includes(grade));
+    return { data: filtered } as T;
+  }
+
+  if (basePath.startsWith("/sel/templates/")) {
+    const id = basePath.replace("/sel/templates/", "");
+    const tpl = SEL_LESSON_TEMPLATES.find(t => t.id === id);
+    if (!tpl) throw new Error("Template not found");
+    return tpl as T;
+  }
+
+  // =========== MODULE 4: SEL LESSONS ===========
+  if (basePath === "/sel/lessons") {
+    const status = params.get("status");
+    const category = params.get("category");
+    const grade = params.get("grade");
+    let filtered = [...SEL_LESSONS];
+    if (status) filtered = filtered.filter(l => l.status === status);
+    if (category) filtered = filtered.filter(l => l.category === category);
+    if (grade) filtered = filtered.filter(l => l.grade === grade);
+    return { data: filtered } as T;
+  }
+
+  if (basePath.startsWith("/sel/lessons/") && !basePath.includes("/status")) {
+    const id = basePath.replace("/sel/lessons/", "");
+    const lesson = SEL_LESSONS.find(l => l.id === id);
+    if (!lesson) throw new Error("Lesson not found");
+    return lesson as T;
+  }
+
+  if (basePath.startsWith("/sel/lessons/") && basePath.endsWith("/status") && isPost(_init)) {
+    const id = basePath.replace("/sel/lessons/", "").replace("/status", "");
+    const body = parseBody(_init);
+    const lesson = SEL_LESSONS.find(l => l.id === id);
+    if (!lesson) throw new Error("Lesson not found");
+    if (body.status === "APPROVED") { lesson.status = "APPROVED"; lesson.approvedById = "u-admin"; lesson.approvedAt = new Date().toISOString(); }
+    else if (body.status === "REJECTED") { lesson.status = "REJECTED"; lesson.rejectionReason = (body.reason as string) || "Not approved"; }
+    else if (body.status === "PENDING_APPROVAL") { lesson.status = "PENDING_APPROVAL"; }
+    return lesson as T;
+  }
+
+  if (basePath === "/sel/lessons" && isPost(_init)) {
+    const body = parseBody(_init) as any;
+    const newLesson = {
+      id:`les-${Date.now()}`,
+      templateId: body.templateId || null,
+      title: body.title as string,
+      grade: body.grade as string,
+      topic: body.topic as string,
+      category: body.category as string,
+      learningObjectives: (body.learningObjectives as string[]) || [],
+      activities: (body.activities as string[]) || [],
+      reflectionQuestions: (body.reflectionQuestions as string[]) || [],
+      durationMins: (body.durationMins as number) || 45,
+      status: "DRAFT",
+      createdById: "u-couns",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    SEL_LESSONS.unshift(newLesson as any);
+    return newLesson as T;
+  }
+
+  // =========== MODULE 4: SEL SESSIONS (Module 4 version) ===========
+  if (basePath === "/sel/sessions") {
+    const view = params.get("view") || "list";
+    const status = params.get("status");
+    const classroomId = params.get("classroomId");
+    let filtered = [...SEL_SESSIONS_M4];
+    if (status) filtered = filtered.filter(s => s.status === status);
+    if (classroomId) filtered = filtered.filter(s => s.classroomId === classroomId);
+    if (view === "calendar") {
+      const grouped: Record<string, typeof filtered> = {};
+      filtered.forEach(s => {
+        const key = s.scheduledAt.slice(0, 10);
+        if (!grouped[key]) grouped[key] = [];
+        grouped[key].push(s);
+      });
+      return { data: grouped } as T;
+    }
+    return { data: filtered } as T;
+  }
+
+  if (basePath === "/sel/sessions" && isPost(_init)) {
+    const body = parseBody(_init) as any;
+    const newSession = {
+      id:`sel-m4-new-${Date.now()}`,
+      lessonId: (body.lessonId as string) || null,
+      classroomId: body.classroomId as string,
+      title: body.title as string,
+      topic: (body.topic as string) || body.title,
+      scheduledAt: new Date(body.scheduledAt as string).toISOString(),
+      durationMins: (body.durationMins as number) || 45,
+      facilitatorId: body.facilitatorId as string,
+      status: "SCHEDULED",
+    };
+    SEL_SESSIONS_M4.push(newSession as any);
+    return newSession as T;
+  }
+
+  // =========== MODULE 4: SEL DASHBOARD STATS ===========
+  if (basePath === "/sel/dashboard/stats") {
+    const completed = SEL_SESSIONS_M4.filter(s => s.status === "COMPLETED");
+    const scheduled = SEL_SESSIONS_M4.filter(s => s.status === "SCHEDULED");
+    const totalFeedback = SEL_FEEDBACK_M4.length;
+    const avgRating = totalFeedback > 0 ? SEL_FEEDBACK_M4.reduce((sum, f) => sum + f.rating, 0) / totalFeedback : 0;
+    const avgParticipation = 75 + Math.random() * 15;
+    return {
+      totalPrograms: SEL_LESSONS.filter(l => l.status === "APPROVED").length,
+      activeSessions: scheduled.length,
+      completionRate: completed.length > 0 ? Math.round((completed.length / SEL_SESSIONS_M4.length) * 100) : 0,
+      upcomingSessions: scheduled.length,
+      studentParticipation: Math.round(avgParticipation),
+      workshopAttendance: Math.round(70 + Math.random() * 20),
+      highestCompletionGrade: "8",
+      studentsRequiringIntervention:24,
+      upcomingWorkshopsThisWeek: WORKSHOPS.filter(w => w.status === "SCHEDULED" && new Date(w.date).getTime() < NOW + 7 * D).length,
+      recentFeedback: [
+        { sessionTitle: "Managing Exam Anxiety - 7A", rating: 4.5, facilitatorName: "Priya Sharma", date: new Date(NOW - 2 * D).toISOString() },
+        { sessionTitle: "Building Empathy - 6B", rating: 4.2, facilitatorName: "Dr. Anil Kumar", date: new Date(NOW - 3 * D).toISOString() },
+        { sessionTitle: "Mindfulness for Focus - 9A", rating: 4.7, facilitatorName: "Sneha Reddy", date: new Date(NOW - 5 * D).toISOString() },
+      ],
+    } as T;
+  }
+
+  // =========== MODULE 4: SEL PROGRESS ===========
+  if (basePath === "/sel/progress") {
+    const byGrade: Record<string, { assigned: number; completed: number; pending: number }> = {};
+    SEED_CLASSROOMS.forEach(cn => {
+      const grade = cn.replace(/[A-Z]/g, "");
+      if (!byGrade[grade]) byGrade[grade] = { assigned: 0, completed: 0, pending: 0 };
+      const sessions = SEL_SESSIONS_M4.filter(s => s.classroomId === `class-${cn}`);
+      byGrade[grade].assigned += sessions.length;
+      byGrade[grade].completed += sessions.filter(s => s.status === "COMPLETED").length;
+      byGrade[grade].pending += sessions.filter(s => s.status === "SCHEDULED").length;
+    });
+    return {
+      byGrade: Object.entries(byGrade).map(([grade, data]) => ({
+        grade,
+        assigned: data.assigned,
+        completed: data.completed,
+        pending: data.pending,
+        completionRate: data.assigned > 0 ? Math.round((data.completed / data.assigned) * 100) : 0,
+        participationRate: 70 + Math.round(Math.random() * 20),
+      })),
+      overallCompletion: Math.round((SEL_SESSIONS_M4.filter(s => s.status === "COMPLETED").length / SEL_SESSIONS_M4.length) * 100),
+      overallParticipation: 75 + Math.round(Math.random() * 15),
+    } as T;
+  }
+
+  // =========== MODULE 4: WORKSHOPS ===========
+  if (basePath === "/workshops") {
+    const status = params.get("status");
+    const category = params.get("category");
+    let filtered = [...WORKSHOPS];
+    if (status) filtered = filtered.filter(w => w.status === status);
+    if (category) filtered = filtered.filter(w => w.category === category);
+    return { data: filtered } as T;
+  }
+
+  if (basePath === "/workshops" && isPost(_init)) {
+    const body = parseBody(_init) as any;
+    const newWorkshop = {
+      id:`ws-new-${Date.now()}`,
+      templateId: body.templateId || null,
+      title: body.title as string,
+      description: (body.description as string) || "",
+      category: body.category as string,
+      audience: body.audience as string,
+      venue: body.venue as string,
+      date: new Date(body.date as string).toISOString(),
+      durationMins: (body.durationMins as number) || 90,
+      facilitatorId: body.facilitatorId as string,
+      materials: (body.materials as string[]) || [],
+      status: "SCHEDULED",
+      createdById: "u-couns",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      feedbackScore: 0,
+    };
+    WORKSHOPS.unshift(newWorkshop as any);
+    return newWorkshop as T;
+  }
+
+  if (basePath.startsWith("/workshops/") && !basePath.includes("/feedback") && !basePath.includes("/attendance")) {
+    const id = basePath.replace("/workshops/", "");
+    const workshop = WORKSHOPS.find(w => w.id === id);
+    if (!workshop) throw new Error("Workshop not found");
+    return workshop as T;
+  }
+
+  if (basePath === "/workshops/templates") {
+    const category = params.get("category");
+    let filtered = [...WORKSHOP_TEMPLATES];
+    if (category) filtered = filtered.filter(t => t.category === category);
+    return { data: filtered } as T;
+  }
+
+  if (basePath === "/workshops/dashboard/stats") {
+    const completed = WORKSHOPS.filter(w => w.status === "COMPLETED");
+    const scheduled = WORKSHOPS.filter(w => w.status === "SCHEDULED");
+    const avgScore = completed.length > 0 ? completed.reduce((sum, w) => sum + (w.feedbackScore || 0), 0) / completed.length : 0;
+    return {
+      totalWorkshops: WORKSHOPS.length,
+      upcomingWorkshops: scheduled.length,
+      completedWorkshops: completed.length,
+      averageAttendance: 78 + Math.round(Math.random() * 15),
+      feedbackScore: Math.round(avgScore * 10) / 10,
+    } as T;
+  }
+
+  if (basePath.includes("/workshops/") && basePath.endsWith("/feedback") && isPost(_init)) {
+    const id = basePath.replace("/workshops/", "").replace("/feedback", "");
+    const body = parseBody(_init) as any;
+    const workshop = WORKSHOPS.find(w => w.id === id);
+    if (!workshop) throw new Error("Workshop not found");
+    const fb = {
+      id:`fb-ws-new-${Date.now()}`,
+      workshopId: id,
+      respondentName: (body.name as string) || "Anonymous",
+      usefulnessScore: body.usefulnessScore as number,
+      learnedNew: body.learnedNew as boolean,
+      wouldRecommend: body.wouldRecommend as boolean,
+      rating: body.rating as number,
+      comments: (body.comments as string) || "",
+      submittedAt: new Date().toISOString(),
+    };
+    WORKSHOP_FEEDBACK_M4.push(fb as any);
+    // Update workshop feedback score
+    const workshopFeedback = WORKSHOP_FEEDBACK_M4.filter(f => f.workshopId === id);
+    if (workshopFeedback.length > 0) {
+      workshop.feedbackScore = workshopFeedback.reduce((sum, f) => sum + f.rating, 0) / workshopFeedback.length;
+    }
+    return fb as T;
+  }
+
+  // =========== MODULE 4: FACILITATORS ===========
+  if (basePath === "/facilitators") {
+    const type = params.get("type");
+    let filtered = [...FACILITATORS];
+    if (type) filtered = filtered.filter(f => f.type === type);
+    return { data: filtered } as T;
+  }
+
+  if (basePath.startsWith("/facilitators/") && !basePath.includes("/sessions")) {
+    const id = basePath.replace("/facilitators/", "");
+    const facilitator = FACILITATORS.find(f => f.id === id);
+    if (!facilitator) throw new Error("Facilitator not found");
+    const assignedSessions = SEL_SESSIONS_M4.filter(s => s.facilitatorId === id);
+    const assignedWorkshops = WORKSHOPS.filter(w => w.facilitatorId === id);
+    return { ...facilitator, assignedSessions: assignedSessions.length, upcomingWorkshops: assignedWorkshops.filter(w => w.status === "SCHEDULED").length } as T;
+  }
+
+  if (basePath.startsWith("/facilitators/") && basePath.endsWith("/sessions")) {
+    const id = basePath.replace("/facilitators/", "").replace("/sessions", "");
+    const sessions = SEL_SESSIONS_M4.filter(s => s.facilitatorId === id);
+    const workshops = WORKSHOPS.filter(w => w.facilitatorId === id);
+    return { selSessions: sessions, workshops } as T;
+  }
+
+  // =========== MODULE 4: CALENDAR EVENTS ===========
+  if (basePath === "/calendar/events") {
+    const type = params.get("type");
+    const from = params.get("from");
+    const to = params.get("to");
+    let filtered = [...CALENDAR_EVENTS];
+    if (type) filtered = filtered.filter(e => e.type === type);
+    if (from) filtered = filtered.filter(e => e.date >= from.slice(0, 10));
+    if (to) filtered = filtered.filter(e => e.date <= to.slice(0, 10));
+    return { data: filtered } as T;
+  }
+
+  // =========== MODULE 4: SEL FEEDBACK ===========
+  if (basePath === "/sel/feedback") {
+    const enriched = SEL_FEEDBACK_M4.map(fb => {
+      const session = SEL_SESSIONS_M4.find(s => s.id === fb.sessionId);
+      return {
+        ...fb,
+        sessionTitle: session?.title || "SEL Session",
+        facilitatorName: session?.facilitatorId ? FACILITATORS.find(f => f.id === session.facilitatorId)?.fullName || "Facilitator" : "Facilitator",
+        contentClarity: 3 + Math.floor(Math.random() * 3),
+        engagementLevel: 3 + Math.floor(Math.random() * 3),
+        practicalTips: 3 + Math.floor(Math.random() * 3),
+      };
+    });
+    return { data: enriched } as T;
+  }
+
+  // =========== MODULE 4: WORKSHOP FEEDBACK ===========
+  if (basePath === "/workshops/feedback") {
+    const enriched = WORKSHOP_FEEDBACK_M4.map(fb => {
+      const workshop = WORKSHOPS.find(w => w.id === fb.workshopId);
+      return {
+        ...fb,
+        workshopTitle: workshop?.title || "Workshop",
+      };
+    });
+    return { data: enriched } as T;
+  }
+
+  // =========== MODULE 4: WELLBEING ANALYTICS ===========
+  if (basePath === "/analytics/wellbeing") {
+    const completedSessions = SEL_SESSIONS_M4.filter(s => s.status === "COMPLETED");
+    const completedWorkshops = WORKSHOPS.filter(w => w.status === "COMPLETED");
+    return {
+      totalSessionsConducted: completedSessions.length,
+      workshopAttendanceRate:75 + Math.round(Math.random() * 20),
+      studentEngagementRate: 70 + Math.round(Math.random() * 20),
+      selCompletionRate: completedSessions.length > 0 ? Math.round((completedSessions.length / SEL_SESSIONS_M4.length) * 100) : 0,
+      flaggedStudentTrends: [
+        { month: "Jan", count: 12 }, { month: "Feb", count: 15 }, { month: "Mar", count: 10 },
+        { month: "Apr", count: 18 }, { month: "May", count: 14 }, { month: "Jun", count: 8 },
+      ],
+      monthlyParticipation: [
+        { month: "Jan", attended: 420, total: 500 }, { month: "Feb", attended: 445, total: 500 },
+        { month: "Mar", attended: 410, total: 500 }, { month: "Apr", attended: 460, total: 500 },
+        { month: "May", attended: 435, total: 500 }, { month: "Jun", attended: 480, total: 500 },
+      ],
+      gradeWiseCompletion: [
+        { grade: "5", completed: 85, total: 100 }, { grade: "6", completed: 78, total: 100 },
+        { grade: "7", completed: 82, total: 100 }, { grade: "8", completed: 75, total: 100 },
+        { grade: "9", completed: 88, total: 100 }, { grade: "10", completed: 92, total: 100 },
+      ],
+      workshopAttendanceTrend: [
+        { month: "Jan", attended: 120, missed: 30 }, { month: "Feb", attended: 135, missed: 25 },
+        { month: "Mar", attended: 128, missed: 22 }, { month: "Apr", attended: 140, missed: 20 },
+        { month: "May", attended: 132, missed: 18 }, { month: "Jun", attended: 145, missed: 15 },
+      ],
+    } as T;
+  }
+
+  // =========== MODULE 6: ASSISTANCE ===========
+  // Assistance Dashboard Stats
+  if (basePath === "/assistance/dashboard/stats") {
+    return ASSISTANCE_DASHBOARD_STATS as T;
+  }
+
+  // Experts list
+  if (basePath === "/assistance/experts") {
+    return { data: EXPERTS } as T;
+  }
+
+  // Expert performance
+  if (basePath === "/assistance/experts/performance") {
+    return { data: EXPERT_PERFORMANCE } as T;
+  }
+
+  // Assistance Analytics
+  if (basePath === "/assistance/analytics") {
+    return ASSISTANCE_ANALYTICS as T;
+  }
+
+  // Assistance requests list
+  if (basePath === "/assistance") {
+    const search = params.get("search")?.toLowerCase() || "";
+    const status = params.get("status") || "";
+    const priority = params.get("priority") || "";
+    const category = params.get("category") || "";
+    const page = parseInt(params.get("page") || "1");
+    const pageSize = parseInt(params.get("pageSize") || "10");
+    let filtered = [...ASSISTANCE_REQUESTS];
+    if (search) filtered = filtered.filter(r => r.studentName.toLowerCase().includes(search) || r.requestId.toLowerCase().includes(search) || r.schoolName.toLowerCase().includes(search));
+    if (status) filtered = filtered.filter(r => r.status === status);
+    if (priority) filtered = filtered.filter(r => r.priority === priority);
+    if (category) filtered = filtered.filter(r => r.concernCategory === category);
+    const start = (page-1)*pageSize;
+    return { data: filtered.slice(start, start+pageSize), pagination: { page, pageSize, total: filtered.length, totalPages: Math.ceil(filtered.length/pageSize) } } as T;
+  }
+
+  // Assistance request detail
+  if (basePath.startsWith("/assistance/") && !basePath.includes("/recommendations") && !basePath.includes("/action-items") && !basePath.includes("/discussions") && !basePath.includes("/timeline") && !basePath.includes("/escalations") && !basePath.includes("/experts")) {
+    const id = basePath.replace("/assistance/", "");
+    const req = ASSISTANCE_REQUESTS.find(r => r.id === id);
+    if (!req) throw new Error("Assistance request not found");
+    const recommendations = ASSISTANCE_RECOMMENDATIONS.filter(r => r.requestId === id);
+    const actionItems = ASSISTANCE_ACTION_ITEMS.filter(a => a.requestId === id);
+    const discussions = ASSISTANCE_DISCUSSIONS.filter(d => d.requestId === id);
+    const timelineEvents = ASSISTANCE_TIMELINE_EVENTS.filter(t => t.requestId === id);
+    const escalations = ASSISTANCE_ESCALATIONS.filter(e => e.requestId === id);
+    return {
+      ...req,
+      studentContext: {
+        age: 13 + (parseInt(id.replace(/\D/g, "") || "0") % 3),
+        tier: "Tier 2",
+        riskScore: req.priority === "CRITICAL" ? 88 : req.priority === "HIGH" ? 72 : req.priority === "MEDIUM" ? 55 : 35,
+        existingCases: parseInt(id.replace(/\D/g, "") || "0") % 3,
+        previousInterventions: ["Check-in", "SEL Session", "Teacher Consultation"].slice(0, (parseInt(id.replace(/\D/g, "") || "0") % 3)),
+      },
+      recommendations,
+      actionItems,
+      discussions,
+      timelineEvents,
+      escalations,
+    } as T;
+  }
+
+  // Recommendations for a request
+  if (basePath.startsWith("/assistance/") && basePath.includes("/recommendations")) {
+    const requestId = basePath.split("/")[2];
+    return { data: ASSISTANCE_RECOMMENDATIONS.filter(r => r.requestId === requestId) } as T;
+  }
+
+  // Action items for a request
+  if (basePath.startsWith("/assistance/") && basePath.includes("/action-items")) {
+    const requestId = basePath.split("/")[2];
+    return { data: ASSISTANCE_ACTION_ITEMS.filter(a => a.requestId === requestId) } as T;
+  }
+
+  // Discussions for a request
+  if (basePath.startsWith("/assistance/") && basePath.includes("/discussions")) {
+    const requestId = basePath.split("/")[2];
+    return { data: ASSISTANCE_DISCUSSIONS.filter(d => d.requestId === requestId) } as T;
+  }
+
+  // Timeline for a request
+  if (basePath.startsWith("/assistance/") && basePath.includes("/timeline")) {
+    const requestId = basePath.split("/")[2];
+    return { data: ASSISTANCE_TIMELINE_EVENTS.filter(t => t.requestId === requestId) } as T;
+  }
+
+  // Create assistance request
+  if (basePath === "/assistance" && isPost(_init)) {
+    const body = parseBody(_init) as any;
+    const newReq = {
+      id: `ar-${Date.now()}`,
+      requestId: `AR-2024-${String(ASSISTANCE_REQUESTS.length + 1).padStart(3, "0")}`,
+      studentName: body.studentName as string,
+      studentGrade: body.studentGrade as string,
+      studentClassroom: body.studentClassroom as string,
+      schoolName: body.schoolName as string,
+      concernCategory: body.concernCategory as string,
+      priority: (body.priority as string) || "MEDIUM",
+      status: "OPEN",
+      summary: body.summary as string,
+      supportingNotes: (body.supportingNotes as string) || "",
+      assignedExpert: null,
+      submittedBy: user?.fullName || "School Staff",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      _count: { recommendations: 0, actionItems: 0, timelineEvents: 1 },
+    };
+    ASSISTANCE_REQUESTS.unshift(newReq as any);
+    return newReq as T;
+  }
+
+  // =========== MODULE 8: CRISIS REPORTING ===========
+  // Crisis Dashboard Stats
+  if (basePath === "/crisis/dashboard/stats") {
+    return CRISIS_DASHBOARD_STATS as T;
+  }
+
+  // Crisis incidents list
+  if (basePath === "/crisis/incidents") {
+    const search = params.get("search")?.toLowerCase() || "";
+    const status = params.get("status") || "";
+    const severity = params.get("severity") || "";
+    const category = params.get("category") || "";
+    const page = parseInt(params.get("page") || "1");
+    const pageSize = parseInt(params.get("pageSize") || "10");
+    let filtered = [...CRISIS_INCIDENTS];
+    if (search) filtered = filtered.filter(r => r.studentName.toLowerCase().includes(search) || r.incidentId.toLowerCase().includes(search) || r.schoolName.toLowerCase().includes(search));
+    if (status) filtered = filtered.filter(r => r.status === status);
+    if (severity) filtered = filtered.filter(r => r.severity === severity);
+    if (category) filtered = filtered.filter(r => r.incidentCategory === category);
+    const start = (page-1)*pageSize;
+    return { data: filtered.slice(start, start+pageSize), pagination: { page, pageSize, total: filtered.length, totalPages: Math.ceil(filtered.length/pageSize) } } as T;
+  }
+
+  // Crisis incident detail
+  if (basePath.startsWith("/crisis/incidents/") && !basePath.includes("/actions") && !basePath.includes("/communications") && !basePath.includes("/timeline") && !basePath.includes("/escalations") && !basePath.includes("/team")) {
+    const id = basePath.replace("/crisis/incidents/", "");
+    const req = CRISIS_INCIDENTS.find(r => r.id === id);
+    if (!req) throw new Error("Crisis incident not found");
+    const team = CRISIS_TEAM_MEMBERS[id] || [];
+    const actions = CRISIS_ACTIONS.filter(a => a.incidentId === id);
+    const communications = CRISIS_COMMUNICATIONS.filter(c => c.incidentId === id);
+    const timelineEvents = CRISIS_TIMELINE_EVENTS.filter(t => t.incidentId === id);
+    const escalations = CRISIS_ESCALATIONS.filter(e => e.incidentId === id);
+    return {
+      ...req,
+      studentInfo: {
+        age: 13 + (parseInt(id.replace(/\D/g, "") || "0") % 3),
+        tier: "Tier 3",
+        riskScore: req.severity === "EMERGENCY" ? 95 : req.severity === "CRITICAL" ? 85 : req.severity === "HIGH" ? 72 : 55,
+        existingCases: parseInt(id.replace(/\D/g, "") || "0") % 3,
+        previousIncidents: parseInt(id.replace(/\D/g, "") || "0") % 4,
+      },
+      responseTeam: team,
+      actions,
+      communications,
+      timelineEvents,
+      escalations,
+      investigation: req.status === "INVESTIGATING" ? { status: "IN_PROGRESS" } : req.status === "CLOSED" || req.status === "RESOLVED" ? { status: "COMPLETED", concludedAt: req.updatedAt } : null,
+    } as T;
+  }
+
+  // Crisis Analytics
+  if (basePath === "/crisis/analytics") {
+    return CRISIS_ANALYTICS as T;
+  }
+
+  // High Risk Students
+  if (basePath === "/crisis/high-risk") {
+    return { data: HIGH_RISK_STUDENTS } as T;
+  }
+
+  // Create crisis incident
+  if (basePath === "/crisis/incidents" && isPost(_init)) {
+    const body = parseBody(_init) as any;
+    const newInc = {
+      id: `ci-${Date.now()}`,
+      incidentId: `CI-2024-${String(CRISIS_INCIDENTS.length + 1).padStart(3, "0")}`,
+      studentName: body.studentName as string,
+      studentGrade: body.studentGrade as string,
+      studentClassroom: body.studentClassroom as string,
+      schoolName: body.schoolName as string,
+      incidentCategory: body.incidentCategory as string,
+      severity: (body.severity as string) || "HIGH",
+      status: "REPORTED",
+      description: body.description as string,
+      location: (body.location as string) || "School",
+      reportedBy: user?.fullName || "School Staff",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      _count: { actions: 0, communications: 0, timelineEvents: 1, escalations: 0 },
+    };
+    CRISIS_INCIDENTS.unshift(newInc as any);
+    // Add initial timeline event
+    CRISIS_TIMELINE_EVENTS.unshift({
+      id: `cte-new-${Date.now()}`,
+      incidentId: newInc.id,
+      eventType: "INCIDENT_REPORTED",
+      title: "Incident Reported",
+      description: `Crisis incident reported by ${newInc.reportedBy}`,
+      createdAt: new Date().toISOString(),
+      createdBy: { id: user?.id || "unknown", fullName: newInc.reportedBy, role: "Staff" },
+    });
+    return newInc as T;
+  }
+
+  // =========== MODULE 10: POLICY & DOCUMENTATION ===========
+  // Policy Dashboard Stats
+  if (basePath === "/compliance/dashboard/stats") {
+    return POLICY_DASHBOARD_STATS as T;
+  }
+
+  // Compliance Stats
+  if (basePath === "/compliance/stats") {
+    return COMPLIANCE_STATS as T;
+  }
+
+  // Policies list
+  if (basePath === "/compliance/policies") {
+    const search = params.get("search")?.toLowerCase() || "";
+    const status = params.get("status") || "";
+    const category = params.get("category") || "";
+    const page = parseInt(params.get("page") || "1");
+    const pageSize = parseInt(params.get("pageSize") || "10");
+    let filtered = [...POLICIES];
+    if (search) filtered = filtered.filter(p => p.title.toLowerCase().includes(search) || p.description.toLowerCase().includes(search));
+    if (status) filtered = filtered.filter(p => p.status === status);
+    if (category) filtered = filtered.filter(p => p.category === category);
+    const start = (page-1)*pageSize;
+    return { data: filtered.slice(start, start+pageSize), pagination: { page, pageSize, total: filtered.length, totalPages: Math.ceil(filtered.length/pageSize) } } as T;
+  }
+
+  // Policy detail
+  if (basePath.startsWith("/compliance/policies/") && !basePath.includes("/acknowledge")) {
+    const id = basePath.replace("/compliance/policies/", "");
+    const policy = POLICIES.find(p => p.id === id);
+    if (!policy) throw new Error("Policy not found");
+    return {
+      ...policy,
+      content: policy.description + " This is the full policy content that would include all sections, subsections, and detailed guidelines...",
+      attachments: [
+        { id:"att-1", name:"Policy_Document_v2.1.pdf", url:"#", size:"2.4 MB", uploadedAt:policy.publishedAt || policy.effectiveDate },
+        { id:"att-2", name:"Appendix_A.pdf", url:"#", size:"456 KB", uploadedAt:policy.publishedAt || policy.effectiveDate },
+      ],
+      versions: [
+        { version:"2.1", publishedAt:new Date(NOW-30*D).toISOString(), publishedBy:{id:"u-couns",fullName:"Priya Sharma"}, changes:"Updated review timeline and added new appendix", isCurrent:true },
+        { version:"2.0", publishedAt:new Date(NOW-180*D).toISOString(), publishedBy:{id:"u-admin",fullName:"Neha Kapoor"}, changes:"Major revision aligned with new SC guidelines", isCurrent:false },
+        { version:"1.0", publishedAt:new Date(NOW-365*D).toISOString(), publishedBy:{id:"u-principal",fullName:"Dr. Suresh Iyengar"}, changes:"Initial publication", isCurrent:false },
+      ],
+      acknowledgements: [],
+    } as T;
+  }
+
+  // SOPs list
+  if (basePath === "/compliance/sops") {
+    const category = params.get("category") || "";
+    const search = params.get("search")?.toLowerCase() || "";
+    let filtered = [...SOPS];
+    if (category) filtered = filtered.filter(s => s.category === category);
+    if (search) filtered = filtered.filter(s => s.title.toLowerCase().includes(search) || s.description.toLowerCase().includes(search));
+    return { data: filtered } as T;
+  }
+
+  // SOP detail
+  if (basePath.startsWith("/compliance/sops/")) {
+    const id = basePath.replace("/compliance/sops/", "");
+    const sop = SOPS.find(s => s.id === id);
+    if (!sop) throw new Error("SOP not found");
+    return sop as T;
+  }
+
+  // Knowledge Base articles
+  if (basePath === "/compliance/knowledge-base") {
+    const category = params.get("category") || "";
+    const search = params.get("search")?.toLowerCase() || "";
+    let filtered = KNOWLEDGE_ARTICLES.filter(a => a.isPublished);
+    if (category) filtered = filtered.filter(a => a.category === category);
+    if (search) filtered = filtered.filter(a => a.title.toLowerCase().includes(search) || a.summary.toLowerCase().includes(search) || a.tags.some(t => t.toLowerCase().includes(search)));
+    return { data: filtered } as T;
+  }
+
+  // Knowledge Base article detail
+  if (basePath.startsWith("/compliance/knowledge-base/")) {
+    const id = basePath.replace("/compliance/knowledge-base/", "");
+    const article = KNOWLEDGE_ARTICLES.find(a => a.id === id);
+    if (!article) throw new Error("Article not found");
+    return article as T;
+  }
+
+  // Audit events
+  if (basePath === "/compliance/audit") {
+    const page = parseInt(params.get("page") || "1");
+    const pageSize = parseInt(params.get("pageSize") || "20");
+    const start = (page-1)*pageSize;
+    return { data: AUDIT_EVENTS.slice(start, start+pageSize), pagination: { page, pageSize, total: AUDIT_EVENTS.length, totalPages: Math.ceil(AUDIT_EVENTS.length/pageSize) } } as T;
+  }
+
+  // Acknowledge policy
+  if (basePath.startsWith("/compliance/policies/") && basePath.includes("/acknowledge") && isPost(_init)) {
+    const policyId = basePath.replace("/compliance/policies/", "").replace("/acknowledge", "");
+    const body = parseBody(_init) as any;
+    return { id:`ack-${Date.now()}`, policyId, userId:user?.id || "unknown", userName:user?.fullName || "Unknown", userRole:body.userRole || "Staff", status:"ACKNOWLEDGED", acknowledgedAt:new Date().toISOString(), dueDate:new Date(NOW+30*D).toISOString(), createdAt:new Date().toISOString() } as T;
+  }
+
+  // Create policy
+  if (basePath === "/compliance/policies" && isPost(_init)) {
+    const body = parseBody(_init) as any;
+    const newPolicy = {
+      id:`pol-${Date.now()}`,
+      policyId:`POL-${String(POLICIES.length + 1).padStart(3,"0")}`,
+      title:body.title as string,
+      description:(body.description as string) || "",
+      category:body.category as string,
+      status:"DRAFT",
+      version:"0.1",
+      accessLevel:(body.accessLevel as string) || "STAFF_ONLY",
+      effectiveDate:new Date().toISOString(),
+      reviewDate:new Date(NOW+180*D).toISOString(),
+      author:{id:user?.id || "unknown",fullName:user?.fullName || "Unknown",role:body.userRole || "Staff"},
+      _count:{acknowledgements:0,versions:1,views:0},
+    };
+    POLICIES.unshift(newPolicy as any);
+    return newPolicy as T;
+  }
 
   throw new Error(`No mock data for: ${url}`);
 }
