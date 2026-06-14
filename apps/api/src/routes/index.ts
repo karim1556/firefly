@@ -7,6 +7,7 @@ import { casesRouter } from "../modules/cases/cases.routes";
 import { sessionsRouter } from "../modules/sessions/sessions.routes";
 import { incidentsRouter } from "../modules/incidents/incidents.routes";
 import { reportsRouter } from "../modules/reports/reports.routes";
+import { referralsRouter } from "../modules/referrals/referrals.routes";
 
 export const apiRouter = Router();
 
@@ -18,3 +19,4 @@ apiRouter.use("/cases", casesRouter);
 apiRouter.use("/sessions", sessionsRouter);
 apiRouter.use("/incidents", incidentsRouter);
 apiRouter.use("/reports", reportsRouter);
+apiRouter.use("/referrals", referralsRouter);
